@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Регіональні федерації - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
+  
+  <!-- Hero Section -->
+  <section class="mb-10 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 rounded-2xl overflow-hidden relative">
+    <div class="absolute inset-0 bg-[url('https://via.placeholder.com/1280x400/137fec/FFFFFF?text=Regions')] bg-cover bg-center opacity-10"></div>
+    <div class="relative z-10 p-8 md:p-16 text-center">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-white text-[48px] md:text-[64px]">map</span>
+      </div>
+      <h1 class="text-white text-4xl md:text-6xl font-black mb-4 tracking-tight">
+        Регіональні федерації
+      </h1>
+      <p class="text-white/90 text-lg md:text-xl max-w-3xl mx-auto">
+        Дзюдо по всій Україні - знайдіть секцію у своєму регіоні
+      </p>
+      
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-2xl mx-auto mt-8">
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+          <div class="text-3xl font-black text-white">{{ regions|length }}</div>
+          <div class="text-sm text-white/80">Регіонів</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+          <div class="text-3xl font-black text-white">{{ regions|sum(attribute='schools_count') }}</div>
+          <div class="text-sm text-white/80">Секцій</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 col-span-2 md:col-span-1">
+          <div class="text-3xl font-black text-white">1000+</div>
+          <div class="text-sm text-white/80">Тренерів</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content: Grid (Sidebar + Regions) -->
+  <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="order-2 lg:order-1 lg:sticky lg:top-24 h-fit flex flex-col gap-5">
+      <!-- Header -->
+      <div class="flex items-center gap-3 pb-3 border-b-2 border-gray-200">
+        <span class="material-symbols-outlined text-[#111418] text-[28px]">explore</span>
+        <h2 class="text-xl font-black text-[#111418] tracking-tight">Навігація</h2>
+      </div>
+
+      <!-- Navigation Cards -->
+      <div class="flex flex-col gap-4">
+        <!-- News Card -->
+        <a href="/news" class="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-[32px]">article</span>
+            </div>
+            <h3 class="text-white text-lg font-black mb-2 leading-tight">Новини</h3>
+            <p class="text-white/90 text-sm leading-relaxed mb-4">
+              Останні події та досягнення
+            </p>
+            <div class="flex items-center gap-2 text-white font-semibold text-sm">
+              <span>Читати</span>
+              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Team Card -->
+        <a href="/team" class="group relative overflow-hidden bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-[32px]">groups</span>
+            </div>
+            <h3 class="text-white text-lg font-black mb-2 leading-tight">Команда</h3>
+            <p class="text-white/90 text-sm leading-relaxed mb-4">
+              Збірна України з дзюдо
+            </p>
+            <div class="flex items-center gap-2 text-white font-semibold text-sm">
+              <span>Дивитись</span>
+              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Events Card -->
+        <a href="/events" class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-[32px]">event</span>
+            </div>
+            <h3 class="text-white text-lg font-black mb-2 leading-tight">Події</h3>
+            <p class="text-white/90 text-sm leading-relaxed mb-4">
+              Календар змагань
+            </p>
+            <div class="flex items-center gap-2 text-white font-semibold text-sm">
+              <span>Переглянути</span>
+              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Search Widget -->
+      <div class="bg-white border-2 border-gray-200 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="material-symbols-outlined text-gray-700 text-[24px]">search</span>
+          <h3 class="text-lg font-black text-gray-900">Пошук</h3>
+        </div>
+        <form method="get" action="/regions" class="space-y-3">
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Назва регіону..."
+            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+          >
+          <button 
+            type="submit"
+            class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+          >
+            <span class="material-symbols-outlined text-[20px]">search</span>
+            <span>Шукати</span>
+          </button>
+        </form>
+        
+        {% if search_query %}
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <div class="text-sm text-gray-600 mb-2">
+            Знайдено: <span class="font-bold text-gray-900">{{ regions|length }}</span>
+          </div>
+          <a href="/regions" class="text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+            <span>Скинути пошук</span>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <!-- Main Content: Regions Grid -->
+    <div class="order-1 lg:order-2">
+      {% if regions and regions|length > 0 %}
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl md:text-3xl font-black text-gray-900">
+          {% if search_query %}
+            Результати пошуку
+          {% else %}
+            Всі регіони
+          {% endif %}
+        </h2>
+        <div class="text-sm text-gray-600">
+          <span class="font-bold text-gray-900">{{ regions|length }}</span> регіон(ів)
+        </div>
+      </div>
+
+      <!-- Regions Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for region in regions %}
+        <a href="/regions/{{ region.slug }}" class="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden border-2 border-transparent hover:border-blue-500">
+          <!-- Logo Section -->
+          <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-6 relative overflow-hidden">
+            <div class="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors"></div>
+            {% if region.logo_url %}
+            <img 
+              src="{{ region.logo_url }}" 
+              alt="Логотип {{ region.region_name }}"
+              class="max-h-full max-w-full object-contain relative z-10 group-hover:scale-110 transition-transform duration-300"
+            >
+            {% else %}
+            <span class="material-symbols-outlined text-gray-300 text-[80px] relative z-10">location_city</span>
+            {% endif %}
+          </div>
+          
+          <!-- Content -->
+          <div class="p-6">
+            <!-- Region Name -->
+            <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+              {{ region.region_name }}
+            </h3>
+            
+            <!-- Federation Name -->
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+              {{ region.federation_name }}
+            </p>
+            
+            <!-- President Info -->
+            {% if region.president_name %}
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+              {% if region.president_photo %}
+              <img 
+                src="{{ region.president_photo }}" 
+                alt="{{ region.president_name }}"
+                class="w-12 h-12 rounded-full object-cover border-2 border-blue-200"
+              >
+              {% else %}
+              <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-blue-600 text-[24px]">person</span>
+              </div>
+              {% endif %}
+              <div class="flex-1 min-w-0">
+                <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold">Президент</div>
+                <div class="font-bold text-gray-900 truncate">{{ region.president_name }}</div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- Footer Stats -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-gray-600">
+                <span class="material-symbols-outlined text-blue-600 text-[20px]">school</span>
+                <span class="text-sm font-semibold">{{ region.schools_count }} секцій</span>
+              </div>
+              <div class="flex items-center gap-1 text-blue-600 font-bold text-sm group-hover:gap-2 transition-all">
+                <span>Детальніше</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      
+      {% else %}
+      <!-- Empty State -->
+      <div class="bg-white rounded-2xl shadow-md p-12 text-center">
+        <span class="material-symbols-outlined text-gray-300 text-[96px] mb-4 block">search_off</span>
+        <h3 class="text-2xl font-black text-gray-900 mb-2">
+          Регіонів не знайдено
+        </h3>
+        <p class="text-gray-600 mb-6">
+          За вашим запитом "{{ search_query }}" нічого не знайдено
+        </p>
+        <a href="/regions" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">
+          <span class="material-symbols-outlined text-[20px]">refresh</span>
+          <span>Показати всі регіони</span>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl overflow-hidden">
+    <div class="p-8 md:p-12 text-center">
+      <span class="material-symbols-outlined text-white text-[64px] mb-4 block">contact_support</span>
+      <h2 class="text-white text-3xl font-black mb-4">Не знайшли свій регіон?</h2>
+      <p class="text-white/90 text-lg max-w-2xl mx-auto mb-8">
+        Зв'яжіться з нами, і ми допоможемо знайти найближчу секцію дзюдо
+      </p>
+      <a href="/contacts" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-xl font-black hover:bg-blue-50 transition-colors">
+        <span class="material-symbols-outlined text-[24px]">email</span>
+        <span>Зв'язатися з нами</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+{% endblock %}

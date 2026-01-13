@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Помилка - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+<main class="container py-12">
+    <div class="max-w-2xl mx-auto text-center">
+        <div class="text-6xl mb-6">⚠️</div>
+        <h1 class="text-3xl font-bold mb-4">Виникла помилка</h1>
+        <p class="text-gray-600 mb-8">{{ error }}</p>
+        <a href="/events" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Повернутися до календаря
+        </a>
+    </div>
+</main>
+{% endblock %}

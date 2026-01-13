@@ -1,0 +1,511 @@
+{% extends "base.html" %}
+
+{% block title %}Протоколи змагань - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
+  
+  <!-- Hero Section -->
+  <section class="mb-10 bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-700 rounded-2xl overflow-hidden relative">
+    <div class="absolute inset-0 bg-[url('https://via.placeholder.com/1280x400/10b981/FFFFFF?text=Protocols')] bg-cover bg-center opacity-10"></div>
+    <div class="relative z-10 p-8 md:p-16 text-center">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-white text-[48px] md:text-[64px]">emoji_events</span>
+      </div>
+      <h1 class="text-white text-4xl md:text-6xl font-black mb-4 tracking-tight">
+        Протоколи змагань
+      </h1>
+      <p class="text-white/90 text-lg md:text-xl max-w-3xl mx-auto">
+        Офіційні результати всеукраїнських та міжнародних змагань
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content: Grid (Sidebar + Content) -->
+  <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="order-2 lg:order-1 lg:sticky lg:top-24 h-fit flex flex-col gap-5">
+      <div class="flex items-center gap-3 pb-3 border-b-2 border-gray-200">
+        <span class="material-symbols-outlined text-[#111418] text-[28px]">folder_open</span>
+        <h2 class="text-xl font-black text-[#111418] tracking-tight">Типи документів</h2>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div class="flex flex-col gap-4">
+        <!-- Documents Card -->
+        <a href="/documents" class="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-[32px]">description</span>
+            </div>
+            <h3 class="text-white text-lg font-black mb-2 leading-tight">Документи</h3>
+            <p class="text-white/90 text-sm leading-relaxed mb-4">
+              Офіційні документи ФДУ
+            </p>
+            <div class="flex items-center gap-2 text-white font-semibold text-sm">
+              <span>Переглянути</span>
+              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Regulations Card -->
+        <a href="/regulations" class="group relative overflow-hidden bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-[32px]">gavel</span>
+            </div>
+            <h3 class="text-white text-lg font-black mb-2 leading-tight">Регламенти</h3>
+            <p class="text-white/90 text-sm leading-relaxed mb-4">
+              Положення змагань
+            </p>
+            <div class="flex items-center gap-2 text-white font-semibold text-sm">
+              <span>Переглянути</span>
+              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="order-1 lg:order-2">
+      <!-- Filters -->
+      <div class="flex flex-col md:flex-row gap-4 mb-8 p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div class="flex-1">
+          <label class="block text-sm font-bold text-gray-700 mb-2">Рік</label>
+          <!-- Custom Dropdown -->
+          <div class="custom-dropdown" data-value="{{ year or 'all' }}" data-name="year">
+            <div class="custom-dropdown-trigger">
+              <span class="custom-dropdown-value">
+                {% if year %}{{ year }}{% else %}Всі роки{% endif %}
+              </span>
+              <span class="custom-dropdown-arrow">
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+            <div class="custom-dropdown-menu">
+              <div class="custom-dropdown-item" data-value="all">Всі роки</div>
+              <div class="custom-dropdown-item" data-value="2026">2026</div>
+              <div class="custom-dropdown-item" data-value="2025">2025</div>
+              <div class="custom-dropdown-item" data-value="2024">2024</div>
+              <div class="custom-dropdown-item" data-value="2023">2023</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex-1">
+          <label class="block text-sm font-bold text-gray-700 mb-2">Категорія</label>
+          <!-- Custom Dropdown -->
+          <div class="custom-dropdown" data-value="{{ category or 'all' }}" data-name="category">
+            <div class="custom-dropdown-trigger">
+              <span class="custom-dropdown-value">
+                {% if category == 'turnir' %}Турніри
+                {% elif category == 'u16' %}До 16 років
+                {% elif category == 'u18' %}До 18 років
+                {% elif category == 'u21' %}До 21 року
+                {% elif category == 'cup' %}Кубок України
+                {% else %}Всі категорії{% endif %}
+              </span>
+              <span class="custom-dropdown-arrow">
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+            <div class="custom-dropdown-menu">
+              <div class="custom-dropdown-item" data-value="all">Всі категорії</div>
+              <div class="custom-dropdown-item" data-value="turnir">Турніри</div>
+              <div class="custom-dropdown-item" data-value="u16">До 16 років</div>
+              <div class="custom-dropdown-item" data-value="u18">До 18 років</div>
+              <div class="custom-dropdown-item" data-value="u21">До 21 року</div>
+              <div class="custom-dropdown-item" data-value="cup">Кубок України</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protocols List (ГОРИЗОНТАЛЬНІ КАРТКИ) -->
+      {% if protocols and protocols|length > 0 %}
+      <div class="flex flex-col gap-4 mb-8">
+        {% for protocol in protocols %}
+        <article class="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 p-6">
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <!-- Icon -->
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-[32px]">emoji_events</span>
+              </div>
+            </div>
+            
+            <!-- Header Content -->
+            <div class="flex-1">
+              <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                {{ protocol.title }}
+              </h3>
+              <div class="flex flex-wrap gap-3 text-sm text-gray-600">
+                {% if protocol.category_display %}
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold">
+                  {{ protocol.category_display }}
+                </span>
+                {% endif %}
+                <span class="inline-flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[18px]">location_on</span>
+                  {{ protocol.location }}
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                  {{ protocol.date }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Files -->
+          {% if protocol.files_list and protocol.files_list|length > 0 %}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {% for file in protocol.files_list %}
+            <a href="{{ file.url }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-200 transition-all group/file" 
+               download 
+               target="_blank">
+              <span class="material-symbols-outlined text-gray-600 group-hover/file:text-emerald-600 transition-colors">article</span>
+              <span class="text-sm font-semibold text-gray-700 group-hover/file:text-emerald-700 transition-colors truncate flex-1">{{ file.name }}</span>
+              <span class="material-symbols-outlined text-gray-400 group-hover/file:text-emerald-600 transition-colors text-[18px]">download</span>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      
+      <!-- Pagination -->
+      {% if total_pages > 1 %}
+      <div class="flex items-center justify-center gap-2">
+        <!-- Previous Button -->
+        {% if has_prev %}
+          <a 
+            href="?page={{ current_page - 1 }}{% if year and year != 'all' %}&year={{ year }}{% endif %}{% if category and category != 'all' %}&category={{ category }}{% endif %}"
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-emerald-600 hover:text-emerald-600 transition-all duration-200 hover:scale-105"
+            title="Попередня сторінка"
+          >
+            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+          </a>
+        {% else %}
+          <button 
+            disabled 
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
+          >
+            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+          </button>
+        {% endif %}
+
+        <!-- Page Numbers -->
+        <div class="flex items-center gap-2">
+          {% set start_page = [1, current_page - 2]|max %}
+          {% set end_page = [total_pages, current_page + 2]|min %}
+          
+          {# Перша сторінка #}
+          {% if start_page > 1 %}
+            <a 
+              href="?page=1{% if year and year != 'all' %}&year={{ year }}{% endif %}{% if category and category != 'all' %}&category={{ category }}{% endif %}"
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200"
+            >
+              1
+            </a>
+            {% if start_page > 2 %}
+              <span class="text-gray-400 px-1">...</span>
+            {% endif %}
+          {% endif %}
+          
+          {# Номери сторінок #}
+          {% for page_num in range(start_page, end_page + 1) %}
+            {% if page_num == current_page %}
+              <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-600 text-white font-bold shadow-lg">
+                {{ page_num }}
+              </span>
+            {% else %}
+              <a 
+                href="?page={{ page_num }}{% if year and year != 'all' %}&year={{ year }}{% endif %}{% if category and category != 'all' %}&category={{ category }}{% endif %}"
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200"
+              >
+                {{ page_num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+          
+          {# Остання сторінка #}
+          {% if end_page < total_pages %}
+            {% if end_page < total_pages - 1 %}
+              <span class="text-gray-400 px-1">...</span>
+            {% endif %}
+            <a 
+              href="?page={{ total_pages }}{% if year and year != 'all' %}&year={{ year }}{% endif %}{% if category and category != 'all' %}&category={{ category }}{% endif %}"
+              class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-200"
+            >
+              {{ total_pages }}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Next Button -->
+        {% if has_next %}
+          <a 
+            href="?page={{ current_page + 1 }}{% if year and year != 'all' %}&year={{ year }}{% endif %}{% if category and category != 'all' %}&category={{ category }}{% endif %}"
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-emerald-600 hover:text-emerald-600 transition-all duration-200 hover:scale-105"
+            title="Наступна сторінка"
+          >
+            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+          </a>
+        {% else %}
+          <button 
+            disabled 
+            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
+          >
+            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+          </button>
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      {% else %}
+      <!-- Empty State -->
+      <div class="text-center py-20">
+        <div class="w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-emerald-400 text-[48px]">trophy</span>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 mb-2">Протоколів не знайдено</h3>
+        <p class="text-gray-600">Протоколи змагань з'являться після завершення турнірів</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+</main>
+
+<style>
+/* Custom Dropdown Styles */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111418;
+}
+
+.custom-dropdown-trigger:hover {
+  border-color: #10b981;
+}
+
+.custom-dropdown-arrow {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+  color: #6b7280;
+}
+
+.custom-dropdown.active .custom-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 300px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s;
+}
+
+.custom-dropdown.active .custom-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4b5563;
+  transition: all 0.15s;
+}
+
+.custom-dropdown-item:hover {
+  background: #d1fae5;
+  color: #10b981;
+}
+
+.custom-dropdown-item.selected {
+  background: #a7f3d0;
+  color: #10b981;
+  font-weight: 600;
+}
+</style>
+
+<script>
+// Custom Dropdown
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdowns = document.querySelectorAll('.custom-dropdown');
+  
+  dropdowns.forEach(dropdown => {
+    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
+    const menu = dropdown.querySelector('.custom-dropdown-menu');
+    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
+    const items = dropdown.querySelectorAll('.custom-dropdown-item');
+    
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('active');
+      
+      // Close other dropdowns
+      dropdowns.forEach(other => {
+        if (other !== dropdown) other.classList.remove('active');
+      });
+    });
+    
+    items.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const value = this.dataset.value;
+        const text = this.textContent.trim();
+        
+        dropdown.dataset.value = value;
+        valueSpan.textContent = text;
+        
+        items.forEach(i => i.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        dropdown.classList.remove('active');
+        
+        filterProtocols();
+      });
+      
+      // Mark selected
+      if (item.dataset.value === dropdown.dataset.value) {
+        item.classList.add('selected');
+      }
+    });
+  });
+  
+  // Close dropdowns on outside click
+  document.addEventListener('click', function() {
+    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+  });
+});
+
+function filterProtocols() {
+  const year = document.querySelector('.custom-dropdown[data-name="year"]').dataset.value;
+  const category = document.querySelector('.custom-dropdown[data-name="category"]').dataset.value;
+  
+  let url = '/protocols?page=1';
+  if (year && year !== 'all') url += `&year=${year}`;
+  if (category && category !== 'all') url += `&category=${category}`;
+  
+  window.location.href = url;
+}
+// ========== ІНІЦІАЛІЗАЦІЯ ДРОПДАУНІВ (для page transitions) ==========
+function initCustomDropdowns() {
+  const dropdowns = document.querySelectorAll('.custom-dropdown');
+  
+  // Видаляємо старі event listeners (клонування елементів)
+  dropdowns.forEach(dropdown => {
+    const newDropdown = dropdown.cloneNode(true);
+    dropdown.parentNode.replaceChild(newDropdown, dropdown);
+  });
+  
+  // Отримуємо оновлені посилання
+  const freshDropdowns = document.querySelectorAll('.custom-dropdown');
+  
+  freshDropdowns.forEach(dropdown => {
+    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
+    const menu = dropdown.querySelector('.custom-dropdown-menu');
+    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
+    const items = dropdown.querySelectorAll('.custom-dropdown-item');
+    
+    // Trigger click
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('active');
+      
+      // Close other dropdowns
+      freshDropdowns.forEach(other => {
+        if (other !== dropdown) other.classList.remove('active');
+      });
+    });
+    
+    // Items click
+    items.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const value = this.dataset.value;
+        const text = this.textContent.trim();
+        
+        dropdown.dataset.value = value;
+        valueSpan.textContent = text;
+        
+        items.forEach(i => i.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        dropdown.classList.remove('active');
+        
+        // Викликаємо відповідний фільтр
+        const dropdownName = dropdown.dataset.name;
+        if (window.location.pathname.includes('/documents')) {
+          filterDocuments();
+        } else if (window.location.pathname.includes('/protocols')) {
+          filterProtocols();
+        } else if (window.location.pathname.includes('/regulations')) {
+          filterRegulations();
+        }
+      });
+      
+      // Mark selected
+      if (item.dataset.value === dropdown.dataset.value) {
+        item.classList.add('selected');
+      }
+    });
+  });
+  
+  // Close on outside click
+  document.addEventListener('click', function() {
+    freshDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+  });
+  
+  console.log('✓ Custom dropdowns initialized');
+}
+
+// Ініціалізація при завантаженні сторінки
+document.addEventListener('DOMContentLoaded', initCustomDropdowns);
+
+// Ініціалізація після page transition
+document.addEventListener('pageTransitionComplete', initCustomDropdowns);
+
+</script>
+{% endblock %}

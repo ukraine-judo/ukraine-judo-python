@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <!-- Essential Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}Федерація Дзюдо України - Офіційний сайт{% endblock %}</title>
+    <meta name="title" content="{% block meta_title %}Федерація Дзюдо України - Офіційний сайт{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Офіційна організація, що розвиває дзюдо в Україні з 1991 року. Новини, календар змагань, збірна України, результати турнірів та документи.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}дзюдо україна, федерація дзюдо, змагання з дзюдо, збірна україни, українське дзюдо, judo ukraine, спорт україна, олімпійські види спорту{% endblock %}">
+    <meta name="author" content="Федерація Дзюдо України">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Ukrainian">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical %}https://judoukraine.co.ua/{% endblock %}">
+    
+    <!-- Favicon - Multiple Sizes for All Platforms -->
+    <link rel="icon" type="image/x-icon" href="../../static/assets/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../static/assets/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../static/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="../../static/assets/favicon/favicon-48x48.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../static/assets/favicon/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../../static/assets/favicon/apple-touch-icon-152x152.png">
+    
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="../../static/assets/favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../../static/assets/favicon/android-chrome-512x512.png">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0E2A47">
+    <meta name="msapplication-TileColor" content="#0E2A47">
+    <meta name="msapplication-TileImage" content="/assets/mstile-144x144.png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://judoukraine.co.ua/{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Федерація Дзюдо України{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Офіційна організація, що розвиває дзюдо в Україні з 1991 року. Новини, змагання та досягнення української збірної.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://judoukraine.co.ua/assets/og-image.jpg{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="uk_UA">
+    <meta property="og:site_name" content="Федерація Дзюдо України">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{% block twitter_url %}https://judoukraine.co.ua/{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}Федерація Дзюдо України{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Офіційна організація, що розвиває дзюдо в Україні з 1991 року.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://judoukraine.co.ua/assets/og-image.jpg{% endblock %}">
+    <meta name="twitter:site" content="@ukraine_judo_official">
+    
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SportsOrganization",
+        "name": "Федерація Дзюдо України",
+        "alternateName": "Ukraine Judo Federation",
+        "url": "https://judoukraine.co.ua",
+        "logo": "https://judoukraine.co.ua/assets/fju-logo.png",
+        "description": "Офіційна організація, що розвиває дзюдо в Україні з 1991 року",
+        "foundingDate": "1991",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "вул. Еспланадна, 42, офіс 808",
+            "addressLocality": "Київ",
+            "postalCode": "01601",
+            "addressCountry": "UA"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+38-044-284-38-39",
+            "contactType": "customer service",
+            "email": "judoukr@ukr.net",
+            "availableLanguage": ["Ukrainian", "English"]
+        },
+        "sameAs": [
+            "https://www.facebook.com/UkraineJudoFederation",
+            "https://www.instagram.com/ukraine_judo_official",
+            "https://t.me/ukrainianjudofederation",
+            "https://www.youtube.com/@ukrainejudo"
+        ]
+    }
+    </script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3B82F6',
+                            600: '#2563EB',
+                            700: '#1d4ed8',
+                        },
+                        accent: {
+                            500: '#F59E0B',
+                            600: '#D97706',
+                        },
+                        brand: {
+                            900: '#0B1930',
+                            800: '#0E2746',
+                            700: '#12365C',
+                            DEFAULT: '#0E2A47',
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 0.8s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Common Styles -->
+    <style>
+        /* Design tokens */
+        :root {
+            /* Brand */
+            --brand-900: #0B1930;
+            --brand-800: #0E2746;
+            --brand-700: #12365C;
+            --brand: #0E2A47;
+            --accent: #FFD34E;
+            --accent-hover: #F5C842;
+            
+            /* Base */
+            --bg: #F8FAFC;
+            --surface: #ffffff;
+            --text: #0F172A;
+            --text-secondary: #334155;
+            --muted: #64748B;
+            --muted-light: #94A3B8;
+            
+            /* Effects */
+            --radius-1: 8px;
+            --radius-2: 12px;
+            --radius-3: 16px;
+            --radius-4: 20px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-1: var(--shadow-md);
+            --shadow-2: var(--shadow-lg);
+            
+            /* Layout */
+            --container: 1200px;
+            --gutter: clamp(20px, 4vw, 32px);
+            --section-spacing: clamp(3rem, 8vw, 6rem);
+            
+            /* Type (fluid) */
+            --fs-900: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+            --fs-800: clamp(1.75rem, 1.5rem + 1.25vw, 2.5rem);
+            --fs-700: clamp(1.375rem, 1.25rem + .625vw, 1.75rem);
+            --fs-600: clamp(1.125rem, 1.05rem + .375vw, 1.25rem);
+            --fs-500: 1rem;
+            --fs-400: .9375rem;
+            --fs-300: .875rem;
+            
+            /* Animation */
+            --speed-1: .2s;
+            --speed-2: .3s;
+            --speed-3: .5s;
+            --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            width: 100%;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: var(--text);
+            background: 
+                radial-gradient(1200px 800px at 10% -10%, #E9F1FA 0%, transparent 60%),
+                radial-gradient(900px 600px at 110% 10%, #E6EFFA 0%, transparent 55%),
+                var(--bg);
+        }
+
+        img, svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            inline-size: 1px;
+            block-size: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+        }
+
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+        }
+
+        .skip-link:focus {
+            left: var(--gutter);
+            top: 10px;
+            background: var(--surface);
+            padding: .5rem .75rem;
+            border-radius: .5rem;
+            box-shadow: var(--shadow-1);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            line-height: 1.15;
+            margin: 0 0 .4em;
+            font-weight: 900;
+        }
+
+        h1 {
+            font-size: var(--fs-900);
+            letter-spacing: -.02em;
+        }
+
+        h2 {
+            font-size: var(--fs-800);
+            letter-spacing: -.01em;
+        }
+
+        h3 {
+            font-size: var(--fs-700);
+        }
+
+        p {
+            font-size: var(--fs-500);
+            margin: 0 0 .9em;
+            line-height: 1.6;
+        }
+
+        .lead {
+            font-size: var(--fs-600);
+            color: var(--text);
+            font-weight: 300;
+        }
+
+        .eyebrow {
+            font-weight: 700;
+            color: var(--brand);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-size: .8rem;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .link {
+            color: var(--brand-700);
+            font-weight: 600;
+        }
+
+        .link:hover {
+            color: var(--brand);
+        }
+
+        /* Hero custom styling */
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .hero-eyebrow {
+            font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* Layout helpers */
+        .container {
+            width: min(var(--container), 100% - 2*var(--gutter));
+            margin-inline: auto;
+        }
+
+        .narrow {
+            max-width: 760px;
+            margin-inline: auto;
+        }
+
+        .Section {
+            position: relative;
+        }
+
+        .Section__head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .Section__head h2 {
+            margin-bottom: 0;
+        }
+
+        .Section__head p {
+            margin-bottom: 0;
+            max-width: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .Section__head {
+                flex-direction: column;
+                align-items: start;
+                gap: 1rem;
+            }
+        }
+
+        /* Grid helpers */
+        .Grid {
+            display: grid;
+            gap: clamp(16px, 2.4vw, 28px);
+        }
+
+        .Grid--3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        @media (max-width: 1000px) {
+            .Grid--3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .Grid--3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Badges */
+        .Badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .28rem .6rem;
+            border-radius: 999px;
+            background: rgba(14, 42, 71, .08);
+            color: var(--brand-700);
+            font-weight: 700;
+            font-size: .72rem;
+            letter-spacing: .06em;
+        }
+
+        .Badge--green {
+            background: rgba(16, 185, 129, .12);
+            color: #0F8F62;
+        }
+
+        /* Pills */
+        .Pills {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+        }
+
+        .Pill {
+            padding: .45rem .8rem;
+            border-radius: 999px;
+            border: 1px solid rgba(14, 42, 71, .12);
+            background: rgba(255, 255, 255, .7);
+            backdrop-filter: blur(8px);
+            font-weight: 600;
+            color: var(--brand-700);
+            transition: background var(--speed-1), transform var(--speed-1);
+        }
+
+        .Pill:hover {
+            transform: translateY(-1px);
+            background: #fff;
+        }
+
+        .Pill--active {
+            background: var(--brand);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* Page Transitions */
+        .page-transition {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .page-transition.fade-out {
+            opacity: 0;
+        }
+
+        /* Zoom functionality for images */
+        .Lightbox__img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+        }
+
+        .Lightbox__img.zoomed {
+            cursor: zoom-out;
+            transform: scale(2);
+        }
+
+        .Lightbox__img.zoomed:hover {
+            transform: scale(2) !important;
+        }
+
+        /* Animation keyframes */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-shimmer {
+            animation: shimmer 1.5s infinite;
+        }
+        
+            /* ✅ АНІМАЦІЇ ДЛЯ ПОТОЧНИХ ПОДІЙ */
+    @keyframes pulse-slow {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.95;
+        }
+    }
+    
+    .animate-pulse-slow {
+        animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    @keyframes bounce-slow {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    .animate-bounce-slow {
+        animation: bounce-slow 2s ease-in-out infinite;
+    }
+    
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    
+    .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient 3s ease infinite;
+    }
+    
+    /* Glow effect для поточних подій */
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+        }
+    }
+    
+    .animate-glow {
+        animation: glow 2s ease-in-out infinite;
+    }
+    /* Повна ширина для header та footer */
+header .max-w-7xl,
+footer .max-w-7xl {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: clamp(1rem, 5vw, 4rem);
+    padding-right: clamp(1rem, 5vw, 4rem);
+}
+/* ===== АДАПТИВНА ШИРИНА КОНТЕНТУ ===== */
+
+/* Full HD (1920px) */
+@media (min-width: 1536px) {
+    :root {
+        --container: 1500px;
+    }
+}
+
+/* 2K (2048px) */
+@media (min-width: 1920px) {
+    :root {
+        --container: 1700px;
+    }
+}
+
+/* QHD (2560px) */
+@media (min-width: 2304px) {
+    :root {
+        --container: 2000px;
+    }
+}
+
+/* Автоматичне збільшення для Tailwind класів */
+@media (min-width: 1536px) {
+    header .max-w-7xl,
+    footer .max-w-7xl,
+    main .max-w-7xl,
+    .max-w-7xl {
+        max-width: var(--container) !important;
+    }
+}
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20 whitespace-nowrap">
+                
+                <!-- Brand/Logo -->
+                <a href="/" class="flex items-center gap-3 flex-1 group">
+                    <img 
+                        src="../../../../static/assets/favicon/favicon-48x48.png"
+                        alt="Логотип ФДУ" 
+                        class="w-10 h-10 lg:w-9 lg:h-9 transition-transform duration-300 group-hover:scale-105"
+                        width="48" 
+                        height="48"
+                    >
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                        <h2 class="text-lg lg:text-xl font-bold text-slate-900 leading-tight tracking-tight">
+                            Федерація Дзюдо України
+                        </h2>
+                        <span class="hidden sm:inline-flex items-center px-2 py-1 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 rounded-full">
+                            Неофіційний сайт
+                        </span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-8 ml-auto" aria-label="Основна навігація">
+                    <a href="/" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="home">
+                        Головна
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                    <a href="/news" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="news">
+                        Новини
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                    <a href="/team" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="team">
+                        Збірна
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                    <a href="/calendar" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="events">
+                        Календар
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                    <a href="/documents" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="documents">
+                        Документи
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                    <a href="/contacts" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="contacts">
+                        Контакти
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
+                </nav>
+                
+                <!-- Mobile Menu Toggle -->
+                <button 
+                    id="mobileMenuToggle"
+                    class="flex md:hidden flex-col justify-center items-center w-10 h-10 ml-4 p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200 z-50"
+                    aria-label="Відкрити меню навігації"
+                    aria-expanded="false"
+                >
+                    <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full transition-all duration-300"></span>
+                    <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full transition-all duration-300 my-1.5"></span>
+                    <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Drawer Menu -->
+    <div 
+        id="mobileDrawer" 
+        class="fixed inset-0 z-[100] pointer-events-none"
+        aria-hidden="true"
+    >
+        <!-- Backdrop -->
+        <div 
+            id="drawerBackdrop"
+            class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+        ></div>
+        
+        <!-- Drawer Panel -->
+        <nav 
+            class="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out flex flex-col"
+        >
+            <!-- Drawer Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <img 
+                        src="/static/../../static/assets/fju-logo.png" 
+                        alt="Логотип ФДУ" 
+                        class="w-8 h-8 rounded-lg"
+                        width="32" 
+                        height="32"
+                    >
+                    <span class="text-base font-bold text-slate-900">ФДУ</span>
+                </div>
+                <button 
+                    id="closeDrawer"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                    aria-label="Закрити меню"
+                >
+                    <svg class="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Drawer Navigation -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 px-3">Навігація</h4>
+                <ul class="space-y-1">
+                    <li>
+                        <a href="/" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="home">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Головна
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/news" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="news">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Новини
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/team" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="team">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Збірна
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/events" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="calendar">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Календар
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/documents" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="documents">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Документи
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/contacts" class="drawer-link flex items-center px-4 py-3 text-base font-semibold text-slate-900 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 relative group" data-page="contacts">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-blue-600 rounded-r-full transition-all duration-200 group-hover:h-10"></span>
+                            Контакти
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Drawer Footer -->
+            <div class="p-4 border-t border-gray-200 flex-shrink-0">
+                <p class="text-xs text-center text-gray-500">© 2026 Федерація Дзюдо України</p>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content pt-16 lg:pt-20">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- Footer -->
+    <footer class="relative">
+        <!-- Partners Section -->
+        <section class="py-12 md:py-16 lg:py-20 border-b border-gray-200" aria-labelledby="partners-title">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+            <h2 class="text-center text-sm md:text-base font-bold uppercase tracking-widest text-gray-500 mb-8 md:mb-10 lg:mb-12" id="partners-title">
+            Офіційні партнери
+            </h2>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-10 lg:gap-14" role="list">
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://etg.ua/" target="_blank" rel="noopener noreferrer" aria-label="ETG - перейти на сайт партнера">
+                <img src="../../../../static/assets/etg-logo.svg" alt="ETG" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://www.frutexworld.com/" target="_blank" rel="noopener noreferrer" aria-label="Frutex - перейти на сайт партнера">
+                <img src="../../../../static/assets/frutex-logo.svg" alt="Frutex" loading="lazy" width="120" height="40" class="!max-w-[180px] !max-h-[70px] !min-w-[160px] w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://leon-force.com.ua/" target="_blank" rel="noopener noreferrer" aria-label="Leon Force - перейти на сайт партнера">
+                <img src="../../../../static/assets/leon-logo.png" alt="Leon Force" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://mirozdanie.com.ua/" target="_blank" rel="noopener noreferrer" aria-label="Міроображення - перейти на сайт партнера">
+                <img src="../../../../static/assets/mir-logo.png" alt="Міроображення" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://petrykivka.ua/" target="_blank" rel="noopener noreferrer" aria-label="Петриківка - перейти на сайт партнера">
+                <img src="../../../../static/assets/petrikiv-logo.png" alt="Петриківка" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://tascombank.ua/" target="_blank" rel="noopener noreferrer" aria-label="TASCOMBANK - перейти на сайт партнера">
+                <img src="../../../../static/assets/TAS_logo.svg" alt="TASCOMBANK" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            <div class="flex items-center justify-center px-5 py-3" role="listitem">
+                <a href="https://greenagro.info/" target="_blank" rel="noopener noreferrer" aria-label="Green Agro - перейти на сайт партнера">
+                <img src="../../../../static/assets/TKD.png" alt="Green Agro" loading="lazy" width="120" height="40" class="max-w-[100px] max-h-10 md:max-w-[120px] md:max-h-12 lg:max-w-[140px] lg:max-h-14 w-auto h-auto object-contain">
+                </a>
+            </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Main Footer Content -->
+        <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1.5fr] gap-10 md:gap-12 lg:gap-16 xl:gap-20 py-12 md:py-16 lg:py-20">
+            
+            <!-- Brand Info Column -->
+            <div class="flex flex-col gap-6">
+            <a href="/" class="flex items-center gap-4 no-underline transition-transform duration-300 hover:translate-x-1 group" aria-label="Федерація Дзюдо України - повернутися на головну">
+                <img class="w-12 h-12 md:w-14 md:h-14 shadow-blue-500/15 transition-shadow duration-300 group-hover:shadow-blue-500/25" 
+                    src="../../../../static/assets/favicon/apple-touch-icon-152x152.png"
+                    alt="" 
+                    aria-hidden="true" 
+                    width="48" 
+                    height="48" />
+                <div class="flex flex-col gap-1">
+                <span class="text-lg md:text-xl font-bold text-gray-900 leading-tight">Федерація Дзюдо України</span>
+                <span class="text-[13px] text-gray-500 font-medium">Неофіційний вебсайт</span>
+                </div>
+            </a>
+            <p class="text-[15px] leading-relaxed text-gray-600 m-0">
+                Офіційна організація, що розвиває дзюдо в Україні з 1991 року.
+            </p>
+            <nav class="flex gap-3" aria-label="Соціальні мережі">
+                <a href="https://www.facebook.com/UkraineJudoFederation" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="Facebook" 
+                class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M13 22v-8h3l1-4h-4V7a2 2 0 0 1 2-2h2V1h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z"/>
+                </svg>
+                </a>
+                <a href="https://www.instagram.com/ukraine_judo_official" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="Instagram" 
+                class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                </svg>
+                </a>
+                <a href="https://t.me/ukrainianjudofederation" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="Telegram" 
+                class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9.5 16.6l-.3 4c.4 0 .6-.2.9-.4l2.1-2 4.3 3.1c.8.5 1.4.2 1.6-.8l2.9-13.6c.3-1.3-.5-1.8-1.3-1.5L2.7 9.7c-1.3.5-1.3 1.2-.2 1.5l4.4 1.4L17.8 6c.6-.4 1.2-.2.7.2l-9 8.3z"/>
+                </svg>
+                </a>
+                <a href="https://www.youtube.com/@ukrainejudo" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="YouTube" 
+                class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.5.3c-.4 0-1.3.1-2.1 1-.7.7-.9 2.4-.9 2.4S0 8.3 0 10.4v1.9c0 2.1.5 4.2.5 4.2s.2 1.7.9 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.2.3 8.2.3 0 0 5.8 0 8.6-.3.4-.1 1.3-.1 2.1-1 .7-.7.9-2.4.9-2.4s.5-2.1.5-4.2v-1.9c0-2.1-.5-4.2-.5-4.2zM9.5 14.9V8.9l6.1 3-6.1 3z"/>
+                </svg>
+                </a>
+            </nav>
+            </div>
+
+            <!-- Quick Links Column -->
+            <nav class="flex flex-col gap-6" aria-labelledby="footer-links-title">
+            <h3 class="text-[15px] font-bold uppercase tracking-wider text-gray-900 m-0" id="footer-links-title">
+                Швидкі посилання
+            </h3>
+            <ul class="flex flex-col gap-3.5 list-none m-0 p-0">
+                <li>
+                <a href"/" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Головна
+                </a>
+                </li>
+                <li>
+                <a href="/news" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Новини
+                </a>
+                </li>
+                <li>
+                <a href="/events" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Календар
+                </a>
+                </li>
+                <li>
+                <a href="/team" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Збірна
+                </a>
+                </li>
+                <li>
+                <a href="/documents" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Документи
+                </a>
+                </li>
+                <li>
+                <a href="/contacts" class="text-[15px] text-gray-600 no-underline inline-flex items-center gap-2 transition-all duration-300 relative before:content-['→'] before:opacity-0 before:-translate-x-2 before:transition-all before:duration-300 before:text-blue-500 hover:text-blue-500 hover:translate-x-1 hover:before:opacity-100 hover:before:translate-x-0">
+                    Контакти
+                </a>
+                </li>
+            </ul>
+            </nav>
+
+            <!-- Contact Column -->
+            <div class="flex flex-col gap-6 md:col-span-2 lg:col-span-1">
+            <div class="flex flex-col gap-5">
+                <h3 class="text-[15px] font-bold uppercase tracking-wider text-gray-900 m-0" id="footer-contacts-title">
+                Контакти
+                </h3>
+                <address class="flex flex-col gap-4 not-italic">
+                <div class="flex items-start gap-3.5 text-[15px] text-gray-600 transition-all duration-300 hover:text-gray-900 hover:translate-x-0.5 group">
+                    <span class="material-symbols-outlined text-blue-500 text-[22px] flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">location_on</span>
+                    <div>
+                    <p class="text-gray-600 font-normal leading-normal m-0">
+                        Україна, 01601, м. Київ, вул. Еспланадна, 42, офіс 808
+                    </p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3.5 text-[15px] text-gray-600 transition-all duration-300 hover:text-gray-900 hover:translate-x-0.5 group">
+                    <span class="material-symbols-outlined text-blue-500 text-[22px] flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">call</span>
+                    <a href="tel:+380442843839" class="text-gray-600 no-underline transition-colors duration-300 hover:text-blue-500">
+                    +38 044 284-38-39
+                    </a>
+                </div>
+                <div class="flex items-start gap-3.5 text-[15px] text-gray-600 transition-all duration-300 hover:text-gray-900 hover:translate-x-0.5 group">
+                    <span class="material-symbols-outlined text-blue-500 text-[22px] flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true">mail</span>
+                    <a href="mailto:judoukr@ukr.net" class="text-gray-600 no-underline transition-colors duration-300 hover:text-blue-500">
+                    judoukr@ukr.net
+                    </a>
+                </div>
+                </address>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Copyright Bar -->
+        <div class="border-t-2 border-gray-200 bg-white py-5 md:py-7">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+            <p class="text-sm text-gray-500 m-0">
+                © 2025 Федерація Дзюдо України. Всі права захищені.
+            </p>
+            </div>
+            <nav class="flex flex-wrap justify-center gap-6" aria-label="Юридична інформація">
+            <a href="/terms" class="text-sm text-gray-500 no-underline transition-colors duration-300 hover:text-blue-500">
+                Умови використання
+            </a>
+            <a href="/privacy" class="text-sm text-gray-500 no-underline transition-colors duration-300 hover:text-blue-500">
+                Політика конфіденційності
+            </a>
+            <a href="/disclaimer" class="text-sm text-gray-500 no-underline transition-colors duration-300 hover:text-blue-500">
+                Відмова від відповідальності
+            </a>
+            </nav>
+        </div>
+        </div>
+    </footer>
+
+<style>
+  /* ========== ГЛОБАЛЬНА АНІМАЦІЯ ПЕРЕХОДІВ ========== */
+  .page-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-transition-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* ========== LOADER ========== */
+  .page-transition-loader {
+    position: relative;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    animation: fadeInUp 0.4s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Логотип */
+  .transition-logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .transition-logo .material-symbols-outlined {
+    color: white;
+    font-size: 48px;
+    font-weight: 400;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 25px 80px rgba(59, 130, 246, 0.6);
+    }
+  }
+
+  /* Прогрес бар */
+  .transition-progress {
+    width: 240px;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .transition-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3B82F6 0%, #2563EB 50%, #3B82F6 100%);
+    background-size: 200% 100%;
+    border-radius: 999px;
+    animation: progressMove 1.5s ease-in-out infinite;
+  }
+
+  @keyframes progressMove {
+    0% {
+      width: 0%;
+      background-position: 0% 0%;
+    }
+    50% {
+      width: 70%;
+      background-position: 100% 0%;
+    }
+    100% {
+      width: 100%;
+      background-position: 200% 0%;
+    }
+  }
+
+  /* Текст */
+  .transition-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 0.5px;
+    text-align: center;
+    animation: fadeText 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeText {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* ========== FADE КОНТЕНТУ ========== */
+  body {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  body.page-transitioning {
+    opacity: 0.95;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* ========== FADE IN CONTENT ========== */
+  .main-content {
+    animation: fadeInContent 0.5s ease-out;
+  }
+
+  @keyframes fadeInContent {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ========== SKELETON LOADER ========== */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      #f1f5f9 0%,
+      #e2e8f0 50%,
+      #f1f5f9 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .skeleton-card {
+    height: 200px;
+    border-radius: 16px;
+  }
+</style>
+<!-- Page Transition Overlay -->
+<div class="page-transition-overlay" id="pageTransitionOverlay">
+    <div class="page-transition-loader">
+        <!-- Лого -->
+        <div class="transition-logo">
+            <span class="material-symbols-outlined">sports_martial_arts</span>
+        </div>
+        
+        <!-- Прогрес бар -->
+        <div class="transition-progress">
+            <div class="transition-progress-bar"></div>
+        </div>
+        
+        <!-- Текст -->
+        <p class="transition-text">Завантаження...</p>
+    </div>
+</div>
+
+
+  <script>
+    // ========== ГЛОБАЛЬНА СИСТЕМА ПЛАВНИХ ПЕРЕХОДІВ ==========
+    (function() {
+        'use strict';
+
+        const ANIMATION_DURATION = 300;
+        const overlay = document.getElementById('pageTransitionOverlay');
+        let isTransitioning = false;
+        let loadedScripts = new Set(); // ✅ Відстеження завантажених скриптів
+
+        // Ініціалізація при завантаженні сторінки
+        document.addEventListener('DOMContentLoaded', function() {
+            initPageTransitions();
+            fadeInPage();
+            updateActiveNavigation();
+            initMobileMenu();
+            trackInitialScripts(); // ✅ Запам'ятовуємо початкові скрипти
+        });
+
+        // ✅ Запам'ятовуємо скрипти що вже є на сторінці
+        function trackInitialScripts() {
+            document.querySelectorAll('script[src]').forEach(script => {
+                loadedScripts.add(script.src);
+            });
+        }
+
+        // Fade in при завантаженні сторінки
+        function fadeInPage() {
+            document.body.classList.remove('page-transitioning');
+        }
+
+        // Ініціалізація системи переходів
+        function initPageTransitions() {
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                
+                if (!link) return;
+                if (link.hostname !== window.location.hostname) return;
+                if (link.hasAttribute('target')) return;
+                if (link.pathname === window.location.pathname) return;
+                if (link.getAttribute('href')?.startsWith('#')) return;
+                if (link.hasAttribute('download')) return;
+                if (link.classList.contains('no-transition')) return;
+                if (link.href.includes('/api/')) return;
+                
+                e.preventDefault();
+                
+                if (!isTransitioning) {
+                    navigateToPage(link.href);
+                }
+            });
+
+            window.addEventListener('popstate', function(e) {
+                if (!isTransitioning) {
+                    navigateToPage(window.location.href, false);
+                }
+            });
+        }
+
+        // Навігація на нову сторінку
+        async function navigateToPage(url, updateHistory = true) {
+            if (isTransitioning) return;
+            
+            isTransitioning = true;
+
+            try {
+                // 1. Fade out
+                document.body.classList.add('page-transitioning');
+                overlay.classList.add('active');
+                await sleep(ANIMATION_DURATION);
+
+                // 2. ✅ Очищуємо старі page-specific скрипти
+                cleanupPageScripts();
+
+                // 3. Завантажуємо нову сторінку
+                const response = await fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) throw new Error('Failed to load page');
+
+                const html = await response.text();
+                const parser = new DOMParser();
+                const newDoc = parser.parseFromString(html, 'text/html');
+
+                // 4. Оновлюємо title
+                document.title = newDoc.title;
+
+                // 5. Замінюємо content
+                const newMain = newDoc.querySelector('main') || newDoc.querySelector('body');
+                const currentMain = document.querySelector('main') || document.querySelector('body');
+
+                if (newMain && currentMain) {
+                    currentMain.innerHTML = newMain.innerHTML;
+                }
+
+                // 6. Оновлюємо meta tags
+                updateMetaTags(newDoc);
+
+                // 7. ✅ Завантажуємо нові page-specific скрипти
+                await loadPageScripts(newDoc);
+
+                // 8. Scroll to top
+                window.scrollTo({ top: 0, behavior: 'instant' });
+
+                // 9. Оновлюємо URL
+                if (updateHistory) {
+                    window.history.pushState({ url: url }, '', url);
+                }
+
+                // 10. Реініціалізуємо скрипти
+                reinitializePageScripts();
+
+                // 11. Fade in
+                await sleep(50);
+                overlay.classList.remove('active');
+                document.body.classList.remove('page-transitioning');
+                await sleep(ANIMATION_DURATION);
+
+                isTransitioning = false;
+
+            } catch (error) {
+                console.error('Page transition error:', error);
+                window.location.href = url;
+            }
+        }
+
+        // ✅ ОЧИЩЕННЯ СТАРИХ PAGE-SPECIFIC СКРИПТІВ
+        function cleanupPageScripts() {
+            // Видаляємо всі page-specific скрипти (не base.html скрипти)
+            document.querySelectorAll('script[data-page-script="true"]').forEach(script => {
+                script.remove();
+            });
+
+            // Очищуємо глобальні змінні page-specific скриптів
+            if (window.eventFilters) {
+                delete window.eventFilters;
+            }
+            if (window.applyFilters) {
+                delete window.applyFilters;
+            }
+            if (window.resetFilters) {
+                delete window.resetFilters;
+            }
+            if (window.changeMonth) {
+                delete window.changeMonth;
+            }
+
+            console.log('✓ Old page scripts cleaned up');
+        }
+
+        // ✅ ЗАВАНТАЖЕННЯ НОВИХ PAGE-SPECIFIC СКРИПТІВ
+        async function loadPageScripts(newDoc) {
+            const newScripts = newDoc.querySelectorAll('script');
+            
+            for (const script of newScripts) {
+                // Пропускаємо inline скрипти base.html (вони вже є)
+                if (!script.src && script.textContent.includes('initPageTransitions')) {
+                    continue;
+                }
+
+                // Пропускаємо вже завантажені глобальні скрипти
+                if (script.src && loadedScripts.has(script.src)) {
+                    continue;
+                }
+
+                // Завантажуємо новий скрипт
+                await loadScript(script);
+            }
+
+            console.log('✓ New page scripts loaded');
+        }
+
+        // ✅ ЗАВАНТАЖЕННЯ ОКРЕМОГО СКРИПТА
+        function loadScript(originalScript) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                
+                // Копіюємо атрибути
+                if (originalScript.src) {
+                    script.src = originalScript.src;
+                    script.async = false; // Завантажуємо послідовно
+                    
+                    // Позначаємо як page-specific
+                    script.setAttribute('data-page-script', 'true');
+                    
+                    script.onload = () => {
+                        loadedScripts.add(originalScript.src);
+                        resolve();
+                    };
+                    script.onerror = () => {
+                        console.error('Failed to load script:', originalScript.src);
+                        reject();
+                    };
+                    
+                    document.body.appendChild(script);
+                } else {
+                    // Inline скрипт
+                    script.textContent = originalScript.textContent;
+                    script.setAttribute('data-page-script', 'true');
+                    
+                    try {
+                        document.body.appendChild(script);
+                        resolve();
+                    } catch (e) {
+                        console.error('Failed to execute inline script:', e);
+                        reject(e);
+                    }
+                }
+            });
+        }
+
+        // Оновлення meta tags
+        function updateMetaTags(newDoc) {
+            const newDescription = newDoc.querySelector('meta[name="description"]');
+            const currentDescription = document.querySelector('meta[name="description"]');
+            if (newDescription && currentDescription) {
+                currentDescription.setAttribute('content', newDescription.getAttribute('content'));
+            }
+
+            const ogTags = ['og:title', 'og:description', 'og:image', 'og:url'];
+            ogTags.forEach(tag => {
+                const newTag = newDoc.querySelector(`meta[property="${tag}"]`);
+                const currentTag = document.querySelector(`meta[property="${tag}"]`);
+                if (newTag && currentTag) {
+                    currentTag.setAttribute('content', newTag.getAttribute('content'));
+                }
+            });
+        }
+
+        // ✅ ОНОВЛЕННЯ АКТИВНОЇ НАВІГАЦІЇ
+        function updateActiveNavigation() {
+            const currentPath = window.location.pathname;
+            
+            let activePage = 'home';
+            if (currentPath.includes('/news')) activePage = 'news';
+            else if (currentPath.includes('/team')) activePage = 'team';
+            else if (currentPath.includes('/calendar')) activePage = 'events';
+            else if (currentPath.includes('/documents')) activePage = 'documents';
+            else if (currentPath.includes('/contacts')) activePage = 'contacts';
+            else if (currentPath === '/' || currentPath === '/index' || currentPath === '/index.html') activePage = 'home';
+            
+            // Desktop Navigation
+            const desktopNavLinks = document.querySelectorAll('.nav-link');
+            desktopNavLinks.forEach(link => {
+                const linkPage = link.getAttribute('data-page');
+                const underline = link.querySelector('span');
+                
+                if (linkPage === activePage) {
+                    link.classList.remove('text-gray-700');
+                    link.classList.add('text-blue-600', 'font-bold');
+                    if (underline) {
+                        underline.classList.remove('scale-x-0');
+                        underline.classList.add('scale-x-100');
+                    }
+                } else {
+                    link.classList.add('text-gray-700');
+                    link.classList.remove('text-blue-600', 'font-bold');
+                    if (underline) {
+                        underline.classList.add('scale-x-0');
+                        underline.classList.remove('scale-x-100');
+                    }
+                }
+            });
+            
+            // Mobile Drawer Navigation
+            const drawerNavLinks = document.querySelectorAll('.drawer-link');
+            drawerNavLinks.forEach(link => {
+                const linkPage = link.getAttribute('data-page');
+                const indicator = link.querySelector('span');
+                
+                if (linkPage === activePage) {
+                    link.classList.remove('text-slate-900');
+                    link.classList.add('bg-blue-50', 'text-blue-600');
+                    if (indicator) {
+                        indicator.classList.remove('h-0');
+                        indicator.classList.add('h-10');
+                    }
+                } else {
+                    link.classList.add('text-slate-900');
+                    link.classList.remove('bg-blue-50', 'text-blue-600');
+                    if (indicator) {
+                        indicator.classList.add('h-0');
+                        indicator.classList.remove('h-10');
+                    }
+                }
+            });
+        }
+
+        // Реініціалізація скриптів
+        function reinitializePageScripts() {
+            // ✅ Викликаємо ініціалізацію якщо функції існують
+            if (typeof initCustomDropdowns === 'function') {
+                initCustomDropdowns();
+            }
+            if (typeof initCoachDropdowns === 'function') {
+                initCoachDropdowns();
+            }
+            if (typeof initPaginationListeners === 'function') {
+                initPaginationListeners();
+            }
+
+            // ✅ Оновлюємо навігацію після переходу
+            updateActiveNavigation();
+
+            // ✅ Custom event для інших скриптів
+            document.dispatchEvent(new CustomEvent('pageTransitionComplete'));
+            
+            console.log('✓ Page scripts reinitialized');
+        }
+
+        // ========== MOBILE MENU ==========
+        function initMobileMenu() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileDrawer = document.getElementById('mobileDrawer');
+            const drawerBackdrop = document.getElementById('drawerBackdrop');
+            const closeDrawer = document.getElementById('closeDrawer');
+            const drawerPanel = mobileDrawer?.querySelector('nav');
+            const hamburgerLines = mobileMenuToggle?.querySelectorAll('.hamburger-line');
+            
+            if (!mobileMenuToggle || !mobileDrawer) return;
+            
+            function openDrawer() {
+                mobileDrawer.classList.remove('pointer-events-none');
+                drawerBackdrop.classList.remove('opacity-0');
+                drawerPanel.classList.remove('translate-x-full');
+                mobileDrawer.setAttribute('aria-hidden', 'false');
+                mobileMenuToggle.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+                
+                if (hamburgerLines.length >= 3) {
+                    hamburgerLines[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                    hamburgerLines[1].style.opacity = '0';
+                    hamburgerLines[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                }
+            }
+            
+            function closeDrawerMenu() {
+                drawerBackdrop.classList.add('opacity-0');
+                drawerPanel.classList.add('translate-x-full');
+                mobileDrawer.setAttribute('aria-hidden', 'true');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+                
+                if (hamburgerLines.length >= 3) {
+                    hamburgerLines[0].style.transform = '';
+                    hamburgerLines[1].style.opacity = '';
+                    hamburgerLines[2].style.transform = '';
+                }
+                
+                setTimeout(() => {
+                    mobileDrawer.classList.add('pointer-events-none');
+                }, 300);
+            }
+            
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                if (isOpen) {
+                    closeDrawerMenu();
+                } else {
+                    openDrawer();
+                }
+            });
+            
+            closeDrawer?.addEventListener('click', closeDrawerMenu);
+            drawerBackdrop?.addEventListener('click', closeDrawerMenu);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenuToggle.getAttribute('aria-expanded') === 'true') {
+                    closeDrawerMenu();
+                }
+            });
+            
+            const drawerLinks = drawerPanel?.querySelectorAll('a');
+            drawerLinks?.forEach(link => {
+                link.addEventListener('click', closeDrawerMenu);
+            });
+        }
+
+        // Helper
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // API
+        window.pageTransitions = {
+            navigateTo: navigateToPage,
+            isTransitioning: () => isTransitioning
+        };
+
+    })();
+</script>
+
+</body>
+</html>

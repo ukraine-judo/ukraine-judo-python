@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Календар подій - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+<main class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Page Heading -->
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+        <div class="flex flex-col gap-2">
+            <h1 class="hero-title text-4xl md:text-5xl">Календар подій 🥋</h1>
+            <p class="lead text-[var(--muted)]">Офіційний графік змагань та заходів Федерації Дзюдо України</p>
+        </div>
+    </div>
+
+    <!-- Month Navigation & Title -->
+    <div class="flex flex-col items-center gap-6 mb-10">
+        <div class="flex items-center gap-2 bg-white px-2 py-2 rounded-2xl shadow-md border border-gray-100">
+            <!-- Стрілка назад -->
+            <button onclick="changeMonth({{ current_month - 1 if current_month > 1 else 12 }}, {{ current_year if current_month > 1 else current_year - 1 }})" 
+                    class="flex items-center justify-center size-10 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            
+            <!-- Попередній місяць -->
+            <button onclick="changeMonth({{ current_month - 1 if current_month > 1 else 12 }}, {{ current_year if current_month > 1 else current_year - 1 }})" 
+                    class="hidden sm:block px-4 py-2 rounded-lg text-sm font-bold bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors whitespace-nowrap">
+                {% set prev_month = current_month - 1 if current_month > 1 else 12 %}
+                {{ ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'][prev_month - 1] }}
+            </button>
+            
+            <!-- Поточний місяць (активний) -->
+            <button class="px-5 py-2.5 rounded-lg text-sm font-bold bg-primary-600 text-white shadow-md shadow-primary-500/30 whitespace-nowrap cursor-default">
+                {{ month_name }} {{ current_year }}
+            </button>
+            
+            <!-- Наступний місяць -->
+            <button onclick="changeMonth({{ current_month + 1 if current_month < 12 else 1 }}, {{ current_year if current_month < 12 else current_year + 1 }})" 
+                    class="hidden sm:block px-4 py-2 rounded-lg text-sm font-bold bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors whitespace-nowrap">
+                {% set next_month = current_month + 1 if current_month < 12 else 1 %}
+                {{ ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'][next_month - 1] }}
+            </button>
+            
+            <!-- Стрілка вперед -->
+            <button onclick="changeMonth({{ current_month + 1 if current_month < 12 else 1 }}, {{ current_year if current_month < 12 else current_year + 1 }})" 
+                    class="flex items-center justify-center size-10 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+
+        <div class="text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2">{{ month_name }} {{ current_year }}</h2>
+            <p class="text-gray-500 text-sm md:text-base">Виберіть місяць для перегляду подій</p>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <!-- Filter: Type -->
+            <div class="relative">
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Тип події</label>
+                <select id="filter-type" onchange="applyFilters()" 
+                        class="w-full h-11 pl-4 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="all" {% if current_type == 'all' %}selected{% endif %}>Усі типи</option>
+                    <option value="international" {% if current_type == 'international' %}selected{% endif %}>Міжнародні</option>
+                    <option value="national" {% if current_type == 'national' %}selected{% endif %}>Національні</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 pt-7 text-gray-500">
+                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Filter: Category -->
+            <div class="relative">
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Категорія</label>
+                <select id="filter-category" onchange="applyFilters()" 
+                        class="w-full h-11 pl-4 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="all" {% if current_category == 'all' %}selected{% endif %}>Усі категорії</option>
+                    <option value="championship" {% if current_category == 'championship' %}selected{% endif %}>Чемпіонат</option>
+                    <option value="cup" {% if current_category == 'cup' %}selected{% endif %}>Кубок</option>
+                    <option value="tournament" {% if current_category == 'tournament' %}selected{% endif %}>Турнір</option>
+                    <option value="seminar" {% if current_category == 'seminar' %}selected{% endif %}>Семінар</option>
+                    <option value="university" {% if current_category == 'university' %}selected{% endif %}>Університетські</option>
+                    <option value="training" {% if current_category == 'training' %}selected{% endif %}>НТЗ</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 pt-7 text-gray-500">
+                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Filter: Status -->
+            <div class="relative">
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Статус</label>
+                <select id="filter-status" onchange="applyFilters()" 
+                        class="w-full h-11 pl-4 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>Усі статуси</option>
+                    <option value="planned" {% if current_status == 'planned' %}selected{% endif %}>Заплановано</option>
+                    <option value="ongoing" {% if current_status == 'ongoing' %}selected{% endif %}>Триває</option>
+                    <option value="finished" {% if current_status == 'finished' %}selected{% endif %}>Завершено</option>
+                    <option value="canceled" {% if current_status == 'canceled' %}selected{% endif %}>Скасовано</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 pt-7 text-gray-500">
+                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Filter: Age Group -->
+            <div class="relative">
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Вікова група</label>
+                <select id="filter-age-group" onchange="applyFilters()" 
+                        class="w-full h-11 pl-4 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="all" {% if current_age_group == 'all' %}selected{% endif %}>Усі групи</option>
+                    <option value="adults" {% if current_age_group == 'adults' %}selected{% endif %}>Дорослі</option>
+                    <option value="veterans" {% if current_age_group == 'veterans' %}selected{% endif %}>Ветерани</option>
+                    <option value="U23" {% if current_age_group == 'U23' %}selected{% endif %}>До 23 років (U23)</option>
+                    <option value="U21" {% if current_age_group == 'U21' %}selected{% endif %}>До 21 року (U21)</option>
+                    <option value="U18" {% if current_age_group == 'U18' %}selected{% endif %}>До 18 років (U18)</option>
+                    <option value="U17" {% if current_age_group == 'U17' %}selected{% endif %}>До 17 років (U17)</option>
+                    <option value="U16" {% if current_age_group == 'U16' %}selected{% endif %}>До 16 років (U16)</option>
+                    <option value="U15" {% if current_age_group == 'U15' %}selected{% endif %}>До 15 років (U15)</option>
+                    <option value="U13" {% if current_age_group == 'U13' %}selected{% endif %}>До 13 років (U13)</option>
+                    <option value="U12" {% if current_age_group == 'U12' %}selected{% endif %}>До 12 років (U12)</option>
+                    <option value="officials" {% if current_age_group == 'officials' %}selected{% endif %}>Офіційні особи</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 pt-7 text-gray-500">
+                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="flex items-end">
+                <button onclick="resetFilters()" 
+                        class="w-full h-11 flex items-center justify-center gap-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">restart_alt</span>
+                    Скинути
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div id="events-list" class="Grid Grid--3">
+        {% if events %}
+            {% for event in events %}
+            {% set is_ongoing = event.is_ongoing %}
+            {% set is_cancelled = event.is_cancelled %}
+            {% set is_featured = event.featured %}
+            
+            <article class="group relative flex flex-col bg-white rounded-2xl border 
+                {% if is_ongoing %}
+                    border-2 border-green-500 shadow-2xl shadow-green-500/30 ring-4 ring-green-100 animate-pulse-slow bg-gradient-to-br from-green-50 to-white
+                {% elif is_featured %}
+                    border-2 border-primary-500 shadow-xl
+                {% else %}
+                    border-gray-200 shadow-md
+                {% endif %}
+                overflow-hidden transition-all hover:shadow-xl 
+                {% if is_cancelled %}opacity-70 hover:opacity-100{% endif %}">
+                
+                <!-- LIVE Banner для поточних подій -->
+                {% if is_ongoing %}
+                <div class="absolute top-0 left-0 right-0 bg-gradient-to-r from-green-500 via-green-400 to-green-500 text-white text-xs font-black uppercase tracking-widest px-4 py-2 flex items-center justify-center gap-2 z-10 animate-gradient">
+                    <span>⚡ ПОДІЯ ВІДБУВАЄТЬСЯ ЗАРАЗ ⚡</span>
+                </div>
+                {% elif is_featured %}
+                <!-- Featured Ribbon -->
+                <div class="absolute top-0 right-0 bg-accent-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-bl-xl z-10 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">star</span>
+                    Виділена
+                </div>
+                {% endif %}
+
+                <div class="p-6 flex-1 flex flex-col gap-4 {% if is_ongoing %}pt-14{% endif %}">
+                    <!-- Header -->
+                    <div class="flex justify-between items-start {% if is_featured and not is_ongoing %}pt-2{% endif %}">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex gap-2 flex-wrap">
+                                <!-- Type Badge -->
+                                <span class="Badge {% if event.type == 'international' %}bg-primary-100 text-primary-700{% else %}bg-accent-100 text-accent-700{% endif %}">
+                                    {{ event.type_label }}
+                                </span>
+                                
+                                <!-- Status Badge -->
+                                {% if is_ongoing %}
+                                <span class="Badge bg-green-100 text-green-700 flex items-center gap-1 animate-pulse">
+                                    <span class="size-2 rounded-full bg-green-500 animate-ping absolute"></span>
+                                    <span class="size-2 rounded-full bg-green-500"></span>
+                                    <span class="font-black">ЗАРАЗ ТРИВАЄ</span>
+                                </span>
+                                {% elif event.status == 'completed' or event.status == 'finished' %}
+                                <span class="Badge">Завершено</span>
+                                {% elif is_cancelled %}
+                                <span class="Badge bg-red-100 text-red-700">Скасовано</span>
+                                {% else %}
+                                <span class="Badge">Заплановано</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Category Icon -->
+                        <div class="text-4xl {% if is_cancelled %}grayscale{% endif %} {% if is_ongoing %}animate-bounce-slow{% endif %}">
+                            {% if event.category == 'championship' %}🏆
+                            {% elif event.category == 'cup' %}🏆
+                            {% elif event.category == 'tournament' %}🥋
+                            {% elif event.category == 'training' %}🏕️
+                            {% elif event.category == 'seminar' %}👨‍⚖️
+                            {% elif event.category == 'university' %}🎓
+                            {% else %}📅{% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div>
+                        <h3 class="text-xl font-bold leading-tight group-hover:text-primary-600 transition-colors mb-2 
+                            {% if is_cancelled %}text-gray-500 line-through decoration-red-500/50
+                            {% elif is_ongoing %}text-green-700{% endif %}">
+                            {{ event.title }}
+                        </h3>
+                        {% if event.description %}
+                        <p class="text-sm text-gray-600 line-clamp-2">
+                            {{ event.description }}
+                        </p>
+                        {% else %}
+                        <p class="text-sm text-gray-400 italic">
+                            Опис відсутній
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details -->
+                    <div class="flex flex-col gap-2 mt-auto {% if is_cancelled %}grayscale opacity-70{% endif %}">
+                        <div class="flex items-center gap-2 text-sm {% if is_ongoing %}text-green-700 font-bold{% else %}text-gray-700{% endif %}">
+                            <span class="material-symbols-outlined {% if is_ongoing %}text-green-600{% else %}text-primary-600{% endif %} text-[20px]">calendar_month</span>
+                            <span class="font-medium">{{ event.date_range_formatted }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm {% if is_ongoing %}text-green-700 font-bold{% else %}text-gray-700{% endif %}">
+                            <span class="material-symbols-outlined {% if is_ongoing %}text-green-600{% else %}text-primary-600{% endif %} text-[20px]">location_on</span>
+                            <span class="font-medium">{{ event.location }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="Pills pt-2 border-t border-dashed {% if is_ongoing %}border-green-300{% else %}border-gray-200{% endif %}">
+                        <span class="Pill text-xs {% if is_ongoing %}bg-green-100 text-green-700 border-green-300{% endif %}">{{ event.category_label }}</span>
+                        <span class="Pill text-xs {% if is_ongoing %}bg-green-100 text-green-700 border-green-300{% endif %}">{{ event.age_group_label }}</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="p-4 {% if is_ongoing %}bg-green-50 border-t border-green-200{% else %}bg-gray-50 border-t border-gray-100{% endif %} flex gap-3">
+                    {% if is_cancelled %}
+                    <a href="/events/{{ event.id }}" 
+                       class="flex-1 h-11 rounded-xl border-2 border-gray-300 hover:bg-gray-100 text-gray-700 text-sm font-bold flex items-center justify-center gap-2 transition-all">
+                        Причина
+                    </a>
+                    {% else %}
+                    <a href="/events/{{ event.id }}" 
+                       class="flex-1 h-11 rounded-xl 
+                        {% if is_ongoing %}bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30 animate-pulse-slow
+                        {% elif is_featured %}bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-500/30
+                        {% else %}bg-gray-100 hover:bg-primary-50 text-brand-700{% endif %}
+                        text-sm font-bold flex items-center justify-center gap-2 transition-all">
+                        Детальніше
+                        {% if is_ongoing or is_featured %}
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        {% endif %}
+                    </a>
+                    
+                    {% if event.regulation_full_url %}
+                    <a href="{{ event.regulation_full_url }}" 
+                       target="_blank"
+                       class="size-11 rounded-xl border-2 
+                        {% if is_ongoing %}border-green-200 bg-white hover:bg-green-50 hover:border-green-400 text-green-700
+                        {% else %}border-gray-200 bg-white hover:bg-gray-50 hover:border-primary-300 text-gray-700{% endif %}
+                        flex items-center justify-center transition-all" 
+                       title="Завантажити положення">
+                        <span class="material-symbols-outlined text-[20px]">description</span>
+                    </a>
+                    {% else %}
+                    <button class="size-11 rounded-xl border border-gray-200 bg-gray-50 text-gray-300 flex items-center justify-center cursor-not-allowed" 
+                            disabled 
+                            title="Положення відсутнє">
+                        <span class="material-symbols-outlined text-[20px]">description</span>
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+            <div class="col-span-full text-center py-16">
+                <p class="text-gray-400 text-5xl mb-4">📭</p>
+                <p class="text-gray-600 text-lg font-semibold mb-2">Подій на {{ month_name }} {{ current_year }} не знайдено</p>
+                <p class="text-gray-400 text-sm">Спробуйте інший місяць або змініть фільтри</p>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<style>
+  /* Анімації для ongoing подій */
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+  
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce-slow 2s ease-in-out infinite;
+  }
+  
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+</style>
+
+<script>
+  let currentState = {
+    year: {{ current_year }},
+    month: {{ current_month }},
+    type: '{{ current_type }}',
+    category: '{{ current_category }}',
+    status: '{{ current_status }}',
+    age_group: '{{ current_age_group }}'
+  };
+
+  function changeMonth(month, year) {
+    currentState.month = month;
+    currentState.year = year;
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const type = document.getElementById('filter-type').value;
+    const category = document.getElementById('filter-category').value;
+    const status = document.getElementById('filter-status').value;
+    const age_group = document.getElementById('filter-age-group').value;
+    
+    let url = `/events?year=${currentState.year}&month=${currentState.month}`;
+    if (type !== 'all') url += `&type=${type}`;
+    if (category !== 'all') url += `&category=${category}`;
+    if (status !== 'all') url += `&status=${status}`;
+    if (age_group !== 'all') url += `&age_group=${age_group}`;
+    
+    window.location.href = url;
+  }
+
+  function resetFilters() {
+    window.location.href = `/events?year=${currentState.year}&month=${currentState.month}`;
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,255 @@
+<!-- News Section -->
+<section class="w-full py-8 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="flex items-end justify-between gap-8 mb-12 flex-wrap">
+            <div class="flex-1 min-w-[280px]">
+                <h2 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-2 tracking-tight leading-tight">
+                    Останні новини
+                </h2>
+                <p class="text-lg lg:text-xl text-slate-600 font-normal">
+                    Слідкуйте за досягненнями наших спортсменів
+                </p>
+            </div>
+            <a 
+                href="/news" 
+                class="inline-flex items-center gap-2 px-6 py-3 text-blue-600 font-semibold border-2 border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-600/25"
+            >
+                Всі новини
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Slider Wrapper -->
+        <div class="relative w-full">
+            {% if news %}
+            <!-- Slider Container -->
+            <div class="overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-400">
+                <div id="newsSlider" class="flex transition-transform duration-500 ease-out">
+                    {% for item in news %}
+                    <div class="group min-w-full relative cursor-pointer" style="height: clamp(450px, 60vh, 700px);">
+                        
+                        <!-- Background Image -->
+                        {% if item.image_full_url %}
+                        <div 
+                            class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            style="background-image: url('{{ item.image_full_url }}');"
+                        ></div>
+                        {% endif %}
+                        
+                        <!-- Gradient Overlay (ЗАВЖДИ ВИДИМИЙ) -->
+                        <div class="absolute inset-0" style="background: linear-gradient(
+                            to top,
+                            rgba(15, 23, 42, 0.98) 0%,
+                            rgba(15, 23, 42, 0.85) 35%,
+                            rgba(15, 23, 42, 0.5) 60%,
+                            rgba(15, 23, 42, 0.2) 80%,
+                            transparent 100%
+                        );"></div>
+                        
+                        <!-- Content -->
+                        <div class="absolute inset-x-0 bottom-0 flex items-end">
+                            <div class="w-full p-6 sm:p-8 lg:p-12 space-y-4 lg:space-y-5 transition-transform duration-500 group-hover:-translate-y-1">
+                                
+                                <!-- Category Badge -->
+                                <span class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg backdrop-blur-md transition-all duration-400 group-hover:-translate-y-1 group-hover:scale-105 
+                                    {% if item.category == 'achievements' %}
+                                        bg-blue-600/95 text-white shadow-lg shadow-blue-600/40 group-hover:bg-blue-600 group-hover:shadow-xl group-hover:shadow-blue-600/60
+                                    {% elif item.category == 'announcements' %}
+                                        bg-amber-500/95 text-white shadow-lg shadow-amber-500/40 group-hover:bg-amber-500 group-hover:shadow-xl group-hover:shadow-amber-500/60
+                                    {% else %}
+                                        bg-slate-600/95 text-white shadow-lg shadow-slate-600/40 group-hover:bg-slate-600 group-hover:shadow-xl group-hover:shadow-slate-600/60
+                                    {% endif %}">
+                                    {{ item.category }}
+                                </span>
+                                
+                                <!-- Date -->
+                                <div class="flex items-center gap-2.5 text-white/95 text-base font-medium transition-all duration-300 group-hover:text-white group-hover:translate-x-1">
+                                    <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:rotate-[5deg] group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    {{ item.publishedAt }}
+                                </div>
+                                
+                                <!-- Title -->
+                                <h3 class="text-2xl sm:text-3xl lg:text-5xl font-black text-white leading-tight tracking-tight line-clamp-3 transition-all duration-400" style="letter-spacing: -0.02em; word-break: break-word; hyphens: auto; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);">
+                                    {{ item.title }}
+                                </h3>
+                                
+                                <!-- Excerpt -->
+                                <p class="text-base lg:text-lg text-white/90 leading-relaxed line-clamp-2 transition-all duration-400 group-hover:text-white" style="word-break: break-word; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);">
+                                    {{ item.excerpt }}
+                                </p>
+                                
+                                <!-- Read More Link -->
+                                <a 
+                                    href="/news/{{ item.id }}" 
+                                    class="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-blue-600/95 text-white font-semibold text-sm sm:text-base rounded-xl backdrop-blur-md transition-all duration-400 hover:bg-blue-700 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-600/60 active:translate-y-0 active:scale-[0.98] mt-2 lg:mt-4 relative overflow-hidden group/btn w-fit shadow-lg shadow-blue-600/40"
+                                >
+                                    <span class="relative z-10">Читати далі</span>
+                                    <svg class="w-[18px] h-[18px] flex-shrink-0 relative z-10 transition-transform duration-400 group-hover/btn:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                    </svg>
+                                    <!-- Shine effect -->
+                                    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-600"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Navigation Controls (Desktop) -->
+            <div class="hidden md:flex absolute bottom-8 right-8 gap-3 z-20 pb-8">
+                <button 
+                    id="prevBtn" 
+                    class="w-12 h-12 xl:w-14 xl:h-14 flex items-center justify-center bg-white/95 backdrop-blur-xl border-2 border-slate-200 rounded-xl text-slate-600 transition-all duration-300 hover:bg-blue-600 hover:border-blue-600 hover:text-white hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-600/40 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/70 disabled:hover:translate-y-0 disabled:hover:text-slate-600 disabled:hover:border-slate-200 shadow-lg"
+                >
+                    <svg class="w-5 h-5 xl:w-6 xl:h-6 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button 
+                    id="nextBtn" 
+                    class="w-12 h-12 xl:w-14 xl:h-14 flex items-center justify-center bg-white/95 backdrop-blur-xl border-2 border-slate-200 rounded-xl text-slate-600 transition-all duration-300 hover:bg-blue-600 hover:border-blue-600 hover:text-white hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-600/40 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/70 disabled:hover:translate-y-0 disabled:hover:text-slate-600 disabled:hover:border-slate-200 shadow-lg"
+                >
+                    <svg class="w-5 h-5 xl:w-6 xl:h-6 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+                        
+            <!-- Dots Navigation -->
+            <div class="flex justify-center gap-2 sm:gap-3 mt-6 sm:mt-8">
+                {% for item in news %}
+                <button 
+                    class="news-dot w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-slate-300 transition-all duration-400 hover:bg-slate-400 hover:scale-125 cursor-pointer"
+                    data-index="{{ loop.index0 }}"
+                ></button>
+                {% endfor %}
+            </div>
+
+            
+            {% else %}
+            <!-- Loading State -->
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-3xl" style="min-height: clamp(400px, 50vh, 600px);">
+                <div class="w-12 h-12 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <p class="text-slate-500">Завантаження новин...</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- JS залишається той самий -->
+<script>
+    let currentSlide = 0;
+    const slider = document.getElementById('newsSlider');
+    const slides = slider?.children;
+    const totalSlides = slides?.length || 0;
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dots = document.querySelectorAll('.news-dot');
+    
+    function updateSlider() {
+        if (!slider) return;
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('w-8', 'sm:w-8', 'bg-blue-600', 'rounded-md', 'shadow-lg', 'shadow-blue-600/40');
+                dot.classList.remove('w-2.5', 'sm:w-3', 'bg-slate-300');
+            } else {
+                dot.classList.remove('w-8', 'sm:w-8', 'bg-blue-600', 'rounded-md', 'shadow-lg', 'shadow-blue-600/40');
+                dot.classList.add('w-2.5', 'sm:w-3', 'bg-slate-300');
+            }
+        });
+        
+        if (prevBtn) prevBtn.disabled = currentSlide === 0;
+        if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+    
+    prevBtn?.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlider();
+        }
+    });
+    
+    nextBtn?.addEventListener('click', () => {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlider();
+        }
+    });
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateSlider();
+        });
+    });
+    
+    let autoplayInterval = setInterval(() => {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+        } else {
+            currentSlide = 0;
+        }
+        updateSlider();
+    }, 5000);
+    
+    slider?.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+    });
+    
+    slider?.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(() => {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+            } else {
+                currentSlide = 0;
+            }
+            updateSlider();
+        }, 5000);
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' && currentSlide > 0) {
+            currentSlide--;
+            updateSlider();
+        } else if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlider();
+        }
+    });
+    
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slider?.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    slider?.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        if (touchEndX < touchStartX - 50 && currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlider();
+        }
+        if (touchEndX > touchStartX + 50 && currentSlide > 0) {
+            currentSlide--;
+            updateSlider();
+        }
+    }
+    
+    updateSlider();
+</script>

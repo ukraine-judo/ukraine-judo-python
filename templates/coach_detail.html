@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}{{ coach.name }} - Тренер збірної України{% endblock %}
+
+{% block head %}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+  body {
+    font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  /* ✅ Плавні переходи для всіх інтерактивних елементів */
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Плавна поява сторінки */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  main {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Smooth hover для карток */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Smooth scale для зображень */
+  .image-hover {
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .image-hover img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .image-hover:hover img {
+    transform: scale(1.1);
+  }
+  
+  /* Badge hover */
+  .badge-hover {
+    transition: all 0.2s ease;
+  }
+  
+  .badge-hover:hover {
+    transform: scale(1.05);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="container mx-auto px-3 md:px-6 lg:px-8 py-8 md:py-12">
+  <!-- Breadcrumbs -->
+  <nav aria-label="Breadcrumb" class="mb-6">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2">
+      <li class="inline-flex items-center">
+        <a class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors duration-300" href="/">
+          <span class="material-symbols-outlined text-[18px] mr-1 transition-transform duration-300 hover:scale-110">home</span>
+          Головна
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <span class="material-symbols-outlined text-gray-400 text-[18px]">chevron_right</span>
+          <a class="ms-1 text-sm font-medium text-gray-500 hover:text-blue-600 md:ms-2 transition-colors duration-300" href="/team">Збірна</a>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <span class="material-symbols-outlined text-gray-400 text-[18px]">chevron_right</span>
+          <span class="ms-1 text-sm font-medium text-gray-900 md:ms-2">{{ coach.name }}</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- Left Sidebar: Photo -->
+    <div class="lg:col-span-3 flex flex-col gap-6">
+      
+      <!-- Coach Photo Card -->
+      <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-200 card-hover">
+        <div class="aspect-[3/4] w-full rounded-lg relative overflow-hidden group">
+          {% if coach.image_url %}
+            <img src="{{ coach.image_url }}" alt="{{ coach.name }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+          {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 flex items-center justify-center transition-all duration-500 group-hover:from-orange-300 group-hover:to-orange-500">
+              <span class="material-symbols-outlined text-white text-[80px] opacity-50 transition-all duration-500 group-hover:scale-110">person</span>
+            </div>
+          {% endif %}
+          
+          <!-- National Team Badge -->
+          {% if coach.is_national_team %}
+            <div class="absolute top-2 right-2 transition-all duration-300 group-hover:scale-110">
+              <div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded shadow-sm border border-gray-200 flex items-center gap-1.5 transition-all duration-300 hover:bg-white hover:shadow-md">
+                <div class="w-5 h-3.5 relative shadow-sm overflow-hidden rounded-[2px]">
+                  <div class="absolute inset-0 bg-[#0057B7] h-1/2"></div>
+                  <div class="absolute bottom-0 inset-x-0 bg-[#FFD700] h-1/2"></div>
+                </div>
+                <span class="text-xs font-bold text-gray-900">UKR</span>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Contact Info Card -->
+      {% if coach.email or coach.phone %}
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 card-hover">
+        <div class="flex items-center gap-2 mb-4 text-gray-400 uppercase tracking-wider text-xs font-bold">
+          <span class="material-symbols-outlined text-[16px] transition-transform duration-300 hover:scale-110">contact_mail</span>
+          Контакти
+        </div>
+        
+        <div class="flex flex-col gap-3">
+          {% if coach.email %}
+          <a href="mailto:{{ coach.email }}" class="flex items-center gap-3 p-2 -mx-2 rounded-lg transition-all duration-300 hover:bg-gray-50 group">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center transition-all duration-300 group-hover:bg-blue-100">
+              <span class="material-symbols-outlined text-[20px]">mail</span>
+            </div>
+            <span class="text-sm text-gray-900 break-all">{{ coach.email }}</span>
+          </a>
+          {% endif %}
+          
+          {% if coach.phone %}
+          <a href="tel:{{ coach.phone }}" class="flex items-center gap-3 p-2 -mx-2 rounded-lg transition-all duration-300 hover:bg-gray-50 group">
+            <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center transition-all duration-300 group-hover:bg-green-100">
+              <span class="material-symbols-outlined text-[20px]">phone</span>
+            </div>
+            <span class="text-sm text-gray-900">{{ coach.phone }}</span>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      
+    </div>
+    
+    <!-- Right Content: Info & Athletes -->
+    <div class="lg:col-span-9 flex flex-col gap-6">
+      
+      <!-- Main Header Info -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 card-hover">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            {% if coach.is_national_team %}
+            <span class="badge-hover px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-700">
+              Національна збірна
+            </span>
+            {% endif %}
+            {% if coach.category_label %}
+            <span class="badge-hover px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">
+              {{ coach.category_label }}
+            </span>
+            {% endif %}
+          </div>
+          
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 transition-colors duration-300">{{ coach.name }}</h1>
+          
+          <p class="text-gray-500 text-lg flex items-center gap-2 flex-wrap transition-colors duration-300">
+            {% if coach.position %}{{ coach.position }}{% endif %}
+            {% if coach.city %}
+              <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+              {{ coach.city }}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      
+      <!-- Info Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        
+        {% if coach.club %}
+        <div class="bg-white p-4 rounded-xl border border-gray-200 card-hover cursor-default col-span-2 sm:col-span-1">
+          <p class="text-xs text-gray-500 uppercase font-bold mb-1 transition-colors duration-300">Клуб</p>
+          <p class="text-sm font-semibold text-gray-900 transition-colors duration-300">{{ coach.club }}</p>
+        </div>
+        {% endif %}
+        
+        {% if coach.category_label %}
+        <div class="bg-white p-4 rounded-xl border border-gray-200 card-hover cursor-default">
+          <p class="text-xs text-gray-500 uppercase font-bold mb-1 transition-colors duration-300">Категорія</p>
+          <p class="text-sm font-semibold text-gray-900 transition-colors duration-300">{{ coach.category_label }}</p>
+        </div>
+        {% endif %}
+        
+        {% if athletes and athletes|length > 0 %}
+        <div class="bg-white p-4 rounded-xl border border-orange-200 card-hover cursor-default bg-orange-50">
+          <p class="text-xs text-orange-600 uppercase font-bold mb-1 transition-colors duration-300">Спортсменів</p>
+          <p class="text-sm font-semibold text-orange-900 transition-colors duration-300">{{ athletes|length }}</p>
+        </div>
+        {% endif %}
+        
+      </div>
+      
+      <!-- Athletes Section -->
+      {% if athletes and athletes|length > 0 %}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden card-hover">
+        
+        <!-- Section Header -->
+        <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="bg-blue-50 text-blue-600 p-2 rounded-lg transition-all duration-300 hover:bg-blue-100 hover:scale-110">
+              <span class="material-symbols-outlined">emoji_events</span>
+            </span>
+            <h2 class="text-lg font-bold text-gray-900 transition-colors duration-300">Спортсмени</h2>
+          </div>
+          <div class="text-sm text-gray-500 transition-colors duration-300">
+            Всього: <span class="font-bold text-gray-900">{{ athletes|length }}</span>
+          </div>
+        </div>
+        
+        <!-- Athletes Grid -->
+        <div class="p-6">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for athlete in athletes %}
+            <a href="/team/athletes/{{ athlete.slug }}" class="group transition-all duration-300 hover:-translate-y-2">
+              <div class="image-hover aspect-[3/4] rounded-lg shadow-md hover:shadow-xl mb-2 border border-gray-200">
+                {% if athlete.photo_url %}
+                  <img src="{{ athlete.photo_url }}" alt="{{ athlete.name }}" class="w-full h-full object-cover rounded-lg">
+                {% else %}
+                  <div class="w-full h-full bg-gradient-to-br from-blue-200 to-blue-400 flex items-center justify-center rounded-lg transition-all duration-500 group-hover:from-blue-300 group-hover:to-blue-500">
+                    <span class="material-symbols-outlined text-white text-[60px] opacity-50 transition-all duration-500 group-hover:scale-110">person</span>
+                  </div>
+                {% endif %}
+              </div>
+              <p class="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors duration-300 truncate mb-1">{{ athlete.name }}</p>
+              {% if athlete.weight %}
+              <p class="text-xs text-gray-500 transition-colors duration-300 mb-1">{{ athlete.weight }}</p>
+              {% endif %}
+              {% if athlete.status_label %}
+              <span class="badge-hover inline-block px-2 py-0.5 text-[10px] font-bold rounded-full
+                {% if athlete.status == 'main' %}bg-green-100 text-green-700
+                {% elif athlete.status == 'candidate' %}bg-blue-100 text-blue-700
+                {% else %}bg-gray-100 text-gray-600{% endif %}">
+                {{ athlete.status_label }}
+              </span>
+              {% endif %}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        
+      </div>
+      {% endif %}
+      
+      <!-- Awards Section -->
+      {% if coach.awards_list and coach.awards_list|length > 0 %}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden card-hover">
+        
+        <!-- Section Header -->
+        <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="bg-yellow-50 text-yellow-600 p-2 rounded-lg transition-all duration-300 hover:bg-yellow-100 hover:scale-110">
+              <span class="material-symbols-outlined">military_tech</span>
+            </span>
+            <h2 class="text-lg font-bold text-gray-900 transition-colors duration-300">Нагороди та досягнення</h2>
+          </div>
+          <div class="text-sm text-gray-500 transition-colors duration-300">
+            Всього: <span class="font-bold text-gray-900">{{ coach.awards_list|length }}</span>
+          </div>
+        </div>
+        
+        <!-- Awards Grid -->
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for award in coach.awards_list %}
+            <div class="bg-gray-50 rounded-xl border border-gray-200 p-5 transition-all duration-300 hover:bg-white hover:shadow-lg hover:border-yellow-300">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center flex-shrink-0 shadow-md transition-all duration-300 hover:scale-110">
+                  <span class="material-symbols-outlined text-white text-[24px]">
+                    {% if award.type == 'title' %}workspace_premium
+                    {% elif award.type == 'coaching' %}sports
+                    {% elif award.type == 'appointment' %}badge
+                    {% else %}emoji_events{% endif %}
+                  </span>
+                </div>
+                <div class="flex-1">
+                  {% if award.year %}
+                  <div class="text-xs font-bold text-orange-600 mb-1 transition-colors duration-300">{{ award.year }}</div>
+                  {% endif %}
+                  <h3 class="font-bold text-gray-900 mb-1 text-sm transition-colors duration-300">{{ award.title }}</h3>
+                  {% if award.location %}
+                  <p class="text-xs text-gray-600 transition-colors duration-300">{{ award.location }}</p>
+                  {% endif %}
+                  {% if award.description %}
+                  <p class="text-xs text-gray-500 mt-1 transition-colors duration-300">{{ award.description }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+      </div>
+      {% endif %}
+      
+      <!-- Photo Gallery -->
+      {% if coach.gallery_images and coach.gallery_images|length > 0 %}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 card-hover">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="bg-blue-50 text-blue-600 p-2 rounded-lg transition-all duration-300 hover:bg-blue-100 hover:scale-110">
+            <span class="material-symbols-outlined">photo_library</span>
+          </span>
+          <h2 class="text-lg font-bold text-gray-900 transition-colors duration-300">Фотогалерея</h2>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {% for image in coach.gallery_images %}
+          <div class="image-hover aspect-square rounded-lg shadow-md hover:shadow-xl cursor-pointer">
+            <img src="{{ image }}" alt="{{ coach.name }}" class="w-full h-full object-cover rounded-lg">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- Back Button -->
+      <div class="text-center">
+        <a href="/team" class="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-200 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:border-orange-600 hover:text-orange-600 hover:-translate-y-1 hover:shadow-lg">
+          <span class="material-symbols-outlined transition-transform duration-300 group-hover:-translate-x-1">arrow_back</span>
+          Повернутись до збірної
+        </a>
+      </div>
+      
+    </div>
+    
+  </div>
+</main> 
+
+{% endblock %}
