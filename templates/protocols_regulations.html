@@ -1,0 +1,1111 @@
+{% extends "base.html" %}
+
+{% block title %}Протоколи та регламенти - {{ settings.site_name }}{% endblock %}
+
+{% block content %}
+{% block subheader %}
+<!-- Documents Subheader -->
+<div class="fixed top-16 lg:top-20 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide py-2" aria-label="Навігація по документах">
+            <!-- Документи -->
+            <a href="/documents" class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">folder</span>
+                <span>Нормативні документи</span>
+            </a>
+            
+            <!-- Протоколи та регламенти (Active) -->
+            <a href="/documents/events" class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+                <span>Протоколи та регламенти</span>
+            </a>
+        </nav>
+    </div>
+</div>
+
+<!-- Spacer for fixed subheader -->
+<div class="h-[52px]"></div>
+{% endblock %}
+<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
+<!-- Header & Controls -->
+<div class="mb-6 flex flex-col gap-6">
+  <!-- Breadcrumbs -->
+  <div class="flex flex-wrap items-center gap-2 text-sm">
+      <a class="text-gray-600 font-medium hover:text-blue-600 transition-colors" href="/">Головна</a>
+      <span class="text-gray-400 font-medium">/</span>
+      <a class="text-gray-600 font-medium hover:text-blue-600 transition-colors" href="/documents">Документи</a>
+      <span class="text-gray-400 font-medium">/</span>
+      <span class="text-gray-900 font-semibold">Протоколи та регламенти</span>
+  </div>
+  
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="max-w-2xl">
+          <h1 class="text-gray-900 text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2">Протоколи та регламенти</h1>
+          <p class="text-[var(--muted)] leading-relaxed mb-1">
+              Неофіційний реєстр протоколів змагань, регламентів. Використовуйте фільтри для швидкого пошуку.
+          </p>
+          <p class="text-gray-400 text-sm font-normal">
+              <span class="inline-flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px]">link</span>
+                  Джерело: офіційний сайт Федерації Дзюдо України
+              </span>
+          </p>
+      </div>
+      
+      <!-- Simple Stat -->
+      <div id="protocols-stats" class="hidden md:flex items-center gap-2 text-sm text-[var(--muted)] bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">folder_open</span>
+          <span class="font-semibold">{{ total }}</span> <span>документів</span>
+      </div>
+  </div>
+</div>
+
+
+        <!-- Controls Toolbar -->
+        <div class="flex flex-col lg:flex-row gap-4 p-1">
+            
+            <!-- Search -->
+            <div class="flex-grow max-w-2xl group relative">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--muted-light)] group-focus-within:text-primary-600 transition-colors">
+                        <span class="material-symbols-outlined">search</span>
+                    </div>
+                    <input 
+                        id="search-input" 
+                        name="search" 
+                        value="{{ search_query }}"
+                        class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 sm:text-sm shadow-sm transition-shadow" 
+                        placeholder="Пошук за назвою події..."
+                        type="text"
+                    />
+                    <div class="absolute inset-y-0 right-0 pr-2 flex items-center">
+                        {% if search_query %}
+                        <button onclick="clearSearch()" class="text-gray-400 hover:text-gray-600">
+                            <span class="material-symbols-outlined text-[20px]">close</span>
+                        </button>
+                        {% else %}
+                        <kbd class="hidden sm:inline-flex items-center border border-gray-200 rounded px-2 text-xs font-sans font-medium text-gray-400">⌘K</kbd>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+<!-- Filters -->
+<div class="flex items-center gap-2 flex-wrap lg:flex-nowrap pb-2 lg:pb-0">
+
+                
+                <!-- Year Filter (Custom Dropdown) -->
+                <div class="custom-dropdown" data-value="{{ current_year or '' }}" data-name="year">
+                    <div class="custom-dropdown-trigger">
+                        <span class="custom-dropdown-value">
+                            {% if current_year %}{{ current_year }}{% else %}Всі роки{% endif %}
+                        </span>
+                        <span class="custom-dropdown-arrow">
+                            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="custom-dropdown-menu">
+                        <div class="custom-dropdown-item" data-value="">Всі роки</div>
+                        {% for y in available_years %}
+                        <div class="custom-dropdown-item" data-value="{{ y }}">{{ y }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Type Filter (Custom Dropdown) -->
+                <div class="custom-dropdown" data-value="{{ current_event_type }}" data-name="event_type">
+                    <div class="custom-dropdown-trigger">
+                        <span class="custom-dropdown-value">
+                            {% if current_event_type == 'national' %}Національні
+                            {% elif current_event_type == 'international' %}Міжнародні
+                            {% else %}Всі типи{% endif %}
+                        </span>
+                        <span class="custom-dropdown-arrow">
+                            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="custom-dropdown-menu">
+                        <div class="custom-dropdown-item" data-value="all">Всі типи</div>
+                        <div class="custom-dropdown-item" data-value="national">Національні</div>
+                        <div class="custom-dropdown-item" data-value="international">Міжнародні</div>
+                    </div>
+                </div>
+
+                <!-- Category Filter (Custom Dropdown) -->
+                <div class="custom-dropdown" data-value="{{ current_category }}" data-name="category">
+                    <div class="custom-dropdown-trigger">
+                        <span class="custom-dropdown-value">
+                            {% if current_category == 'championship' %}Чемпіонати
+                            {% elif current_category == 'cup' %}Кубки
+                            {% elif current_category == 'tournament' %}Турніри
+                            {% elif current_category == 'seminar' %}Семінари
+                            {% elif current_category == 'training' %}Тренування
+                            {% else %}Всі категорії{% endif %}
+                        </span>
+                        <span class="custom-dropdown-arrow">
+                            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="custom-dropdown-menu">
+                        <div class="custom-dropdown-item" data-value="all">Всі категорії</div>
+                        <div class="custom-dropdown-item" data-value="championship">Чемпіонати</div>
+                        <div class="custom-dropdown-item" data-value="cup">Кубки</div>
+                        <div class="custom-dropdown-item" data-value="tournament">Турніри</div>
+                        <div class="custom-dropdown-item" data-value="seminar">Семінари</div>
+                        <div class="custom-dropdown-item" data-value="training">Тренування</div>
+                    </div>
+                </div>
+
+                <!-- Clear Filters -->
+                <button onclick="clearAllFilters()" class="flex items-center justify-center w-10 h-[42px] rounded-xl border border-dashed border-gray-300 text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors" title="Очистити фільтри">
+                    <span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    {% if events %}
+    <div id="protocols-table" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="sticky top-0 z-10 px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-[160px]">
+                            <div class="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                                <span>Дата</span>
+                                <span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                            </div>
+                        </th>
+                        <th scope="col" class="sticky top-0 z-10 px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Подія та Локація
+                        </th>
+                        <th scope="col" class="sticky top-0 z-10 px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-[140px]">
+                            Категорія
+                        </th>
+                        <th scope="col" class="sticky top-0 z-10 px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-[160px]">
+                            Регламент
+                        </th>
+                        <th scope="col" class="sticky top-0 z-10 px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-[180px]">
+                            Протоколи
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for event in events %}
+                    <tr class="group hover:bg-gray-50 transition-colors">
+                        <!-- Date -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium font-mono text-[var(--text)] tabular-nums">{{ event.date_start_formatted }}</span>
+                                {% if event.date_end %}
+                                <span class="text-xs text-gray-400 tabular-nums">{{ event.date_end_formatted }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <!-- Event & Location -->
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <a href="/calendar/{{ event.slug }}" class="text-sm font-semibold text-[var(--text)] group-hover:text-primary-600 transition-colors">
+                                    {{ event.title }}
+                                </a>
+                                {% if event.city or event.region %}
+                                <div class="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                                    <span class="material-symbols-outlined text-[14px]">location_on</span>
+                                    {% if event.city %}{{ event.city }}{% endif %}{% if event.region %}, {{ event.region }}{% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <!-- Category Badge -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if event.event_type == 'national' %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                {{ event.event_type_label }}
+                            </span>
+                            {% elif event.event_type == 'international' %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">
+                                {{ event.event_type_label }}
+                            </span>
+                            {% endif %}
+                            {% if event.category_label %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200 mt-1">
+                                {{ event.category_label }}
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Regulation -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if event.regulation_path %}
+                            <a href="{{ event.regulation_url }}" target="_blank" download class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 rounded-lg transition-all group border border-primary-200 hover:border-primary-300">
+                                <span class="material-symbols-outlined text-[18px]">download</span>
+                                <span>PDF</span>
+                            </a>
+                            {% else %}
+                            <span class="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 bg-gray-50 rounded-lg border border-gray-200">
+                                <span class="material-symbols-outlined text-[16px]">block</span>
+                                <span>Немає</span>
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Protocols Column -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if event.protocols_parsed and event.protocols_parsed|length > 0 %}
+                                {% if event.protocols_parsed|length == 1 %}
+                                <!-- Single protocol - direct link -->
+                                <a href="/static/{{ event.protocols_parsed[0].path }}" target="_blank" download class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 rounded-lg transition-all group border border-primary-200 hover:border-primary-300">
+                                    <span class="material-symbols-outlined text-[18px]">download</span>
+                                    <span>{{ event.protocols_parsed[0].name or 'Протокол' }}</span>
+                                </a>
+                                {% else %}
+                                <!-- Multiple protocols - dropdown -->
+                                <div class="relative group-dropdown">
+                                    <button type="button" onclick="toggleDropdown(event)" class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 rounded-lg transition-all border border-primary-200 hover:border-primary-300">
+                                        <span class="material-symbols-outlined text-[18px]">folder_open</span>
+                                        <span>{{ event.protocols_parsed|length }} файлів</span>
+                                        <span class="material-symbols-outlined text-[16px] transition-transform duration-200 chevron-icon">expand_more</span>
+                                    </button>
+                                    
+                                    <!-- Dropdown Menu -->
+                                    <div class="dropdown-menu absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-200 z-20 overflow-hidden">
+                                        <div class="p-2 bg-gray-50 border-b border-gray-200">
+                                            <p class="text-xs font-semibold text-gray-600 uppercase tracking-wide px-2">Доступні протоколи</p>
+                                        </div>
+                                        {% for protocol in event.protocols_parsed %}
+                                        <a href="/static/{{ protocol.path }}" target="_blank" download class="flex items-center gap-3 px-3 py-2.5 hover:bg-primary-50 transition-colors group-item border-b border-gray-100 last:border-b-0">
+                                            <!-- Icon based on type -->
+                                            {% if protocol.type == 'results' %}
+                                            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-green-50 group-hover-item:bg-green-100 transition-colors">
+                                                <span class="material-symbols-outlined text-[20px] text-green-600">trophy</span>
+                                            </div>
+                                            {% elif protocol.type == 'brackets' or protocol.type == 'grids' %}
+                                            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 group-hover-item:bg-blue-100 transition-colors">
+                                                <span class="material-symbols-outlined text-[20px] text-blue-600">grid_on</span>
+                                            </div>
+                                            {% else %}
+                                            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-50 group-hover-item:bg-primary-100 transition-colors">
+                                                <span class="material-symbols-outlined text-[20px] text-primary-600">description</span>
+                                            </div>
+                                            {% endif %}
+                                            
+                                            <!-- File Info -->
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-semibold text-gray-900 truncate group-hover-item:text-primary-700 transition-colors">{{ protocol.name }}</p>
+                                                <p class="text-xs text-gray-500">
+                                                    {% if protocol.type == 'results' %}Результати
+                                                    {% elif protocol.type == 'protocol' %}Протокол
+                                                    {% elif protocol.type == 'brackets' %}Сітка
+                                                    {% elif protocol.type == 'grids' %}Таблиця
+                                                    {% elif protocol.type %}{{ protocol.type }}
+                                                    {% else %}Документ{% endif %}
+                                                </p>
+                                            </div>
+                                            
+                                            <!-- Download Icon -->
+                                            <span class="material-symbols-outlined text-[18px] text-gray-400 group-hover-item:text-primary-600 transition-colors">download</span>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% else %}
+                            <!-- No protocols available -->
+                            <span class="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-gray-400 bg-gray-50 rounded-lg border border-gray-200">
+                                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                <span>Очікується</span>
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div id="protocols-pagination" class="border-t border-gray-200 px-6 py-4 flex items-center justify-between bg-gray-50/50">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Показано <span class="font-medium text-gray-900">{{ showing_from }}</span> до <span class="font-medium text-gray-900">{{ showing_to }}</span> з <span class="font-medium text-gray-900">{{ total }}</span> результатів
+                    </p>
+                </div>
+                
+                <!-- Pagination (1+ pages) -->
+                {% if total_pages > 1 %}
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <!-- Previous -->
+                        {% if has_prev %}
+                        <a href="#" data-page="{{ current_page - 1 }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Попередня</span>
+                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                        </a>
+                        {% else %}
+                        <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                        </span>
+                        {% endif %}
+
+                        <!-- Page Numbers -->
+                        {% for p in page_range %}
+                            {% if p == '...' %}
+                            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
+                            {% elif p == current_page %}
+                            <span class="z-10 bg-primary-500/10 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ p }}</span>
+                            {% else %}
+                            <a href="#" data-page="{{ p }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Next -->
+                        {% if has_next %}
+                        <a href="#" data-page="{{ current_page + 1 }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Наступна</span>
+                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                        </a>
+                        {% else %}
+                        <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                        </span>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% else %}
+                <!-- Single page -->
+                <div class="text-sm text-gray-500">Сторінка 1 з 1</div>
+                {% endif %}
+            </div>
+
+            <!-- Mobile Pagination -->
+            <div class="flex items-center justify-between w-full sm:hidden">
+                {% if has_prev %}
+                <a href="#" data-page="{{ current_page - 1 }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Попередня
+                </a>
+                {% else %}
+                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
+                    Попередня
+                </span>
+                {% endif %}
+
+                <span class="text-sm text-gray-500">
+                    Стор. {{ current_page }} з {{ total_pages }}
+                </span>
+
+                {% if has_next %}
+                <a href="#" data-page="{{ current_page + 1 }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Наступна
+                </a>
+                {% else %}
+                <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
+                    Наступна
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div id="protocols-table" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-4">
+            <span class="material-symbols-outlined text-gray-400 text-[48px]">search_off</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Документів не знайдено</h3>
+        <p class="text-gray-600 mb-6">Спробуйте змінити фільтри або пошуковий запит</p>
+        <button onclick="clearAllFilters()" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-bold transition-all shadow-md">
+            <span class="material-symbols-outlined text-[20px]">refresh</span>
+            Скинути фільтри
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Quick Access Cards -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Help Card -->
+        <div class="p-4 rounded-xl bg-blue-50 border border-blue-100 flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-primary-600 font-semibold text-sm">
+                <span class="material-symbols-outlined text-[20px]">help</span>
+                <span>Потрібна допомога?</span>
+            </div>
+            <p class="text-xs text-gray-600">
+                Не знайшли потрібний документ? Зверніться до секретаріату.
+            </p>
+            <a class="text-xs font-medium text-primary-600 hover:underline mt-1" href="/contacts">Написати запит →</a>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="p-4 rounded-xl bg-white border border-gray-200 flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-gray-800 font-semibold text-sm">
+                <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+                <span>Статистика</span>
+            </div>
+            <div class="flex flex-col gap-1 text-xs text-gray-600">
+                <div class="flex justify-between">
+                    <span>Протоколи:</span>
+                    <span class="font-bold text-primary-600">{{ total_with_protocols }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Регламенти:</span>
+                    <span class="font-bold text-primary-600">{{ total_with_regulations }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="p-4 rounded-xl bg-white border border-gray-200 flex flex-col gap-2 relative overflow-hidden group">
+            <div class="absolute right-[-10px] top-[-10px] opacity-5 rotate-12">
+                <span class="material-symbols-outlined text-[80px]">campaign</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-800 font-semibold text-sm relative z-10">
+                <span class="material-symbols-outlined text-[20px]">campaign</span>
+                <span>Оновлення</span>
+            </div>
+            <p class="text-xs text-gray-600 relative z-10">
+                Оновлено правила суддівства IJF на 2024 рік. Ознайомтесь у розділі "Документи".
+            </p>
+        </div>
+    </div>
+</main>
+
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+</div>
+
+<style>
+/* ===========================
+   CUSTOM DROPDOWN STYLES
+   =========================== */
+.custom-dropdown {
+    position: relative;
+    user-select: none;
+    min-width: 160px;
+}
+
+.custom-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 8px;
+}
+
+.custom-dropdown-trigger:hover {
+    border-color: #9CA3AF;
+}
+
+.custom-dropdown.active .custom-dropdown-trigger {
+    border-color: #111418;
+    box-shadow: 0 0 0 1px #111418;
+}
+
+.custom-dropdown-value {
+    font-size: 14px;
+    color: #111418;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.custom-dropdown-arrow {
+    display: flex;
+    align-items: center;
+    color: #6B7280;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.custom-dropdown.active .custom-dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+    z-index: 50;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.custom-dropdown.active .custom-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.custom-dropdown-item {
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #111418;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #F3F4F6;
+}
+
+.custom-dropdown-item.selected {
+    background-color: #F9FAFB;
+    font-weight: 500;
+}
+
+/* Scrollbar */
+.custom-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-dropdown-menu::-webkit-scrollbar-track {
+    background: #F3F4F6;
+    border-radius: 4px;
+}
+
+.custom-dropdown-menu::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+.custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+/* ===========================
+   LOADER & ANIMATIONS
+   =========================== */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.page-loader.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #E5E7EB;
+    border-top-color: #111418;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.fade-content {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* TABLE TRANSITION */
+#protocols-table {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#protocols-table.loading {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* DROPDOWN ANIMATION */
+.dropdown-menu {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    pointer-events: none;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* SMOOTH SCROLL */
+html {
+    scroll-behavior: smooth;
+}
+</style>
+
+<script data-page-script="true">
+  (function() {
+      'use strict';
+      
+      // Current filters state
+      let currentFilters = {
+          year: '{{ current_year or '' }}',
+          eventtype: '{{ current_event_type }}',
+          category: '{{ current_category }}',
+          search: '{{ search_query }}',
+          page: {{ current_page }}
+      };
+  
+      /* ===========================
+         LOADER FUNCTIONS
+         =========================== */
+      function showLoader() {
+          const loader = document.getElementById('pageLoader');
+          if (loader) loader.classList.add('active');
+      }
+  
+      function hideLoader() {
+          const loader = document.getElementById('pageLoader');
+          if (loader) loader.classList.remove('active');
+      }
+  
+      /* ===========================
+         URL MANAGEMENT
+         =========================== */
+      function updateURL(filters) {
+          let url = `/documents/events?page=${filters.page}`;
+          if (filters.year) url += `&year=${filters.year}`;
+          if (filters.eventtype && filters.eventtype !== 'all') url += `&event_type=${filters.eventtype}`;
+          if (filters.category && filters.category !== 'all') url += `&category=${filters.category}`;
+          if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
+          
+          window.history.pushState({ filters }, '', url);
+      }
+  
+      /* ===========================
+         AJAX LOAD PROTOCOLS
+         =========================== */
+      async function loadProtocols(filters, scrollToTop = true) {
+          showLoader();
+          
+          try {
+              let url = `/documents/events?page=${filters.page}`;
+              if (filters.year) url += `&year=${filters.year}`;
+              if (filters.eventtype && filters.eventtype !== 'all') url += `&event_type=${filters.eventtype}`;
+              if (filters.category && filters.category !== 'all') url += `&category=${filters.category}`;
+              if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
+              
+              const response = await fetch(url, {
+                  headers: { 'X-Requested-With': 'XMLHttpRequest' }
+              });
+              
+              if (!response.ok) throw new Error('Network error');
+              
+              const html = await response.text();
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, 'text/html');
+              
+              const newTable = doc.querySelector('#protocols-table');
+              const newPagination = doc.querySelector('#protocols-pagination');
+              const newStats = doc.querySelector('#protocols-stats');
+              
+              const currentTable = document.querySelector('#protocols-table');
+              const currentPagination = document.querySelector('#protocols-pagination');
+              const currentStats = document.querySelector('#protocols-stats');
+              
+              if (!currentTable) {
+                  console.error('Table not found');
+                  hideLoader();
+                  return;
+              }
+              
+              // Fade out
+              currentTable.classList.add('loading');
+              
+              setTimeout(() => {
+                  // Update content
+                  if (newTable) currentTable.outerHTML = newTable.outerHTML;
+                  if (newPagination && currentPagination) currentPagination.outerHTML = newPagination.outerHTML;
+                  if (newStats && currentStats) currentStats.outerHTML = newStats.outerHTML;
+                  
+                  const updatedTable = document.querySelector('#protocols-table');
+                  if (updatedTable) updatedTable.classList.remove('loading');
+                  
+                  // Scroll to top if needed
+                  if (scrollToTop) {
+                      const mainSection = document.querySelector('main');
+                      if (mainSection) mainSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                  
+                  hideLoader();
+              }, 300);
+              
+              updateURL(filters);
+              currentFilters = { ...filters };
+              
+          } catch (error) {
+              console.error('Error loading protocols:', error);
+              hideLoader();
+              // Fallback
+              window.location.href = url;
+          }
+      }
+  
+      /* ===========================
+         FILTER FUNCTIONS
+         =========================== */
+      function applyFilters() {
+          const year = document.querySelector('.custom-dropdown[data-name="year"]')?.getAttribute('data-value') || '';
+          const eventType = document.querySelector('.custom-dropdown[data-name="event_type"]')?.getAttribute('data-value') || 'all';
+          const category = document.querySelector('.custom-dropdown[data-name="category"]')?.getAttribute('data-value') || 'all';
+          const search = document.getElementById('search-input')?.value?.trim() || '';
+          
+          const filters = {
+              year: year,
+              eventtype: eventType,
+              category: category,
+              search: search,
+              page: 1
+          };
+          
+          loadProtocols(filters, true);
+      }
+  
+      function clearSearch() {
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) {
+              searchInput.value = '';
+              applyFilters();
+          }
+      }
+  
+      function clearAllFilters() {
+          // Reset dropdowns
+          const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
+          const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
+          const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
+          
+          if (yearDropdown) {
+              yearDropdown.setAttribute('data-value', '');
+              const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
+              if (valueEl) valueEl.textContent = 'Всі роки';
+              yearDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                  item.classList.toggle('selected', item.getAttribute('data-value') === '');
+              });
+          }
+          
+          if (eventTypeDropdown) {
+              eventTypeDropdown.setAttribute('data-value', 'all');
+              const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
+              if (valueEl) valueEl.textContent = 'Всі типи';
+              eventTypeDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                  item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
+              });
+          }
+          
+          if (categoryDropdown) {
+              categoryDropdown.setAttribute('data-value', 'all');
+              const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
+              if (valueEl) valueEl.textContent = 'Всі категорії';
+              categoryDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                  item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
+              });
+          }
+          
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) searchInput.value = '';
+          
+          loadProtocols({ year: '', eventtype: 'all', category: 'all', search: '', page: 1 }, true);
+      }
+  
+      /* ===========================
+         PAGINATION
+         =========================== */
+      function goToPage(page) {
+          loadProtocols({ ...currentFilters, page: page }, true);
+      }
+  
+      /* ===========================
+         CUSTOM DROPDOWN LOGIC
+         =========================== */
+      function initCustomDropdowns() {
+          const dropdowns = document.querySelectorAll('.custom-dropdown');
+          
+          dropdowns.forEach(dropdown => {
+              const trigger = dropdown.querySelector('.custom-dropdown-trigger');
+              const items = dropdown.querySelectorAll('.custom-dropdown-item');
+              const valueSpan = dropdown.querySelector('.custom-dropdown-value');
+              
+              if (!trigger || !valueSpan) return;
+              
+              // Remove old listeners (clone node trick)
+              const newTrigger = trigger.cloneNode(true);
+              trigger.parentNode.replaceChild(newTrigger, trigger);
+              
+              // Toggle dropdown
+              newTrigger.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                  
+                  // Close all other dropdowns
+                  document.querySelectorAll('.custom-dropdown.active').forEach(d => {
+                      if (d !== dropdown) d.classList.remove('active');
+                  });
+                  
+                  dropdown.classList.toggle('active');
+              });
+              
+              // Mark current value as selected
+              items.forEach(item => {
+                  const value = item.getAttribute('data-value');
+                  if (value === dropdown.getAttribute('data-value')) {
+                      item.classList.add('selected');
+                  }
+                  
+                  // Remove old listener
+                  const newItem = item.cloneNode(true);
+                  item.parentNode.replaceChild(newItem, item);
+                  
+                  // Item selection
+                  newItem.addEventListener('click', function(e) {
+                      e.stopPropagation();
+                      
+                      dropdown.setAttribute('data-value', value);
+                      const valueEl = dropdown.querySelector('.custom-dropdown-value');
+                      if (valueEl) valueEl.textContent = newItem.textContent;
+                      
+                      dropdown.querySelectorAll('.custom-dropdown-item').forEach(i => i.classList.remove('selected'));
+                      newItem.classList.add('selected');
+                      dropdown.classList.remove('active');
+                      
+                      // Trigger filter update
+                      applyFilters();
+                  });
+              });
+          });
+      }
+  
+      /* ===========================
+         DROPDOWN TOGGLE (for protocols)
+         =========================== */
+      function toggleDropdown(event) {
+          event.stopPropagation();
+          const button = event.currentTarget;
+          const dropdown = button.nextElementSibling;
+          const icon = button.querySelector('.chevron-icon');
+          
+          // Close all other dropdowns
+          document.querySelectorAll('.dropdown-menu.show').forEach(d => {
+              if (d !== dropdown) closeDropdown(d);
+          });
+          
+          // Toggle current dropdown
+          if (dropdown.classList.contains('show')) {
+              closeDropdown(dropdown);
+          } else {
+              openDropdown(dropdown, icon);
+          }
+      }
+  
+      function openDropdown(dropdown, icon) {
+          dropdown.classList.add('show');
+          if (icon) icon.style.transform = 'rotate(180deg)';
+      }
+  
+      function closeDropdown(dropdown) {
+          dropdown.classList.remove('show');
+          const button = dropdown.previousElementSibling;
+          const icon = button?.querySelector('.chevron-icon');
+          if (icon) icon.style.transform = 'rotate(0deg)';
+      }
+  
+      /* ===========================
+         CLEANUP FUNCTION
+         =========================== */
+      function cleanup() {
+          // Remove event listeners
+          document.removeEventListener('click', outsideClickHandler);
+          document.removeEventListener('keydown', escapeKeyHandler);
+          document.removeEventListener('click', paginationClickHandler);
+          
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) {
+              searchInput.removeEventListener('keypress', searchEnterHandler);
+          }
+          
+          window.removeEventListener('popstate', popstateHandler);
+      }
+  
+      /* ===========================
+         EVENT HANDLERS
+         =========================== */
+      function outsideClickHandler() {
+          document.querySelectorAll('.custom-dropdown.active').forEach(d => {
+              d.classList.remove('active');
+          });
+          
+          document.querySelectorAll('.dropdown-menu.show').forEach(dropdown => {
+              closeDropdown(dropdown);
+          });
+      }
+  
+      function escapeKeyHandler(e) {
+          if (e.key === 'Escape') {
+              document.querySelectorAll('.dropdown-menu.show').forEach(dropdown => {
+                  closeDropdown(dropdown);
+              });
+          }
+      }
+  
+      function paginationClickHandler(e) {
+          const pageLink = e.target.closest('a[data-page]');
+          if (pageLink) {
+              e.preventDefault();
+              const page = parseInt(pageLink.getAttribute('data-page'));
+              goToPage(page);
+          }
+      }
+  
+      function searchEnterHandler(e) {
+          if (e.key === 'Enter') {
+              e.preventDefault();
+              applyFilters();
+          }
+      }
+  
+      function popstateHandler(event) {
+          if (event.state && event.state.filters) {
+              loadProtocols(event.state.filters, false);
+              
+              // Update UI
+              const filters = event.state.filters;
+              
+              const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
+              if (yearDropdown) {
+                  yearDropdown.setAttribute('data-value', filters.year || '');
+                  const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
+                  if (valueEl) valueEl.textContent = filters.year || 'Всі роки';
+              }
+              
+              const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
+              if (eventTypeDropdown) {
+                  eventTypeDropdown.setAttribute('data-value', filters.eventtype || 'all');
+                  const labels = { 'national': 'Національні', 'international': 'Міжнародні', 'all': 'Всі типи' };
+                  const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
+                  if (valueEl) valueEl.textContent = labels[filters.eventtype] || 'Всі типи';
+              }
+              
+              const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
+              if (categoryDropdown) {
+                  categoryDropdown.setAttribute('data-value', filters.category || 'all');
+                  const labels = {
+                      'championship': 'Чемпіонати',
+                      'cup': 'Кубки',
+                      'tournament': 'Турніри',
+                      'seminar': 'Семінари',
+                      'training': 'Тренування',
+                      'all': 'Всі категорії'
+                  };
+                  const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
+                  if (valueEl) valueEl.textContent = labels[filters.category] || 'Всі категорії';
+              }
+              
+              const searchInput = document.getElementById('search-input');
+              if (searchInput) searchInput.value = filters.search || '';
+          } else {
+              location.reload();
+          }
+      }
+  
+      /* ===========================
+         INITIALIZATION
+         =========================== */
+      function init() {
+          // Initialize custom dropdowns
+          initCustomDropdowns();
+          
+          // Search on Enter
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) {
+              searchInput.addEventListener('keypress', searchEnterHandler);
+          }
+          
+          // Event listeners
+          document.addEventListener('click', outsideClickHandler);
+          document.addEventListener('keydown', escapeKeyHandler);
+          document.addEventListener('click', paginationClickHandler);
+          window.addEventListener('popstate', popstateHandler);
+          
+          console.log('Protocols page initialized');
+      }
+  
+      /* ===========================
+         EXPOSE TO GLOBAL SCOPE
+         =========================== */
+      // Make functions available globally for inline onclick handlers
+      window.toggleDropdown = toggleDropdown;
+      window.clearSearch = clearSearch;
+      window.clearAllFilters = clearAllFilters;
+      window.applyFilters = applyFilters;
+  
+      /* ===========================
+         AUTO-INIT & CLEANUP
+         =========================== */
+      // Initialize on DOM ready or immediately if already loaded
+      if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+      } else {
+          init();
+      }
+  
+      // Listen for page transition complete event
+      document.addEventListener('pageTransitionComplete', function() {
+          console.log('Page transition complete - reinitializing protocols page');
+          cleanup();
+          init();
+      });
+  
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', cleanup);
+  })();
+  </script>
+  
+{% endblock %}

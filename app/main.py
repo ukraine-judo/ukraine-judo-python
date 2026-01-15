@@ -7,6 +7,14 @@ from app.api.v1.router import api_router
 from app.services.supabase import supabase
 from app.utils.categories import normalize_category, get_old_categories_for_filter, CATEGORY_LABELS, get_category_label
 from app.utils.coach_categories import COACH_CATEGORY_LABELS, get_coach_category_label
+from app.utils.file_helpers import (
+    get_file_extension,
+    get_file_icon,
+    get_file_icon_color,
+    format_file_size,
+    format_date_ukrainian,
+    is_new_document
+)
 from datetime import datetime, date
 from typing import Optional, List, Dict, Any  # ✅ ДОДАЙ ЦЕЙ РЯДОК
 import json
@@ -639,7 +647,7 @@ async def calendar_page(
         # Якщо AJAX - повертаємо тільки частину з подіями
         if is_ajax:
             # Рендеримо тільки events-grid та stats
-            return templates.TemplateResponse("calendar_events_partial.html", context)
+            return templates.TemplateResponse("calendar.html", context)
         
         return templates.TemplateResponse("calendar.html", context)
     
@@ -1736,7 +1744,111 @@ async def region_detail_page(request: Request, region_slug: str):
             "request": request,
             "settings": settings
         }, status_code=404)
-# ========== DOCUMENTS PAGE (ВИПРАВЛЕНО) ==========
+
+# Нові оптимізовані категорії
+DOCUMENT_CATEGORIES = {
+    'statutory': 'Статутні документи',
+    'competitions': 'Змагання та протоколи',
+    'athletes': 'Спортсмени та рейтинги',
+    'education': 'Освіта та суддівство',
+    'medical': 'Медичні документи'
+}
+
+# Mapping старих категорій на нові (для зворотної сумісності)
+CATEGORY_MAPPING = {
+    # Старі -> Нові
+    'document': 'statutory',
+    'documents': 'statutory',
+    'statutory': 'statutory',
+    
+    'protocol': 'competitions',
+    'protocols': 'competitions',
+    'regulation': 'competitions',
+    'regulations': 'competitions',
+    'competitions': 'competitions',
+    
+    'athletes': 'athletes',
+    'rating': 'athletes',
+    
+    'education': 'education',
+    'judging': 'education',
+    
+    'medical': 'medical'
+}
+
+def normalize_category(category: str) -> str:
+    """
+    Нормалізує категорію: перетворює стару на нову
+    """
+    if not category:
+        return 'statutory'
+    
+    category_lower = category.lower()
+    return CATEGORY_MAPPING.get(category_lower, 'statutory')
+
+def get_category_display(category: str) -> str:
+    """
+    Отримати відображення категорії українською
+    """
+    normalized = normalize_category(category)
+    return DOCUMENT_CATEGORIES.get(normalized, 'Документи')
+
+def get_category_icon(category: str) -> str:
+    """
+    Отримати Material Icon для категорії
+    """
+    normalized = normalize_category(category)
+    
+    icons = {
+        'statutory': 'gavel',
+        'competitions': 'emoji_events',
+        'athletes': 'groups',
+        'education': 'school',
+        'medical': 'health_and_safety'
+    }
+    
+    return icons.get(normalized, 'description')
+
+def get_category_color(category: str) -> dict:
+    """
+    Отримати кольори для категорії
+    """
+    normalized = normalize_category(category)
+    
+    colors = {
+        'statutory': {
+            'bg': 'bg-purple-50',
+            'text': 'text-purple-700',
+            'border': 'border-purple-200'
+        },
+        'competitions': {
+            'bg': 'bg-orange-50',
+            'text': 'text-orange-700',
+            'border': 'border-orange-200'
+        },
+        'athletes': {
+            'bg': 'bg-green-50',
+            'text': 'text-green-700',
+            'border': 'border-green-200'
+        },
+        'education': {
+            'bg': 'bg-blue-50',
+            'text': 'text-blue-700',
+            'border': 'border-blue-200'
+        },
+        'medical': {
+            'bg': 'bg-red-50',
+            'text': 'text-red-700',
+            'border': 'border-red-200'
+        }
+    }
+    
+    return colors.get(normalized, {
+        'bg': 'bg-gray-50',
+        'text': 'text-gray-700',
+        'border': 'border-gray-200'
+    })
+
 @app.get("/documents", response_class=HTMLResponse)
 async def documents_page(
     request: Request,
@@ -1749,63 +1861,124 @@ async def documents_page(
         return JSONResponse({"error": "Templates directory not found"}, status_code=500)
     
     try:
-        per_page = 12
+        per_page = 15
+        
+        # Нормалізуємо категорію
+        normalized_category = None
+        if category and category != 'all':
+            normalized_category = normalize_category(category)
         
         # Базовий запит
-        query = supabase.table("documents").select("*", count="exact")
+        query = supabase.table("documents").select("*")
         
-        # Фільтри
-        if category and category != 'all':
-            query = query.eq("category", category)
+        # Фільтр по категорії
+        if normalized_category:
+            old_categories = [k for k, v in CATEGORY_MAPPING.items() if v == normalized_category]
+            if old_categories:
+                query = query.in_("category", old_categories)
         
+        # Отримуємо всі документи
+        query = query.order("date", desc=True)
+        all_docs_response = query.execute()
+        
+        # Фільтруємо по пошуку
         if search:
-            query = query.or_(f"title.ilike.%{search}%,tags.ilike.%{search}%")
+            search_lower = search.lower()
+            filtered_docs = []
+            
+            for doc in all_docs_response.data:
+                title = (doc.get("title") or "").lower()
+                description = (doc.get("description") or "").lower()
+                tags = (doc.get("tags") or "").lower()
+                
+                if (search_lower in title or 
+                    search_lower in description or 
+                    search_lower in tags):
+                    filtered_docs.append(doc)
+        else:
+            filtered_docs = all_docs_response.data
         
-        # Загальна кількість
-        total_response = query.execute()
-        total_count = total_response.count if hasattr(total_response, 'count') else len(total_response.data)
-        total_pages = (total_count + per_page - 1) // per_page
+        # Підрахунок сторінок
+        total_count = len(filtered_docs)
+        total_pages = max(1, (total_count + per_page - 1) // per_page)
+        page = max(1, min(page, total_pages))
         
-        # Отримуємо документи для поточної сторінки
+        # Пагінація
         offset = (page - 1) * per_page
-        documents_response = query.order("date", desc=True).range(offset, offset + per_page - 1).execute()
+        documents_data = filtered_docs[offset:offset + per_page]
         
-        # Обробка документів
+        # ✅ Обробка документів з повними метаданими
         documents = []
-        for doc in documents_response.data:
-            # ✅ ВИПРАВЛЕНО: filename з БД + додаємо префікс
+        for doc in documents_data:
             filename = doc.get("filename", "")
             file_url = f"/static/assets/documents/{filename}" if filename else ""
             
-            # Обробка тегів
+            # Категорія
+            doc_category = doc.get("category", "")
+            normalized_doc_category = normalize_category(doc_category)
+            category_display = get_category_display(doc_category)
+            category_colors = get_category_color(doc_category)
+            category_icon = get_category_icon(doc_category)
+            
+            # Дата
+            doc_date = doc.get("date")
+            date_formatted = format_date_ukrainian(doc_date)
+            is_new = is_new_document(doc_date, days=7)
+            
+            # Теги
             tags_list = []
             if doc.get("tags"):
                 tags = doc["tags"]
                 if isinstance(tags, str):
                     tags_list = [tag.strip() for tag in tags.split(",") if tag.strip()]
                 elif isinstance(tags, list):
-                    tags_list = [tag.strip() for tag in tags if tag and tag.strip()]
+                    tags_list = tags
+            
+            # Файл
+            file_size = doc.get("file_size")  # В байтах з БД
             
             documents.append({
                 "id": doc.get("id"),
-                "title": doc.get("title", ""),
+                "title": doc.get("title", "Без назви"),
                 "description": doc.get("description", ""),
-                "category": doc.get("category", ""),
-                "category_display": get_category_display(doc.get("category", "")),
-                "date": doc.get("date", ""),
-                "file_url": file_url,
+                "date": doc_date,
+                "date_formatted": date_formatted,
+                "is_new": is_new,
+                
+                # Категорія
+                "category": normalized_doc_category,
+                "category_display": category_display,
+                "category_icon": category_icon,
+                "category_colors": category_colors,
+                
+                # Файл
+                "file": {
+                    "url": file_url,
+                    "name": filename,
+                    "extension": get_file_extension(filename),
+                    "icon": get_file_icon(filename),
+                    "icon_color": get_file_icon_color(filename),
+                    "size": file_size,
+                    "size_formatted": format_file_size(file_size) if file_size else None
+                },
+                
+                # Додатково
+                "author": doc.get("author", "ФДУ"),
+                "views": doc.get("views", 0),
+                "downloads": doc.get("downloads", 0),
                 "tags_list": tags_list
             })
         
         return templates.TemplateResponse("documents.html", {
             "request": request,
             "documents": documents,
-            "category": category,
+            "category": normalized_category or 'all',
             "search_query": search or "",
             "current_page": page,
             "total_pages": total_pages,
             "has_prev": page > 1,
-            "has_next": page < total_pages
+            "has_next": page < total_pages,
+            "categories": DOCUMENT_CATEGORIES
         })
     
     except Exception as e:
@@ -1821,276 +1994,210 @@ async def documents_page(
             "current_page": 1,
             "total_pages": 1,
             "has_prev": False,
-            "has_next": False
+            "has_next": False,
+            "categories": DOCUMENT_CATEGORIES
         })
 
 
-# ========== PROTOCOLS PAGE (ВИПРАВЛЕНО) ==========
-@app.get("/protocols", response_class=HTMLResponse)
-async def protocols_page(
+@app.get("/documents/events", response_class=HTMLResponse)
+async def protocols_regulations_page(
     request: Request,
-    year: int = None,
-    category: str = None,
-    page: int = 1
+    year: Optional[str] = Query(None, description="Фільтр за роком"),
+    event_type: Optional[str] = Query(None, description="Тип події (national/international)"),
+    category: Optional[str] = Query(None, description="Категорія події"),
+    search: Optional[str] = Query(None, description="Пошук за назвою"),
+    page: int = Query(1, ge=1, description="Номер сторінки")
 ):
-    """Сторінка протоколів"""
+    """Сторінка протоколів та регламентів з таблиці events"""
     if not templates:
         return JSONResponse({"error": "Templates directory not found"}, status_code=500)
     
     try:
-        per_page = 10
+        from datetime import datetime
         
-        # Базовий запит
-        query = supabase.table("protocols").select("*", count="exact")
+        # 🔥 10 елементів на сторінку
+        limit = 10
+        offset = (page - 1) * limit
+        
+        # Конвертуємо year з string в int
+        year_int = None
+        if year and year.strip():
+            try:
+                year_int = int(year)
+            except ValueError:
+                year_int = None
+        
+        # 🔥 Базовий запит з COUNT для загальної кількості
+        query = supabase.table("events").select(
+            "id, slug, title, event_type, category, age_group, "
+            "date_start, date_end, city, region, organizer, protocols, regulation_path",
+            count="exact"
+        )
         
         # Фільтри
-        if year:
-            query = query.eq("year", year)
+        if year_int:
+            query = query.gte("date_start", f"{year_int}-01-01")
+            query = query.lte("date_start", f"{year_int}-12-31")
+        
+        if event_type and event_type != 'all':
+            query = query.eq("event_type", event_type)
         
         if category and category != 'all':
             query = query.eq("category", category)
         
-        # Загальна кількість
-        total_response = query.execute()
-        total_count = total_response.count if hasattr(total_response, 'count') else len(total_response.data)
-        total_pages = (total_count + per_page - 1) // per_page
+        if search and search.strip():
+            query = query.ilike("title", f"%{search}%")
         
-        # Отримуємо протоколи
-        offset = (page - 1) * per_page
-        protocols_response = query.order("date", desc=True).range(offset, offset + per_page - 1).execute()
+        # Сортування
+        query = query.order("date_start", desc=True)
         
-        # Обробка протоколів
-        protocols = []
-        for protocol in protocols_response.data:
-            files_list = []
-            if protocol.get("files"):
-                # Парсинг JSON
-                files = protocol["files"]
-                if isinstance(files, str):
-                    try:
-                        files = json.loads(files)
-                    except:
-                        files = []
-                
-                # ✅ ВИПРАВЛЕНО: використовуємо поле "path" з JSON
-                for file in files:
-                    file_path = file.get("path", "")
-                    # path вже містить "assets/protocols/..." тому просто додаємо /static/
-                    file_url = f"/static/{file_path}" if file_path else ""
-                    
-                    files_list.append({
-                        "name": file.get("name", "Файл"),
-                        "url": file_url,
-                        "type": file.get("type", "document"),
-                        "description": file.get("description", ""),
-                        "icon": file.get("icon", "results")
-                    })
-            
-            protocols.append({
-                "id": protocol.get("id"),
-                "title": protocol.get("title", ""),
-                "category": protocol.get("category", ""),
-                "category_display": get_protocol_category_display(protocol.get("category", "")),
-                "location": protocol.get("location", ""),
-                "date": protocol.get("date", ""),
-                "year": protocol.get("year", ""),
-                "status": protocol.get("status", ""),
-                "files_list": files_list
-            })
-        
-        return templates.TemplateResponse("protocols.html", {
-            "request": request,
-            "protocols": protocols,
-            "year": year,
-            "category": category,
-            "current_page": page,
-            "total_pages": total_pages,
-            "has_prev": page > 1,
-            "has_next": page < total_pages
-        })
-    
-    except Exception as e:
-        print(f"❌ ERROR в protocols_page: {e}")
-        import traceback
-        traceback.print_exc()
-        
-        return templates.TemplateResponse("protocols.html", {
-            "request": request,
-            "protocols": [],
-            "year": None,
-            "category": None,
-            "current_page": 1,
-            "total_pages": 1,
-            "has_prev": False,
-            "has_next": False
-        })
-
-
-@app.get("/regulations", response_class=HTMLResponse)
-async def regulations_page(
-    request: Request,
-    year: int = None,
-    status: str = None,
-    page: int = 1
-):
-    """SSR: Regulations page"""
-    if not templates:
-        return JSONResponse({"error": "Templates directory not found"}, status_code=500)
-    
-    try:
-        from datetime import datetime, date
-        
-        limit = 12
-        offset = (page - 1) * limit
-        
-        # Query
-        query = supabase.table('regulations').select('*', count='exact')
-        
-        # Filters
-        if year and year != 'all':
-            query = query.eq('year', year)
-        
-        if status and status != 'all':
-            query = query.eq('status', status)
-        
-        query = query.order('date_start', desc=True)
-        query = query.range(offset, offset + limit - 1)
-        
+        # Виконуємо запит БЕЗ пагінації спочатку (для фільтрації)
         response = query.execute()
-        regulations = response.data if response.data else []
+        all_events = response.data if response.data else []
         
-        # ✅ АВТОМАТИЧНЕ ВИЗНАЧЕННЯ СТАТУСУ ПО ДАТІ
-        today = date.today()
+        # 🔥 Фільтруємо на бекенді: тільки з протоколами або регламентами
+        filtered_events = []
+        for event in all_events:
+            has_protocols = event.get('protocols') and event.get('protocols') not in [None, '', '[]', 'null']
+            has_regulation = event.get('regulation_path') and event.get('regulation_path') not in [None, '', 'null']
+            
+            if has_protocols or has_regulation:
+                filtered_events.append(event)
         
-        for regulation in regulations:
-            try:
-                date_start = datetime.fromisoformat(str(regulation.get('date_start')).replace('Z', '+00:00')).date()
-                date_end_str = regulation.get('date_end')
-                
-                # ✅ Якщо date_end відсутня, використовуємо date_start
-                if date_end_str:
-                    date_end = datetime.fromisoformat(str(date_end_str).replace('Z', '+00:00')).date()
+        # 🔥 Загальна кількість після фільтрації
+        total = len(filtered_events)
+        
+        # 🔥 ПАГІНАЦІЯ НА БЕКЕНДІ
+        paginated_events = filtered_events[offset:offset + limit]
+        
+        # Обробка даних
+        for event in paginated_events:
+            # Парсинг JSON для protocols
+            if event.get('protocols'):
+                if isinstance(event['protocols'], str):
+                    try:
+                        event['protocols_parsed'] = json.loads(event['protocols'])
+                    except:
+                        event['protocols_parsed'] = []
+                elif isinstance(event['protocols'], list):
+                    event['protocols_parsed'] = event['protocols']
                 else:
-                    date_end = date_start
-                
-                # ✅ Визначаємо статус по даті
-                if regulation.get('status') in ['cancelled', 'canceled']:
-                    regulation['computed_status'] = 'cancelled'
-                elif today > date_end:
-                    regulation['computed_status'] = 'completed'
-                elif date_start <= today <= date_end:
-                    regulation['computed_status'] = 'ongoing'
-                else:
-                    regulation['computed_status'] = 'upcoming'
-                
-                # ✅ Форматуємо дату (без "None")
-                if date_end and date_end != date_start:
-                    regulation['date_formatted'] = f"{date_start.strftime('%d.%m.%Y')} — {date_end.strftime('%d.%m.%Y')}"
-                else:
-                    regulation['date_formatted'] = date_start.strftime('%d.%m.%Y')
-                
-            except Exception as e:
-                print(f"Date parsing error: {e}")
-                regulation['computed_status'] = regulation.get('status', 'upcoming')
-                regulation['date_formatted'] = str(regulation.get('date_start', ''))
+                    event['protocols_parsed'] = []
+            else:
+                event['protocols_parsed'] = []
             
-            # Status labels
-            status_labels = {
-                'upcoming': 'Заплановано',
-                'ongoing': 'Поточні',
-                'completed': 'Завершено',
-                'cancelled': 'Скасовано'
-            }
-            regulation['status_display'] = status_labels.get(regulation.get('computed_status'), 'Заплановано')
-            
-            # ✅ PDF файл
-            if regulation.get('content_type') == 'pdf':
-                regulation['file_url'] = f"/static/{regulation.get('path')}"
-            
-            # ✅ Зображення (для медіа-переглядача)
-            if regulation.get('content_type') == 'images' and regulation.get('images'):
-                import json
+            # Форматування дат
+            if event.get('date_start'):
                 try:
-                    if isinstance(regulation['images'], str):
-                        imgs = json.loads(regulation['images'].replace("'", '"'))
-                    else:
-                        imgs = regulation['images']
-                    
-                    regulation['images_list'] = []
-                    for img in imgs:
-                        img['url'] = f"/static/{regulation.get('path')}/{img['filename']}"
-                        regulation['images_list'].append(img)
+                    event['date_start_formatted'] = format_date(event['date_start'])
                 except:
-                    regulation['images_list'] = []
+                    event['date_start_formatted'] = event['date_start']
+            
+            if event.get('date_end'):
+                try:
+                    event['date_end_formatted'] = format_date(event['date_end'])
+                except:
+                    event['date_end_formatted'] = event['date_end']
+            
+            # URL для регламенту
+            if event.get('regulation_path'):
+                event['regulation_url'] = f"/static/{event['regulation_path']}"
+            
+            # Переклад категорій
+            event['category_label'] = {
+                'cup': 'Кубок',
+                'tournament': 'Турнір',
+                'championship': 'Чемпіонат',
+                'seminar': 'Семінар',
+                'training': 'Тренування',
+                'training_camp': 'НТЗ',
+            }.get(event.get('category'), event.get('category', ''))
+            
+            event['event_type_label'] = {
+                'national': 'Національний',
+                'international': 'Міжнародний',
+            }.get(event.get('event_type'), event.get('event_type', ''))
         
-        # Pagination
-        total = response.count if hasattr(response, 'count') else len(regulations)
+        # 🔥 Розрахунок пагінації
         total_pages = (total + limit - 1) // limit if total > 0 else 1
         has_prev = page > 1
         has_next = page < total_pages
         
-        return templates.TemplateResponse("regulations.html", {
+        # 🔥 Розрахунок діапазону сторінок для відображення (max 7 кнопок)
+        page_range = []
+        if total_pages <= 7:
+            # Якщо сторінок мало - показуємо всі
+            page_range = list(range(1, total_pages + 1))
+        else:
+            # Складна логіка для ... в пагінації
+            if page <= 4:
+                page_range = list(range(1, 6)) + ['...', total_pages]
+            elif page >= total_pages - 3:
+                page_range = [1, '...'] + list(range(total_pages - 4, total_pages + 1))
+            else:
+                page_range = [1, '...'] + list(range(page - 1, page + 2)) + ['...', total_pages]
+        
+        # Отримуємо унікальні роки для фільтра
+        available_years = set()
+        for item in filtered_events:
+            if item.get('date_start'):
+                try:
+                    year_val = datetime.fromisoformat(item['date_start'].replace('Z', '+00:00')).year
+                    available_years.add(year_val)
+                except:
+                    pass
+        available_years = sorted(available_years, reverse=True)
+        
+        # Статистика
+        total_with_protocols = len([e for e in filtered_events if e.get('protocols') and e.get('protocols') not in [None, '', '[]', 'null']])
+        total_with_regulations = len([e for e in filtered_events if e.get('regulation_path') and e.get('regulation_path') not in [None, '', 'null']])
+        
+        # 🔥 Розрахунок "Показано X до Y"
+        showing_from = offset + 1 if paginated_events else 0
+        showing_to = offset + len(paginated_events)
+        
+        return templates.TemplateResponse("protocols_regulations.html", {
             "request": request,
-            "regulations": regulations,
+            "events": paginated_events,
             "current_page": page,
             "total_pages": total_pages,
+            "page_range": page_range,  # 🔥 Додано
             "has_prev": has_prev,
             "has_next": has_next,
-            "year": year,
-            "status": status,
+            "total": total,
+            "showing_from": showing_from,  # 🔥 Додано
+            "showing_to": showing_to,      # 🔥 Додано
+            "total_with_protocols": total_with_protocols,
+            "total_with_regulations": total_with_regulations,
+            "available_years": available_years,
+            "current_year": year_int,
+            "current_event_type": event_type or 'all',
+            "current_category": category or 'all',
+            "search_query": search or '',
             "settings": settings
         })
         
     except Exception as e:
-        print(f"REGULATIONS ERROR: {e}")
+        print(f"Error loading protocols/regulations: {e}")
         import traceback
         traceback.print_exc()
-        return templates.TemplateResponse("regulations.html", {
+        return templates.TemplateResponse("protocols_regulations.html", {
             "request": request,
-            "regulations": [],
+            "events": [],
             "current_page": 1,
             "total_pages": 1,
+            "page_range": [1],
             "has_prev": False,
             "has_next": False,
-            "year": None,
-            "status": None,
+            "total": 0,
+            "showing_from": 0,
+            "showing_to": 0,
+            "total_with_protocols": 0,
+            "total_with_regulations": 0,
+            "available_years": [],
+            "current_year": None,
+            "current_event_type": 'all',
+            "current_category": 'all',
+            "search_query": '',
             "settings": settings
         })
-
-
-
-# ========== ДОПОМІЖНІ ФУНКЦІЇ (БЕЗ ЗМІН) ==========
-def get_category_display(category: str) -> str:
-    """Українські назви категорій документів"""
-    categories = {
-        "statutory": "Статутні",
-        "athletes": "Спортсмени",
-        "education": "Освіта",
-        "competitions": "Змагання"
-    }
-    return categories.get(category, category.capitalize())
-
-
-def get_protocol_category_display(category: str) -> str:
-    """Українські назви категорій протоколів"""
-    categories = {
-        "turnir": "Турніри",
-        "u16": "До 16 років",
-        "u18": "До 18 років",
-        "u21": "До 21 року",
-        "u23": "До 23 років",
-        "cup": "Кубок України",
-        "adults": "Дорослі"
-    }
-    return categories.get(category, category.capitalize())
-
-
-def get_regulation_status_display(status: str) -> str:
-    """Українські назви статусів регламентів"""
-    statuses = {
-        "upcoming": "Заплановано",
-        "ongoing": "Поточні",
-        "completed": "Завершено",
-        "cancelled": "Скасовано"
-    }
-    return statuses.get(status, status.capitalize())

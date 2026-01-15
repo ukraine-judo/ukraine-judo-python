@@ -1,498 +1,775 @@
 {% extends "base.html" %}
 
-{% block title %}Документи - Федерація Дзюдо України{% endblock %}
+{% block title %}Документи ФДУ | Федерація Дзюдо України{% endblock %}
+
+{% block description %}Офіційна документація, регламенти та звітність Федерації Дзюдо України{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="Документи ФДУ | Федерація Дзюдо України">
+<meta property="og:description" content="Системний архів документів ФДУ">
+<meta property="og:url" content="https://judoukraine.co.ua/documents">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
-  
-  <!-- Hero Section -->
-  <section class="mb-10 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 rounded-2xl overflow-hidden relative">
-    <div class="absolute inset-0 bg-[url('https://via.placeholder.com/1280x400/137fec/FFFFFF?text=Documents')] bg-cover bg-center opacity-10"></div>
-    <div class="relative z-10 p-8 md:p-16 text-center">
-      <div class="flex items-center justify-center gap-3 mb-4">
-        <span class="material-symbols-outlined text-white text-[48px] md:text-[64px]">description</span>
-      </div>
-      <h1 class="text-white text-4xl md:text-6xl font-black mb-4 tracking-tight">
-        Офіційні документи
-      </h1>
-      <p class="text-white/90 text-lg md:text-xl max-w-3xl mx-auto">
-        Статутні документи, регламенти та інші офіційні матеріали ФДУ
-      </p>
+{% block subheader %}
+<!-- Documents Subheader -->
+<div class="fixed top-16 lg:top-20 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide py-2" aria-label="Навігація по документах">
+            <!-- Документи (Active) -->
+            <a href="/documents" class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">folder</span>
+                <span>Нормативні документи</span>
+            </a>
+            
+            <!-- Протоколи та регламенти -->
+            <a href="/documents/events" class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+                <span>Протоколи та регламенти</span>
+            </a>
+        </nav>
     </div>
-  </section>
+</div>
 
-  <!-- Main Content: Grid (Sidebar + Content) -->
-  <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10">
-    
-    <!-- Sidebar Navigation -->
-    <aside class="order-2 lg:order-1 lg:sticky lg:top-24 h-fit flex flex-col gap-5">
-      <div class="flex items-center gap-3 pb-3 border-b-2 border-gray-200">
-        <span class="material-symbols-outlined text-[#111418] text-[28px]">folder_open</span>
-        <h2 class="text-xl font-black text-[#111418] tracking-tight">Типи документів</h2>
-      </div>
+<!-- Spacer for fixed subheader -->
+<div class="h-[52px]"></div>
+{% endblock %}
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+</div>
 
-      <!-- Quick Navigation -->
-      <div class="flex flex-col gap-4">
-        <!-- Protocols Card -->
-        <a href="/protocols" class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-          <div class="relative z-10">
-            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-white text-[32px]">emoji_events</span>
-            </div>
-            <h3 class="text-white text-lg font-black mb-2 leading-tight">Протоколи</h3>
-            <p class="text-white/90 text-sm leading-relaxed mb-4">
-              Результати змагань
+<!-- Main Content Layout -->
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Breadcrumbs & Heading -->
+<div class="mb-8">
+    <div class="flex flex-wrap items-center gap-2 text-sm mb-4">
+        <a class="text-gray-600 font-medium hover:text-blue-600 transition-colors" href="/">Головна</a>
+        <span class="text-gray-400 font-medium">/</span>
+        <a class="text-gray-600 font-medium hover:text-blue-600 transition-colors" href="/#federation">Федерація</a>
+        <span class="text-gray-400 font-medium">/</span>
+        <span class="text-gray-900 font-semibold">Документи</span>
+    </div>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div class="max-w-2xl">
+            <h1 class="text-gray-900 text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2">
+                Офіційна документація
+            </h1>
+            <p class="text-[var(--muted)] leading-relaxed mb-1">
+                Системний архів регламентів, протоколів та звітності ФДУ
             </p>
-            <div class="flex items-center gap-2 text-white font-semibold text-sm">
-              <span>Переглянути</span>
-              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Regulations Card -->
-        <a href="/regulations" class="group relative overflow-hidden bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-          <div class="relative z-10">
-            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-white text-[32px]">gavel</span>
-            </div>
-            <h3 class="text-white text-lg font-black mb-2 leading-tight">Регламенти</h3>
-            <p class="text-white/90 text-sm leading-relaxed mb-4">
-              Положення змагань
+            <p class="text-gray-400 text-sm font-normal">
+                <span class="inline-flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">link</span>
+                    Джерело: офіційний сайт Федерації Дзюдо України
+                </span>
             </p>
-            <div class="flex items-center gap-2 text-white font-semibold text-sm">
-              <span>Переглянути</span>
-              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </aside>
+        </div>
+    </div>
+</div>
 
-    <!-- Main Content -->
-    <div class="order-1 lg:order-2">
-      <!-- Filters -->
-      <div class="flex flex-col md:flex-row gap-4 mb-8 p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-        <div class="flex-1">
-          <label class="block text-sm font-bold text-gray-700 mb-2">Категорія</label>
-          <!-- Custom Dropdown -->
-          <div class="custom-dropdown" data-value="{{ category or 'all' }}" data-name="category">
-            <div class="custom-dropdown-trigger">
-              <span class="custom-dropdown-value">
-                {% if category == 'statutory' %}Статутні
-                {% elif category == 'athletes' %}Спортсмени
-                {% elif category == 'education' %}Освіта
-                {% elif category == 'competitions' %}Змагання
-                {% else %}Всі категорії{% endif %}
-              </span>
-              <span class="custom-dropdown-arrow">
-                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
+
+    <div class="flex flex-col lg:flex-row gap-8 items-start">
+        <!-- Left Sidebar Navigation -->
+        <aside class="w-full lg:w-72 flex-shrink-0 lg:sticky lg:top-24">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-4 border-b border-gray-200 bg-gray-50">
+                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">Категорії</span>
+                </div>
+                <nav class="flex flex-col p-2 space-y-1">
+                  <!-- All -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if not category or category == 'all' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="all" onclick="filterByCategory('all'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if not category or category == 'all' %}icon-filled{% endif %} text-[20px]">folder</span>
+                          <span class="{% if not category or category == 'all' %}font-semibold{% else %}font-medium{% endif %} text-sm">Всі документи</span>
+                      </div>
+                  </a>
+              
+                  <!-- Statutory -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if category == 'statutory' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="statutory" onclick="filterByCategory('statutory'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if category == 'statutory' %}icon-filled{% endif %} text-[20px]">gavel</span>
+                          <span class="{% if category == 'statutory' %}font-semibold{% else %}font-medium{% endif %} text-sm">Статутні документи</span>
+                      </div>
+                  </a>
+              
+                  <!-- Competitions -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if category == 'competitions' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="competitions" onclick="filterByCategory('competitions'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if category == 'competitions' %}icon-filled{% endif %} text-[20px]">emoji_events</span>
+                          <span class="{% if category == 'competitions' %}font-semibold{% else %}font-medium{% endif %} text-sm">Змагання та протоколи</span>
+                      </div>
+                  </a>
+              
+                  <!-- Athletes -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if category == 'athletes' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="athletes" onclick="filterByCategory('athletes'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if category == 'athletes' %}icon-filled{% endif %} text-[20px]">groups</span>
+                          <span class="{% if category == 'athletes' %}font-semibold{% else %}font-medium{% endif %} text-sm">Спортсмени та рейтинги</span>
+                      </div>
+                  </a>
+              
+                  <!-- Education -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if category == 'education' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="education" onclick="filterByCategory('education'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if category == 'education' %}icon-filled{% endif %} text-[20px]">school</span>
+                          <span class="{% if category == 'education' %}font-semibold{% else %}font-medium{% endif %} text-sm">Освіта та суддівство</span>
+                      </div>
+                  </a>
+              
+                  <!-- Medical -->
+                  <a class="category-link group flex items-center justify-between px-3 py-3 rounded-md {% if category == 'medical' %}bg-blue-50 text-blue-600 border-l-[3px] border-blue-600{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent{% endif %} transition-all" 
+                     href="#" data-category="medical" onclick="filterByCategory('medical'); return false;">
+                      <div class="flex items-center gap-3">
+                          <span class="material-symbols-outlined {% if category == 'medical' %}icon-filled{% endif %} text-[20px]">health_and_safety</span>
+                          <span class="{% if category == 'medical' %}font-semibold{% else %}font-medium{% endif %} text-sm">Медичні документи</span>
+                      </div>
+                  </a>
+              </nav>
+              
             </div>
-            <div class="custom-dropdown-menu">
-              <div class="custom-dropdown-item" data-value="all">Всі категорії</div>
-              <div class="custom-dropdown-item" data-value="statutory">Статутні</div>
-              <div class="custom-dropdown-item" data-value="athletes">Спортсмени</div>
-              <div class="custom-dropdown-item" data-value="education">Освіта</div>
-              <div class="custom-dropdown-item" data-value="competitions">Змагання</div>
+
+            <!-- Support Card -->
+            <div class="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-100 hidden lg:block">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-blue-600 text-[24px]">help</span>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900 mb-1">Потрібна допомога?</p>
+                        <p class="text-xs text-gray-600 mb-3">Якщо ви не знайшли потрібний документ, зверніться до секретаріату.</p>
+                        <a class="text-xs font-bold text-blue-600 hover:underline" href="/contacts">Контакти ФДУ →</a>
+                    </div>
+                </div>
             </div>
-          </div>
+        </aside>
+
+        <!-- Document List Area -->
+        <div class="flex-1 w-full bg-white rounded-lg shadow-sm border border-gray-200 min-h-[600px]">
+            <!-- Filter Bar -->
+            <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white rounded-t-lg sticky top-0 z-10">
+                <div class="w-full sm:w-auto">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex-1 sm:w-64">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+                            <input 
+                                type="text" 
+                                id="search-input"
+                                value="{{ search_query }}"
+                                placeholder="Пошук документів..." 
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+                        {% if search_query %}
+                        <button onclick="clearSearch()" class="text-sm text-gray-500 hover:text-gray-700">
+                            Очистити
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <span class="text-xs text-gray-600 font-medium whitespace-nowrap" id="documents-stats">
+                    Знайдено {{ documents|length }} документів
+                </span>
+            </div>
+
+<!-- Document Rows -->
+<div id="documents-container" class="flex flex-col divide-y divide-gray-200">
+    {% if documents and documents|length > 0 %}
+    {% for doc in documents %}
+    <div class="document-card group relative flex flex-col md:flex-row gap-5 p-6 hover:bg-blue-50/30 transition-all duration-200">
+        
+        <!-- NEW Badge -->
+        {% if doc.is_new %}
+        <div class="absolute top-4 right-4 md:top-6 md:right-6">
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide shadow-sm">
+                Новий
+            </span>
+        </div>
+        {% endif %}
+        
+        <!-- Left: Icon -->
+        <div class="flex-shrink-0">
+            <div class="size-14 rounded-lg {{ doc.file.icon_color.bg }} {{ doc.file.icon_color.text }} flex items-center justify-center border {{ doc.file.icon_color.border }} shadow-sm group-hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-[36px]">{{ doc.file.icon }}</span>
+            </div>
         </div>
         
-        <div class="flex-1">
-          <label class="block text-sm font-bold text-gray-700 mb-2">Пошук</label>
-          <div class="relative">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-            <input type="search" 
-                   id="search-input" 
-                   placeholder="Пошук документів..." 
-                   value="{{ search_query }}"
-                   onkeypress="if(event.key === 'Enter') filterDocuments()"
-                   class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-          </div>
-        </div>
-      </div>
-
-      <!-- Documents List (ГОРИЗОНТАЛЬНІ КАРТКИ) -->
-      {% if documents and documents|length > 0 %}
-      <div class="flex flex-col gap-4 mb-8">
-        {% for doc in documents %}
-        <article class="group bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden">
-          <div class="flex flex-col md:flex-row gap-4 p-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-[32px]">description</span>
-              </div>
-            </div>
-            
-            <div class="flex-1 min-w-0">
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
-                <div class="flex-1">
-                  <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {{ doc.title }}
-                  </h3>
-                  {% if doc.category_display %}
-                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
-                    {{ doc.category_display }}
-                  </span>
-                  {% endif %}
+        <!-- Center: Content -->
+        <div class="flex-1 min-w-0 flex flex-col justify-between">
+            <!-- Header -->
+            <div class="mb-2">
+                <div class="flex flex-wrap items-start gap-x-3 gap-y-1 mb-2">
+                    <h3 class="text-lg font-semibold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors flex-1">
+                        {{ doc.title }}
+                    </h3>
                 </div>
                 
-                <a href="{{ doc.file_url }}" 
-                   class="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-sm hover:shadow-lg transition-all hover:-translate-y-0.5" 
-                   download 
-                   target="_blank">
-                  <span class="material-symbols-outlined text-[20px]">download</span>
-                  <span>Завантажити</span>
-                </a>
-              </div>
-              
-              {% if doc.description %}
-              <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ doc.description }}</p>
-              {% endif %}
-              
-              {% if doc.tags_list and doc.tags_list|length > 0 %}
-              <div class="flex flex-wrap gap-2">
-                {% for tag in doc.tags_list %}
-                <span class="px-2 py-1 rounded-lg text-xs font-semibold bg-gray-100 text-gray-700">{{ tag }}</span>
-                {% endfor %}
-              </div>
-              {% endif %}
+                <!-- Meta -->
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                        {{ doc.date_formatted }}
+                    </span>
+                    
+                    <span class="text-gray-400">•</span>
+                    
+                    <span class="uppercase font-medium">{{ doc.file.extension }}</span>
+                    
+                    {% if doc.file.size_formatted %}
+                    <span class="text-gray-400">•</span>
+                    <span>{{ doc.file.size_formatted }}</span>
+                    {% endif %}
+                    
+                    {% if doc.author and doc.author != 'ФДУ' %}
+                    <span class="text-gray-400">•</span>
+                    <span>{{ doc.author }}</span>
+                    {% endif %}
+                </div>
             </div>
-          </div>
-        </article>
-        {% endfor %}
-      </div>
-      
-      <!-- Pagination -->
-      {% if total_pages > 1 %}
-      <div class="flex items-center justify-center gap-2">
-        <!-- Previous Button -->
-        {% if has_prev %}
-          <a 
-            href="?page={{ current_page - 1 }}{% if category and category != 'all' %}&category={{ category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
-            title="Попередня сторінка"
-          >
-            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-          </a>
-        {% else %}
-          <button 
-            disabled 
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-          >
-            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-          </button>
-        {% endif %}
-
-        <!-- Page Numbers -->
-        <div class="flex items-center gap-2">
-          {% set start_page = [1, current_page - 2]|max %}
-          {% set end_page = [total_pages, current_page + 2]|min %}
-          
-          {# Перша сторінка #}
-          {% if start_page > 1 %}
-            <a 
-              href="?page=1{% if category and category != 'all' %}&category={{ category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-            >
-              1
-            </a>
-            {% if start_page > 2 %}
-              <span class="text-gray-400 px-1">...</span>
+            
+            <!-- Description -->
+            {% if doc.description %}
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+                {{ doc.description }}
+            </p>
             {% endif %}
-          {% endif %}
-          
-          {# Номери сторінок #}
-          {% for page_num in range(start_page, end_page + 1) %}
-            {% if page_num == current_page %}
-              <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600 text-white font-bold shadow-lg">
-                {{ page_num }}
-              </span>
-            {% else %}
-              <a 
-                href="?page={{ page_num }}{% if category and category != 'all' %}&category={{ category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-              >
-                {{ page_num }}
-              </a>
-            {% endif %}
-          {% endfor %}
-          
-          {# Остання сторінка #}
-          {% if end_page < total_pages %}
-            {% if end_page < total_pages - 1 %}
-              <span class="text-gray-400 px-1">...</span>
-            {% endif %}
-            <a 
-              href="?page={{ total_pages }}{% if category and category != 'all' %}&category={{ category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-            >
-              {{ total_pages }}
-            </a>
-          {% endif %}
+            
+            <!-- Footer: Category + Stats -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mt-auto">
+                <div class="flex items-center gap-2">
+                    <!-- Category Badge -->
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border {{ doc.category_colors.bg }} {{ doc.category_colors.text }} {{ doc.category_colors.border }}">
+                        <span class="material-symbols-outlined text-[14px]">{{ doc.category_icon }}</span>
+                        {{ doc.category_display }}
+                    </span>
+                </div>
+                
+                <!-- Stats -->
+                {% if doc.views or doc.downloads %}
+                <div class="flex items-center gap-3 text-xs text-gray-500">
+                    {% if doc.views %}
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">visibility</span>
+                        {{ doc.views }}
+                    </span>
+                    {% endif %}
+                    
+                    {% if doc.downloads %}
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">download</span>
+                        {{ doc.downloads }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
         </div>
-
-        <!-- Next Button -->
-        {% if has_next %}
-          <a 
-            href="?page={{ current_page + 1 }}{% if category and category != 'all' %}&category={{ category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
-            title="Наступна сторінка"
-          >
-            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-          </a>
-        {% else %}
-          <button 
-            disabled 
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-          >
-            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-          </button>
-        {% endif %}
-      </div>
-      {% endif %}
-      
-      {% else %}
-      <!-- Empty State -->
-      <div class="text-center py-20">
-        <div class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-6">
-          <span class="material-symbols-outlined text-gray-400 text-[48px]">folder_off</span>
+        
+        <!-- Right: Actions -->
+        <div class="flex-shrink-0 flex flex-col gap-2 md:self-center md:items-end pt-2 md:pt-0">
+            <!-- Main Download Button -->
+            <a 
+                href="{{ doc.file.url }}" 
+                target="_blank"
+                onclick="trackDownload('{{ doc.id }}')"
+                class="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-bold shadow-sm transition-all active:scale-95 ring-offset-2 focus:ring-2 ring-blue-500/50"
+            >
+                <span class="material-symbols-outlined text-[20px]">download</span>
+                <span>Завантажити</span>
+            </a>
+            
+            <!-- Quick Actions -->
+            <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button 
+                    onclick="copyLink('{{ doc.file.url }}')" 
+                    class="flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 transition-colors"
+                    title="Копіювати посилання"
+                >
+                    <span class="material-symbols-outlined text-[18px]">link</span>
+                </button>
+                
+                <button 
+                    onclick="shareDocument('{{ doc.title }}', '{{ doc.file.url }}')" 
+                    class="flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 transition-colors"
+                    title="Поділитися"
+                >
+                    <span class="material-symbols-outlined text-[18px]">share</span>
+                </button>
+            </div>
         </div>
-        <h3 class="text-2xl font-black text-gray-900 mb-2">Документів не знайдено</h3>
-        <p class="text-gray-600 mb-6">Спробуйте змінити фільтри або пошуковий запит</p>
-        <button onclick="window.location.href='/documents'" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-bold hover:bg-gray-200 transition-colors">
-          <span class="material-symbols-outlined text-[20px]">refresh</span>
-          <span>Скинути фільтри</span>
-        </button>
-      </div>
-      {% endif %}
     </div>
-  </section>
+    {% endfor %}
+    
+    {% else %}
+    <!-- Empty State -->
+    <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
+        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-gray-400 text-[36px]">folder_open</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Документи не знайдено</h3>
+        <p class="text-gray-600 mb-6 max-w-sm">
+            {% if search_query %}
+                За вашим запитом "<strong>{{ search_query }}</strong>" документів не знайдено.
+            {% elif category and category != 'all' %}
+                В цій категорії поки немає документів.
+            {% else %}
+                Документи ще не додані.
+            {% endif %}
+        </p>
+        {% if category or search_query %}
+        <button onclick="clearAllFilters()" 
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors">
+            <span class="material-symbols-outlined text-[20px]">refresh</span>
+            Скинути фільтри
+        </button>
+        {% endif %}
+    </div>
+    {% endif %}
+            <!-- Pagination -->
+            {% if total_pages and total_pages > 1 %}
+            <div id="documents-pagination" class="mt-12 space-y-4 p-12">
+                <!-- Results Info -->
+                <div class="text-center">
+                  <p class="text-sm text-[#617589]">
+                    Сторінка <span class="font-bold text-[#111418]">{{ current_page }}</span> з 
+                    <span class="font-bold text-[#111418]">{{ total_pages }}</span>
+                    <span class="mx-2">•</span>
+                    Всього документів: <span class="font-bold text-[#111418]">{{ total_count }}</span>
+                  </p>
+                </div>
+    
+                <!-- Pagination Controls -->
+                <div class="flex items-center justify-center gap-2">
+                  <!-- Previous Button -->
+                  {% if has_prev %}
+                    <button
+                      onclick="goToPage({{ current_page - 1 }}); return false;"
+                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
+                      title="Попередня сторінка"
+                    >
+                      <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </button>
+                  {% else %}
+                    <button 
+                      disabled 
+                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
+                    >
+                      <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </button>
+                  {% endif %}
+    
+                  <!-- Page Numbers -->
+                  <div class="flex items-center gap-2">
+                    {% set start_page = [1, current_page - 2]|max %}
+                    {% set end_page = [total_pages, current_page + 2]|min %}
+    
+                    {# Перша сторінка #}
+                    {% if start_page > 1 %}
+                      <button
+                        onclick="goToPage(1); return false;"
+                        class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                      >
+                        1
+                      </button>
+                      {% if start_page > 2 %}
+                        <span class="text-gray-400 px-1">...</span>
+                      {% endif %}
+                    {% endif %}
+    
+                    {# Номери сторінок #}
+                    {% for page_num in range(start_page, end_page + 1) %}
+                      {% if page_num == current_page %}
+                        <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">
+                          {{ page_num }}
+                        </span>
+                      {% else %}
+                        <button
+                          onclick="goToPage({{ page_num }}); return false;"
+                          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 hover:scale-105"
+                        >
+                          {{ page_num }}
+                        </button>
+                      {% endif %}
+                    {% endfor %}
+    
+                    {# Остання сторінка #}
+                    {% if end_page < total_pages %}
+                      {% if end_page < total_pages - 1 %}
+                        <span class="text-gray-400 px-1">...</span>
+                      {% endif %}
+                      <button
+                        onclick="goToPage({{ total_pages }}); return false;"
+                        class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                      >
+                        {{ total_pages }}
+                      </button>
+                    {% endif %}
+                  </div>
+    
+                  <!-- Next Button -->
+                  {% if has_next %}
+                    <button
+                      onclick="goToPage({{ current_page + 1 }}); return false;"
+                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
+                      title="Наступна сторінка"
+                    >
+                      <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </button>
+                  {% else %}
+                    <button 
+                      disabled 
+                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
+                    >
+                      <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+</div>
+
+    </div>
 </main>
 
 <style>
-/* Custom Dropdown Styles */
-.custom-dropdown {
-  position: relative;
-  width: 100%;
-}
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .icon-filled {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-.custom-dropdown-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 14px;
-  font-weight: 500;
-  color: #111418;
-}
+    /* ===== LOADER ===== */
+    .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
 
-.custom-dropdown-trigger:hover {
-  border-color: #2563eb;
-}
+    .page-loader.active {
+        opacity: 1;
+        visibility: visible;
+    }
 
-.custom-dropdown-arrow {
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s;
-  color: #6b7280;
-}
+    .loader-spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #E5E7EB;
+        border-top-color: #111418;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
 
-.custom-dropdown.active .custom-dropdown-arrow {
-  transform: rotate(180deg);
-}
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
 
-.custom-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  max-height: 300px;
-  overflow-y: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.2s;
-}
+    /* ===== CONTAINER TRANSITION ===== */
+    #documents-container {
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
 
-.custom-dropdown.active .custom-dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
+    #documents-container.loading {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-.custom-dropdown-item {
-  padding: 12px 16px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #4b5563;
-  transition: all 0.15s;
-}
+    /* ===== FADE ANIMATION ===== */
+    .fade-content {
+        animation: fadeIn 0.4s ease-in-out;
+    }
 
-.custom-dropdown-item:hover {
-  background: #eff6ff;
-  color: #2563eb;
-}
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-.custom-dropdown-item.selected {
-  background: #dbeafe;
-  color: #2563eb;
-  font-weight: 600;
-}
+    /* ===== SMOOTH SCROLL ===== */
+    html {
+        scroll-behavior: smooth;
+    }
 </style>
 
 <script>
-// Custom Dropdown
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdowns = document.querySelectorAll('.custom-dropdown');
-  
-  dropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
-    const menu = dropdown.querySelector('.custom-dropdown-menu');
-    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
-    const items = dropdown.querySelectorAll('.custom-dropdown-item');
-    
-    trigger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dropdown.classList.toggle('active');
-      
-      // Close other dropdowns
-      dropdowns.forEach(other => {
-        if (other !== dropdown) other.classList.remove('active');
-      });
-    });
-    
-    items.forEach(item => {
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const value = this.dataset.value;
-        const text = this.textContent.trim();
-        
-        dropdown.dataset.value = value;
-        valueSpan.textContent = text;
-        
-        items.forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
-        
-        dropdown.classList.remove('active');
-        
-        filterDocuments();
-      });
-      
-      // Mark selected
-      if (item.dataset.value === dropdown.dataset.value) {
-        item.classList.add('selected');
-      }
-    });
-  });
-  
-  // Close dropdowns on outside click
-  document.addEventListener('click', function() {
-    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-  });
-});
+    // ===== ГЛОБАЛЬНІ ЗМІННІ =====
+    let currentFilters = {
+        category: '{{ category or "all" }}',
+        search: '{{ search_query }}',
+        page: {{ current_page }}
+    };
 
-function filterDocuments() {
-  const category = document.querySelector('.custom-dropdown[data-name="category"]').dataset.value;
-  const search = document.getElementById('search-input').value.trim();
-  
-  let url = '/documents?page=1';
-  if (category && category !== 'all') url += `&category=${category}`;
-  if (search) url += `&search=${encodeURIComponent(search)}`;
-  
-  window.location.href = url;
-}
-// ========== ІНІЦІАЛІЗАЦІЯ ДРОПДАУНІВ (для page transitions) ==========
-function initCustomDropdowns() {
-  const dropdowns = document.querySelectorAll('.custom-dropdown');
-  
-  // Видаляємо старі event listeners (клонування елементів)
-  dropdowns.forEach(dropdown => {
-    const newDropdown = dropdown.cloneNode(true);
-    dropdown.parentNode.replaceChild(newDropdown, dropdown);
-  });
-  
-  // Отримуємо оновлені посилання
-  const freshDropdowns = document.querySelectorAll('.custom-dropdown');
-  
-  freshDropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
-    const menu = dropdown.querySelector('.custom-dropdown-menu');
-    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
-    const items = dropdown.querySelectorAll('.custom-dropdown-item');
-    
-    // Trigger click
-    trigger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dropdown.classList.toggle('active');
-      
-      // Close other dropdowns
-      freshDropdowns.forEach(other => {
-        if (other !== dropdown) other.classList.remove('active');
-      });
-    });
-    
-    // Items click
-    items.forEach(item => {
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const value = this.dataset.value;
-        const text = this.textContent.trim();
+    // ===== LOADER FUNCTIONS =====
+    function showLoader() {
+        document.getElementById('pageLoader').classList.add('active');
+    }
+
+    function hideLoader() {
+        document.getElementById('pageLoader').classList.remove('active');
+    }
+
+    // ===== URL MANAGEMENT =====
+    function updateURL(filters) {
+        let url = '/documents?page=' + filters.page;
         
-        dropdown.dataset.value = value;
-        valueSpan.textContent = text;
+        if (filters.category && filters.category !== 'all') url += '&category=' + filters.category;
+        if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
         
-        items.forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
+        window.history.pushState({ filters: filters }, '', url);
+    }
+
+    // ===== AJAX LOAD DOCUMENTS =====
+    async function loadDocuments(filters, scrollToTop = true) {
+        showLoader();
         
-        dropdown.classList.remove('active');
-        
-        // Викликаємо відповідний фільтр
-        const dropdownName = dropdown.dataset.name;
-        if (window.location.pathname.includes('/documents')) {
-          filterDocuments();
-        } else if (window.location.pathname.includes('/protocols')) {
-          filterProtocols();
-        } else if (window.location.pathname.includes('/regulations')) {
-          filterRegulations();
+        try {
+            let url = '/documents?page=' + filters.page;
+            
+            if (filters.category && filters.category !== 'all') url += '&category=' + filters.category;
+            if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
+            
+            console.log('Loading documents from:', url); // Debug
+            
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            if (!response.ok) throw new Error('Network error');
+            
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Отримуємо нові елементи
+            const newContainer = doc.querySelector('#documents-container');
+            const newPagination = doc.querySelector('#documents-pagination');
+            const newStats = doc.querySelector('#documents-stats');
+            
+            const currentContainer = document.querySelector('#documents-container');
+            const currentPaginationWrapper = document.querySelector('#pagination-wrapper');
+            const currentStats = document.querySelector('#documents-stats');
+            
+            if (!currentContainer) {
+                console.error('Container not found');
+                hideLoader();
+                return;
+            }
+            
+            // Fade out
+            currentContainer.classList.add('loading');
+            
+            setTimeout(() => {
+                // Update content
+                if (newContainer) {
+                    currentContainer.outerHTML = newContainer.outerHTML;
+                }
+                
+                // ✅ ВИПРАВЛЕНО: Оновлення пагінації
+                if (currentPaginationWrapper) {
+                    if (newPagination) {
+                        // Є нова пагінація - замінюємо
+                        currentPaginationWrapper.innerHTML = newPagination.outerHTML;
+                    } else {
+                        // Немає пагінації - очищаємо
+                        currentPaginationWrapper.innerHTML = '';
+                    }
+                }
+                
+                // Update stats
+                if (newStats && currentStats) {
+                    currentStats.textContent = newStats.textContent;
+                }
+                
+                // Отримуємо оновлений елемент після заміни
+                const updatedContainer = document.querySelector('#documents-container');
+                if (updatedContainer) {
+                    updatedContainer.classList.remove('loading');
+                    updatedContainer.classList.add('fade-content');
+                }
+                
+                // Update sidebar active state
+                updateSidebarActive(filters.category);
+                
+                // Scroll to top if needed
+                if (scrollToTop) {
+                    const mainSection = document.querySelector('main');
+                    if (mainSection) {
+                        mainSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+                
+                hideLoader();
+            }, 300);
+            
+            updateURL(filters);
+            currentFilters = { ...filters };
+            
+        } catch (error) {
+            console.error('Error loading documents:', error);
+            hideLoader();
+            // Fallback: повна перезагрузка
+            window.location.href = url;
         }
-      });
-      
-      // Mark selected
-      if (item.dataset.value === dropdown.dataset.value) {
-        item.classList.add('selected');
-      }
+    }
+
+    // ===== UPDATE SIDEBAR ACTIVE STATE =====
+    function updateSidebarActive(category) {
+        const links = document.querySelectorAll('.category-link');
+        links.forEach(link => {
+            const linkCategory = link.getAttribute('data-category');
+            const isActive = linkCategory === category;
+            
+            if (isActive) {
+                link.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-600');
+                link.classList.remove('text-gray-600', 'border-transparent');
+                const icon = link.querySelector('.material-symbols-outlined');
+                const text = link.querySelector('span:last-child');
+                if (icon) icon.classList.add('icon-filled');
+                if (text) {
+                    text.classList.add('font-semibold');
+                    text.classList.remove('font-medium');
+                }
+            } else {
+                link.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-600');
+                link.classList.add('text-gray-600', 'border-transparent');
+                const icon = link.querySelector('.material-symbols-outlined');
+                const text = link.querySelector('span:last-child');
+                if (icon) icon.classList.remove('icon-filled');
+                if (text) {
+                    text.classList.remove('font-semibold');
+                    text.classList.add('font-medium');
+                }
+            }
+        });
+    }
+
+    // ===== FILTER FUNCTIONS =====
+    function filterByCategory(category) {
+        const search = document.getElementById('search-input')?.value?.trim() || '';
+        
+        const filters = {
+            category: category,
+            search: search,
+            page: 1
+        };
+        
+        console.log('Filtering by category:', filters); // Debug
+        loadDocuments(filters, true);
+    }
+
+    function applySearch() {
+        const search = document.getElementById('search-input')?.value?.trim() || '';
+        
+        const filters = {
+            category: currentFilters.category || 'all',
+            search: search,
+            page: 1
+        };
+        
+        console.log('Applying search:', filters); // Debug
+        loadDocuments(filters, true);
+    }
+
+    function clearSearch() {
+        document.getElementById('search-input').value = '';
+        const filters = {
+            category: currentFilters.category || 'all',
+            search: '',
+            page: 1
+        };
+        loadDocuments(filters, true);
+    }
+
+    function clearAllFilters() {
+        document.getElementById('search-input').value = '';
+        
+        loadDocuments({
+            category: 'all',
+            search: '',
+            page: 1
+        }, true);
+    }
+
+    // ===== PAGINATION =====
+    function goToPage(page) {
+        loadDocuments({ ...currentFilters, page: page }, true);
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search on input with debounce
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                const value = e.target.value.trim();
+                
+                // Якщо поле порожнє, одразу застосувати
+                if (value === '') {
+                    applySearch();
+                } else {
+                    // Інакше чекати 500ms
+                    searchTimeout = setTimeout(() => {
+                        applySearch();
+                    }, 500);
+                }
+            });
+            
+            // Search on Enter
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(searchTimeout);
+                    applySearch();
+                }
+            });
+        }
+        
+        // Browser back/forward
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.filters) {
+                loadDocuments(event.state.filters, false);
+                
+                // Оновлюємо UI фільтрів
+                const filters = event.state.filters;
+                if (searchInput) {
+                    searchInput.value = filters.search || '';
+                }
+            } else {
+                location.reload();
+            }
+        });
     });
-  });
-  
-  // Close on outside click
-  document.addEventListener('click', function() {
-    freshDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-  });
-  
-  console.log('✓ Custom dropdowns initialized');
-}
-
-// Ініціалізація при завантаженні сторінки
-document.addEventListener('DOMContentLoaded', initCustomDropdowns);
-
-// Ініціалізація після page transition
-document.addEventListener('pageTransitionComplete', initCustomDropdowns);
-
 </script>
+
+
+
 {% endblock %}
