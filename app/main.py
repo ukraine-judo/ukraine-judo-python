@@ -338,7 +338,6 @@ def get_event_status(event):
             return 'planned'
     except:
         return event.get('status', 'planned')
-
 @app.get("/calendar", response_class=HTMLResponse)
 async def calendar_page(
     request: Request,
@@ -361,6 +360,7 @@ async def calendar_page(
     
     try:
         from datetime import datetime
+        import json
             
         # Поточний місяць якщо не вказано
         now = datetime.now()
@@ -412,14 +412,24 @@ async def calendar_page(
         # 🔍 BUILD QUERY WITH FILTERS
         query = supabase.table("events").select("*")
         
-        # Якщо є фільтри дат - використовуємо їх, інакше місяць
-        if date_from or date_to:
+        # ✨ КЛЮЧОВА ЗМІНА: Пошук має пріоритет над місяцем!
+        is_year_search = bool(search and search.strip())
+        
+        if is_year_search:
+            # 🔍 ПОШУК ПО ВСЬОМУ РОКУ - ігноруємо month параметр!
+            print(f"[SEARCH MODE] Searching for '{search}' in year {current_year}")
+            start_date = f"{current_year}-01-01"
+            end_date = f"{current_year}-12-31"
+            query = query.gte("date_start", start_date).lte("date_start", end_date)
+        elif date_from or date_to:
+            # Кастомний діапазон дат
             if date_from:
                 query = query.gte("date_start", date_from)
             if date_to:
                 query = query.lte("date_start", date_to)
         else:
-            # Формуємо діапазон дат для поточного місяця
+            # 📅 ЗВИЧАЙНИЙ РЕЖИМ - фільтр по місяцю
+            print(f"[MONTH MODE] Showing events for {current_month}/{current_year}")
             start_date = f"{current_year}-{current_month:02d}-01"
             if current_month == 12:
                 end_date = f"{current_year + 1}-01-01"
@@ -443,6 +453,8 @@ async def calendar_page(
         # Execute query
         response = query.order("date_start").execute()
         
+        print(f"[DEBUG] Query returned {len(response.data)} events")
+        
         events = []
         today = datetime.now().date()
         
@@ -458,8 +470,6 @@ async def calendar_page(
                 item['arrival_date'] = datetime.fromisoformat(item['arrival_date'].replace('Z', '+00:00')).date()
             
             # Обробка JSON полів
-            import json
-            
             for json_field in ['program', 'weight_classes', 'contacts', 'live_streams', 'protocols', 'info_blocks']:
                 if item.get(json_field):
                     if isinstance(item[json_field], str):
@@ -528,18 +538,26 @@ async def calendar_page(
         
         # 🔍 CLIENT-SIDE FILTERS (що не можна зробити в Supabase)
         
-        # Search Filter
-        if search:
-            search_lower = search.lower()
-            events = [e for e in events if 
-                search_lower in (e.get('title') or '').lower() or
-                search_lower in (e.get('city') or '').lower() or
-                search_lower in (e.get('region') or '').lower()
-            ]
+        # ✨ ПОКРАЩЕНИЙ ПОШУК - по title, city, region, organizer
+        if is_year_search:
+            search_lower = search.lower().strip()
+            filtered = []
+            for e in events:
+                title_match = search_lower in (e.get('title') or '').lower()
+                city_match = search_lower in (e.get('city') or '').lower()
+                region_match = search_lower in (e.get('region') or '').lower()
+                organizer_match = search_lower in (e.get('organizer') or '').lower()
+                
+                if title_match or city_match or region_match or organizer_match:
+                    filtered.append(e)
+            
+            events = filtered
+            print(f"[DEBUG] After search filter: {len(events)} events")
         
         # Status Filter (після автовизначення)
-        if status:
+        if status and status != 'all':
             events = [e for e in events if e.get('status') == status]
+            print(f"[DEBUG] After status filter: {len(events)} events")
         
         # ✅ СОРТУВАННЯ
         if sort == "date_asc":
@@ -565,13 +583,13 @@ async def calendar_page(
         
         if search:
             active_filters.append({
-                'label': f'Пошук: "{search}"',
+                'label': f'🔍 Пошук: "{search}"',
                 'remove_url': remove_param('search')
             })
         
-        if status:
+        if status and status != 'all':
             status_labels = {
-                'ongoing': '🔴 Live',
+                'ongoing': '🔴 Зараз',
                 'planned': '🔵 Заплановано',
                 'completed': '⚫ Завершено'
             }
@@ -580,23 +598,23 @@ async def calendar_page(
                 'remove_url': remove_param('status')
             })
         
-        if type:
+        if type and type != 'all':
             type_labels = {
-                'international': '🌍 Міжнародні',
-                'national': '🇺🇦 Національні'
+                'international': 'Міжнародні',
+                'national': 'Національні'
             }
             active_filters.append({
                 'label': type_labels.get(type, type),
                 'remove_url': remove_param('type')
             })
         
-        if age_group:
+        if age_group and age_group != 'all':
             active_filters.append({
                 'label': f'Вік: {age_groups_dict.get(age_group, age_group)}',
                 'remove_url': remove_param('age_group')
             })
         
-        if category:
+        if category and category != 'all':
             active_filters.append({
                 'label': f'{categories_dict.get(category, category)}',
                 'remove_url': remove_param('category')
@@ -618,6 +636,78 @@ async def calendar_page(
         international_count = sum(1 for e in events if e.get('event_type') == 'international')
         national_count = sum(1 for e in events if e.get('event_type') == 'national')
         upcoming_count = sum(1 for e in events if e.get('status') == 'planned')
+        
+        # 📅 НАЙБЛИЖЧІ ПОДІЇ (від сьогодні, незалежно від місяця)
+        try:
+            today_str = today.isoformat()  # 2026-01-15
+            print(f"[DEBUG] Getting upcoming events from {today_str}")
+            
+            upcoming_events_query = supabase.table("events").select("*")
+            upcoming_events_query = upcoming_events_query.gte("date_start", today_str)
+            upcoming_events_query = upcoming_events_query.order("date_start", desc=False).limit(7)
+            
+            upcoming_response = upcoming_events_query.execute()
+            print(f"[DEBUG] Upcoming query returned {len(upcoming_response.data) if upcoming_response.data else 0} events")
+            
+            upcoming_events = []
+            
+            if upcoming_response.data:
+                for item in upcoming_response.data:
+                    print(f"[DEBUG] Processing upcoming event: {item.get('title')} - {item.get('date_start')}")
+                    
+                    # Конвертація дат
+                    if isinstance(item.get('date_start'), str):
+                        item['date_start'] = datetime.fromisoformat(item['date_start'].replace('Z', '+00:00')).date()
+                    
+                    if item.get('date_end') and isinstance(item['date_end'], str):
+                        item['date_end'] = datetime.fromisoformat(item['date_end'].replace('Z', '+00:00')).date()
+                    
+                    # JSON поля
+                    for json_field in ['live_streams', 'protocols']:
+                        if item.get(json_field):
+                            if isinstance(item[json_field], str):
+                                try:
+                                    item[f'{json_field}_parsed'] = json.loads(item[json_field])
+                                except:
+                                    item[f'{json_field}_parsed'] = []
+                            elif isinstance(item[json_field], list):
+                                item[f'{json_field}_parsed'] = item[json_field]
+                            else:
+                                item[f'{json_field}_parsed'] = []
+                        else:
+                            item[f'{json_field}_parsed'] = []
+                    
+                    # Автовизначення статусу
+                    event_start = item['date_start']
+                    event_end = item.get('date_end') or event_start
+                    
+                    if item.get('status') != 'cancelled':
+                        if event_start <= today <= event_end:
+                            item['status'] = 'ongoing'
+                        elif today > event_end:
+                            item['status'] = 'completed'
+                        else:
+                            item['status'] = 'planned'
+                    
+                    # Переклади
+                    item['age_group_label'] = age_groups_dict.get(item.get('age_group'), item.get('age_group'))
+                    item['category_label'] = categories_dict.get(item.get('category'), item.get('category'))
+                    
+                    # Назва місяця
+                    if item['date_start']:
+                        item['month_genitive'] = months_genitive.get(item['date_start'].month, '')
+                    
+                    upcoming_events.append(item)
+                
+                print(f"[DEBUG] Successfully processed {len(upcoming_events)} upcoming events")
+            else:
+                print("[DEBUG] No upcoming events found in database")
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to load upcoming events: {e}")
+            import traceback
+            traceback.print_exc()
+            upcoming_events = []
         
         # Перевірка на AJAX запит
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -641,12 +731,13 @@ async def calendar_page(
             "current_category": category or 'all',
             "age_groups_dict": age_groups_dict,
             "categories_dict": categories_dict,
+            "is_year_search": is_year_search,
+            "upcoming_events": upcoming_events,
             "settings": settings
         }
         
         # Якщо AJAX - повертаємо тільки частину з подіями
         if is_ajax:
-            # Рендеримо тільки events-grid та stats
             return templates.TemplateResponse("calendar.html", context)
         
         return templates.TemplateResponse("calendar.html", context)
@@ -683,6 +774,8 @@ async def calendar_page(
             "current_category": 'all',
             "age_groups_dict": {},
             "categories_dict": {},
+            "is_year_search": False,
+            "upcoming_events": [],
             "settings": settings
         })
 
@@ -739,29 +832,40 @@ async def event_detail_page(request: Request, event_slug: str):
         event['event_type_label'] = event_types_dict.get(event.get('event_type'), event.get('event_type'))
         event['category_label'] = categories_dict.get(event.get('category'), event.get('category'))
         
-        # AJAX endpoint debug - якщо потрібно
-        if event.get('program_parsed'):
-            print(f"DEBUG program_parsed: {event['program_parsed']}")
-        
         # Parsing JSON fields
         for json_field in ['program', 'weight_classes', 'contacts', 'live_streams', 'protocols', 'info_blocks']:
             field_value = event.get(json_field)
+            
             if field_value:
                 if isinstance(field_value, str):
                     try:
                         parsed_data = json.loads(field_value)
+                        
+                        # ✅ Normalize weight_classes keys
+                        if json_field == 'weight_classes' and isinstance(parsed_data, list):
+                            for item in parsed_data:
+                                if 'weightClasses' in item:
+                                    item['weight_classes'] = item.pop('weightClasses')
+                        
                         event[f"{json_field}_parsed"] = parsed_data
+                        
                     except Exception as parse_error:
                         print(f"Error parsing {json_field}: {parse_error}")
                         event[f"{json_field}_parsed"] = []
                 elif isinstance(field_value, list):
+                    # ✅ Normalize if already list
+                    if json_field == 'weight_classes':
+                        for item in field_value:
+                            if 'weightClasses' in item:
+                                item['weight_classes'] = item.pop('weightClasses')
                     event[f"{json_field}_parsed"] = field_value
                 elif isinstance(field_value, dict):
-                    event[f"{json_field}_parsed"] = field_value
+                    event[f"{json_field}_parsed"] = [field_value]
                 else:
                     event[f"{json_field}_parsed"] = []
             else:
                 event[f"{json_field}_parsed"] = []
+
         
         # Date parsing
         if isinstance(event.get('date_start'), str):
@@ -808,7 +912,6 @@ async def event_detail_page(request: Request, event_slug: str):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Помилка - Федерація Дзюдо України</title>
-    <!-- Your error page HTML -->
 </head>
 <body>
     <div class="error-container">
@@ -822,7 +925,6 @@ async def event_detail_page(request: Request, event_slug: str):
 </html>""",
             status_code=404
         )
-
 
 
 def get_sex_label(sex):
@@ -2193,7 +2295,7 @@ async def protocols_regulations_page(
             "showing_from": 0,
             "showing_to": 0,
             "total_with_protocols": 0,
-            "total_with_regulations": 0,
+            "total_with_regulations": 0,    
             "available_years": [],
             "current_year": None,
             "current_event_type": 'all',

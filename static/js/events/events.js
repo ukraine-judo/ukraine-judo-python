@@ -363,47 +363,65 @@ function showLoading() {
     `;
 }
 
-// Завантаження подій за місяць
-async function loadEventsByMonth() {
-    const container = document.getElementById('events-list');
-    if (!container) return;
-
-    showLoading();
-    updateNavigationButtons();
-
+async function loadEvents(filters, scrollToTop = true) {
+    showLoader();
+    
     try {
-        const events = await api.getEventsByMonth(currentState.year, currentState.month);
+        // ✨ Будуємо URL з урахуванням пошуку
+        let url = `/calendar?year=${filters.year}`;
         
-        console.log('📊 API Response:', events); // ✅ ДЕБАГ
-        console.log('📊 Is Array:', Array.isArray(events)); // ✅ ДЕБАГ
-        
-        if (!Array.isArray(events)) {
-            console.error('Events is not an array:', events);
-            currentState.allEvents = [];
-        } else {
-            currentState.allEvents = events.map(prepareEventData);
-            console.log('📊 Prepared Events:', currentState.allEvents); // ✅ ДЕБАГ
+        // Додаємо month тільки якщо немає пошуку
+        if (filters.month && !filters.search) {
+            url += `&month=${filters.month}`;
         }
         
-        renderEvents();
+        if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
+        if (filters.status && filters.status !== 'all') url += `&status=${filters.status}`;
+        if (filters.type && filters.type !== 'all') url += `&type=${filters.type}`;
+        if (filters.category && filters.category !== 'all') url += `&category=${filters.category}`;
+        
+        const response = await fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        
+        if (!response.ok) throw new Error('Network error');
+        
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const newContainer = doc.querySelector('#events-container');
+        const currentContainer = document.querySelector('#events-container');
+        
+        if (!currentContainer || !newContainer) {
+            hideLoader();
+            return;
+        }
+        
+        currentContainer.classList.add('loading');
+        
+        setTimeout(() => {
+            currentContainer.outerHTML = newContainer.outerHTML;
+            
+            if (scrollToTop) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            hideLoader();
+        }, 300);
+        
+        updateURL(filters);
+        
+        // ✨ Оновлюємо currentFilters
+        currentFilters = { ...currentFilters, ...filters };
         
     } catch (error) {
         console.error('Error loading events:', error);
-        updateEventsCount(0);
-        
-        container.innerHTML = `
-            <div class="col-span-full text-center py-16">
-                <div class="text-red-500 text-5xl mb-4">⚠️</div>
-                <p class="text-red-600 font-semibold mb-2">Не вдалося завантажити події</p>
-                <p class="text-gray-500 text-sm mb-4">${error.message || 'Невідома помилка'}</p>
-                <button onclick="window.eventsModule.reloadCurrentMonth()" 
-                        class="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-bold transition-all shadow-lg">
-                    Спробувати знову
-                </button>
-            </div>
-        `;
+        hideLoader();
+        window.location.href = url;
     }
 }
+
 
 // Застосування фільтрів на клієнті
 function applyClientFilters(events) {

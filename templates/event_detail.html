@@ -1,1188 +1,535 @@
 {% extends "base.html" %}
 
-{% block title %}{{ event.title }} - Федерація Дзюдо України{% endblock %}
+{% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
 <!-- Full Width Hero Section -->
-<div class="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] flex items-center justify-center overflow-hidden bg-gray-900">
-    <!-- Background Image with Overlay -->
-    <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-10"></div>
-        {% if event.image_url %}
-        <img alt="{{ event.title }}" class="w-full h-full object-cover opacity-80" src="{{ event.image_url }}">
-        {% else %}
-        <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700"></div>
-        {% endif %}
-    </div>
-
-    <div class="relative z-20 w-full max-w-[1200px] px-4 sm:px-6 lg:px-10 flex flex-col items-center text-center">
+<div class="relative w-full h-[60vh] min-h-[500px] overflow-hidden bg-gray-900">
+    <!-- Background Image -->
+    {% if event.image_url %}
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ event.image_url }}');"></div>
+    {% else %}
+    <div class="absolute inset-0 bg-gradient-to-br from-primary to-blue-700"></div>
+    {% endif %}
+    
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/85"></div>
+    
+    <!-- Hero Content -->
+    <div class="relative h-full w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-8 md:pb-12">
         <!-- Status Badge -->
         {% if event.status == 'ongoing' %}
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            В процесі зараз
-        </span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-4 self-start">
+            <span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]"></span>
+            <span class="text-xs font-bold text-white uppercase tracking-wider">Live зараз</span>
+        </div>
         {% elif days_until is not none and days_until >= 0 %}
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
-            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            {% if days_until == 0 %}Починається сьогодні
-            {% elif days_until == 1 %}Починається завтра
-            {% else %}До початку {{ days_until }} {% if days_until < 5 %}дні{% else %}днів{% endif %}
-            {% endif %}
-        </span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-4 self-start">
+            <span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]"></span>
+            <span class="text-xs font-bold text-white uppercase tracking-wider">
+                {% if days_until == 0 %}
+                Сьогодні
+                {% elif days_until == 1 %}
+                Завтра
+                {% else %}
+                Через {{ days_until }} {% if days_until <= 4 %}дні{% else %}днів{% endif %}
+                {% endif %}
+            </span>
+        </div>
         {% endif %}
-
+        
         <!-- Title -->
-        <h1 class="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
+        <h1 class="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight tracking-[-0.033em] mb-3 md:mb-4 drop-shadow-md">
             {{ event.title }}
         </h1>
-
+        
         <!-- Meta Info -->
-        <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 md:gap-8 text-white/90 font-medium text-sm sm:text-base lg:text-lg mt-2">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-8 text-white font-medium drop-shadow-sm text-sm sm:text-base">
             {% if event.date_start %}
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-lg sm:text-xl">calendar_month</span>
-                <span class="text-xs sm:text-sm md:text-base">
+                <span class="material-symbols-outlined text-lg sm:text-xl">calendar_month</span>
+                <span>
                     {% if event.date_end and event.date_end != event.date_start %}
-                    {{ event.date_start.strftime('%d') }}-{{ event.date_end.strftime('%d %B %Y').replace('January', 'січня').replace('February', 'лютого').replace('March', 'березня').replace('April', 'квітня').replace('May', 'травня').replace('June', 'червня').replace('July', 'липня').replace('August', 'серпня').replace('September', 'вересня').replace('October', 'жовтня').replace('November', 'листопада').replace('December', 'грудня') }}
+                        {{ event.date_start.strftime('%d') }}-{{ event.date_end.strftime('%d %B %Y')
+                            .replace('January', 'січня')
+                            .replace('February', 'лютого')
+                            .replace('March', 'березня')
+                            .replace('April', 'квітня')
+                            .replace('May', 'травня')
+                            .replace('June', 'червня')
+                            .replace('July', 'липня')
+                            .replace('August', 'серпня')
+                            .replace('September', 'вересня')
+                            .replace('October', 'жовтня')
+                            .replace('November', 'листопада')
+                            .replace('December', 'грудня') }}
                     {% else %}
-                    {{ event.date_start.strftime('%d %B %Y').replace('January', 'Cічня').replace('February', 'Лютого').replace('March', 'Березня').replace('April', 'Квітня').replace('May', 'Травня').replace('June', 'Червня').replace('July', 'Липня').replace('August', 'Серпня').replace('September', 'Вересня').replace('October', 'Жовтня').replace('November', 'Листопада').replace('December', 'Грудня') }}
+                        {{ event.date_start.strftime('%d %B %Y')
+                            .replace('January', 'січня')
+                            .replace('February', 'лютого')
+                            .replace('March', 'березня')
+                            .replace('April', 'квітня')
+                            .replace('May', 'травня')
+                            .replace('June', 'червня')
+                            .replace('July', 'липня')
+                            .replace('August', 'серпня')
+                            .replace('September', 'вересня')
+                            .replace('October', 'жовтня')
+                            .replace('November', 'листопада')
+                            .replace('December', 'грудня') }}
                     {% endif %}
                 </span>
             </div>
             {% endif %}
-
+            
             {% if event.city %}
-            <div class="hidden sm:block w-1.5 h-1.5 rounded-full bg-white/40"></div>
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-lg sm:text-xl">location_on</span>
-                <span class="text-xs sm:text-sm md:text-base">{{ event.city }}</span>
+                <span class="material-symbols-outlined text-lg sm:text-xl">location_on</span>
+                <span>{{ event.city }}{% if event.region %}, {{ event.region }}{% endif %}</span>
             </div>
             {% endif %}
         </div>
     </div>
 </div>
 
-<!-- Main Content Area -->
-<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
-    <div class="">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
-            <!-- Central Column (Description & Details) -->
-            <div class="lg:col-span-8 flex flex-col gap-6 lg:gap-10 order-2 lg:order-1">
-                <!-- About Section -->
-                {% if event.description %}
-                <section class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 lg:p-8 shadow-sm">
-                    <div class="flex items-center gap-3 mb-4 sm:mb-6 pb-4 sm:pb-5 border-b border-gray-100">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-md shrink-0">
-                            <span class="material-symbols-outlined text-xl sm:text-2xl">description</span>
-                        </div>
-                        <div class="min-w-0">
-                            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-text-main truncate">Про подію</h2>
-                            <p class="text-xs sm:text-sm text-text-secondary hidden sm:block">Детальна інформація про змагання</p>
-                        </div>
-                    </div>
-                    <div class="prose prose-sm sm:prose-base text-text-secondary max-w-none leading-relaxed">
-                        {{ event.description | safe }}
-                    </div>
-                </section>
-                {% endif %}
-
-<!-- Additional Event Info - ADAPTIVE VERSION -->
-{% set has_any_info = event.organizer or event.age_group or event.team_composition or event.arrival_date or event.regulation_url or event.event_type or event.category or event.city or event.region or event.address or event.date_start or (event.contacts_parsed and event.contacts_parsed | length > 0) %}
-
-{% if has_any_info %}
-<section class="bg-gradient-to-br from-white via-blue-50/30 to-white rounded-xl sm:rounded-2xl border-2 border-blue-100 p-4 sm:p-6 lg:p-8 shadow-xl relative overflow-hidden">
-    <!-- Decorative Background -->
-    <div class="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-blue-100/40 to-transparent rounded-full -mr-16 sm:-mr-32 -mt-16 sm:-mt-32 blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-indigo-100/40 to-transparent rounded-full -ml-12 sm:-ml-24 -mb-12 sm:-mb-24 blur-3xl"></div>
-    
-    <div class="relative z-10">
-        <!-- Header -->
-        <div class="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shrink-0">
-                <span class="material-symbols-outlined text-white text-2xl sm:text-3xl">info</span>
-            </div>
-            <div class="min-w-0">
-                <h3 class="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 leading-tight">Інформація про подію</h3>
-            </div>
-        </div>
+<!-- Main Content Container -->
+<div class="min-h-[50vh] w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
         
-        <!-- All Info Cards - HORIZONTAL LAYOUT -->
-        <div class="space-y-2.5 sm:space-y-3">
-            <!-- Location (city is ALWAYS present) -->
-            {% if event.city %}
-            <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-green-300 hover:shadow-lg transition-all">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-white text-lg sm:text-xl">location_on</span>
+        <!-- Main Content Column (Left) -->
+        <div class="flex-1 w-full min-w-0 flex flex-col gap-12">
+            
+            <!-- About Event -->
+            {% if event.description %}
+            <section>
+                <h3 class="text-primary-900 text-2xl font-bold tracking-tight mb-6">Про подію</h3>
+                <div class="text-lg leading-relaxed text-[#333333]/90 font-normal prose max-w-none">
+                    {{ event.description | safe }}
                 </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-[10px] sm:text-xs font-bold text-green-600 uppercase tracking-wider mb-1">Місце проведення</p>
-                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 mb-1">{{ event.city }}</p>
-                    {% if event.region %}
-                    <p class="text-xs sm:text-sm text-gray-600 mb-1">{{ event.region }}</p>
-                    {% endif %}
-                    {% if event.address %}
-                    <p class="text-xs sm:text-sm text-gray-600 flex items-start gap-1 mt-2">
-                        <span class="shrink-0">📍</span>
-                        <span class="leading-relaxed">{{ event.address }}</span>
-                    </p>
-                    {% endif %}
-                </div>
-            </div>
+            </section>
             {% endif %}
             
-            <!-- Organizer (OPTIONAL) -->
-            {% if event.organizer %}
-            <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-blue-300 hover:shadow-lg transition-all">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-white text-lg sm:text-xl">corporate_fare</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-[10px] sm:text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Організатор</p>
-                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug">{{ event.organizer }}</p>
-                </div>
-            </div>
-            {% endif %}
-            
-            <!-- Event Type & Category (ALWAYS present) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                {% if event.event_type %}
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-purple-300 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">public</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-purple-600 uppercase tracking-wider mb-1">Рівень</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900">
-                            {{ event.event_type_label }}
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
-                
-                {% if event.category %}
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-yellow-300 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">emoji_events</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-yellow-600 uppercase tracking-wider mb-1">Тип</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900">
-                            {{ event.category_label }}
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            
-            <!-- Age Group & Arrival Date (OPTIONAL) -->
-            {% if event.age_group or event.arrival_date %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                {% if event.age_group %}
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-orange-300 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">groups</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-orange-600 uppercase tracking-wider mb-1">Вік</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900">{{ event.age_group_label }}</p>
-                    </div>
-                </div>
-                {% endif %}
-                
-                {% if event.arrival_date %}
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-indigo-300 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">flight_land</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">Прибуття</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug">
-                            {{ event.arrival_date.strftime('%d %B %Y').replace('January', 'січня').replace('February', 'лютого').replace('March', 'березня').replace('April', 'квітня').replace('May', 'травня').replace('June', 'червня').replace('July', 'липня').replace('August', 'серпня').replace('September', 'вересня').replace('October', 'жовтня').replace('November', 'листопада').replace('December', 'грудня') }}
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            {% endif %}
-            
-            <!-- Team Composition (OPTIONAL) -->
-            {% if event.team_composition %}
-            <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-teal-400 to-teal-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-white text-lg sm:text-xl">diversity_3</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-[10px] sm:text-xs font-bold text-teal-600 uppercase tracking-wider mb-1">Склад команди</p>
-                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug">{{ event.team_composition }}</p>
-                </div>
-            </div>
-            {% endif %}
-            
-            <!-- Event Dates (ALWAYS present) -->
-            {% if event.date_start %}
-            <div class="grid grid-cols-1 {% if event.date_end and event.date_end != event.date_start %}sm:grid-cols-2{% endif %} gap-2.5 sm:gap-3">
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">event</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">{% if event.date_end and event.date_end != event.date_start %}Початок{% else %}Дата події{% endif %}</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug">
-                            {{ event.date_start.strftime('%d %B %Y').replace('January', 'січня').replace('February', 'лютого').replace('March', 'березня').replace('April', 'квітня').replace('May', 'травня').replace('June', 'червня').replace('July', 'липня').replace('August', 'серпня').replace('September', 'вересня').replace('October', 'жовтня').replace('November', 'листопада').replace('December', 'грудня') }}
-                        </p>
-                    </div>
-                </div>
-                
-                {% if event.date_end and event.date_end != event.date_start %}
-                <div class="group flex items-start gap-3 sm:gap-4 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-50 to-red-100/50 border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-white text-lg sm:text-xl">event_upcoming</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] sm:text-xs font-bold text-red-600 uppercase tracking-wider mb-1">Завершення</p>
-                        <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-900 leading-snug">
-                            {{ event.date_end.strftime('%d %B %Y').replace('January', 'січня').replace('February', 'лютого').replace('March', 'березня').replace('April', 'квітня').replace('May', 'травня').replace('June', 'червня').replace('July', 'липня').replace('August', 'серпня').replace('September', 'вересня').replace('October', 'жовтня').replace('November', 'листопада').replace('December', 'грудня') }}
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            {% endif %}
-        </div>
-        
-        <!-- Regulation Document (OPTIONAL) -->
-        {% if event.regulation_url %}
-        <div class="mt-4 sm:mt-6">
-            <a href="{{ event.regulation_url }}" target="_blank" 
-               class="group flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 hover:border-blue-400 hover:from-blue-100 hover:to-indigo-100 hover:shadow-lg transition-all active:scale-[0.98]">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shrink-0 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-white text-2xl sm:text-3xl">picture_as_pdf</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="px-2 py-0.5 rounded-full bg-blue-500 text-white text-[10px] sm:text-xs font-bold uppercase">Документ</span>
-                    </div>
-                    <p class="text-base sm:text-lg font-black text-gray-900 mb-0.5 leading-tight">Регламент змагань</p>
-                    <p class="text-xs sm:text-sm text-gray-600">Завантажити офіційний PDF</p>
-                </div>
-                <div class="shrink-0">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-blue-300 group-hover:border-blue-500 group-hover:bg-blue-500 flex items-center justify-center transition-all">
-                        <span class="material-symbols-outlined text-blue-600 group-hover:text-white text-xl sm:text-2xl group-hover:translate-x-1 transition-all">arrow_forward</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        {% endif %}
-        
-        <!-- Contacts Section (OPTIONAL) -->
-        {% if event.contacts_parsed and event.contacts_parsed | length > 0 %}
-        <div class="mt-4 sm:mt-6 p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200">
-            <div class="flex items-center gap-3 mb-4 sm:mb-5">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-md shrink-0">
-                    <span class="material-symbols-outlined text-white text-xl sm:text-2xl">contact_phone</span>
-                </div>
-                <div class="min-w-0">
-                    <h4 class="text-base sm:text-lg lg:text-xl font-black text-gray-900 leading-tight">Контакти організаторів</h4>
-                    <p class="text-[10px] sm:text-xs text-gray-600 hidden sm:block">Для всіх питань та уточнень</p>
-                </div>
-            </div>
-            
-            <div class="space-y-2.5 sm:space-y-3">
-                {% for contact in event.contacts_parsed %}
-                <div class="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white border-2 border-gray-100 hover:border-emerald-300 hover:shadow-md transition-all">
-                    <div class="flex items-center gap-2.5 sm:gap-3 mb-3">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white font-bold text-base sm:text-lg shrink-0">
-                            {{ contact['name'][0].upper() if contact['name'] else '?' }}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-bold text-sm sm:text-base text-gray-900 truncate">{{ contact['name'] }}</p>
-                            {% if contact.get('comments') %}
-                            <p class="text-[10px] sm:text-xs text-gray-500 truncate">{{ contact['comments'] }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <div class="flex gap-2">
-                        <a href="tel:{{ contact['phone'] }}" 
-                           class="flex-1 flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-all shadow-sm hover:shadow-md">
-                            <span class="material-symbols-outlined text-base sm:text-lg">call</span>
-                            <span>{{ contact['phone'] }}</span>
-                        </a>
-                        
-                        <button onclick="copyPhone('{{ contact['phone'] }}')" 
-                                class="px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 active:bg-emerald-100 transition-all shrink-0"
-                                title="Скопіювати">
-                            <span class="material-symbols-outlined text-gray-500 hover:text-emerald-600 text-lg sm:text-xl">content_copy</span>
-                        </button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <div class="mt-3 sm:mt-4 flex items-start gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-white/50 border border-emerald-200">
-                <span class="material-symbols-outlined text-emerald-600 text-base sm:text-lg shrink-0">verified</span>
-                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">Офіційні контакти, перевірені організаторами</p>
-            </div>
-        </div>
-        
-        <script>
-        function copyPhone(phone) {
-            navigator.clipboard.writeText(phone).then(() => {
-                const toast = document.createElement('div');
-                toast.className = 'fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm bg-emerald-500 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl shadow-2xl flex items-center gap-3 z-50 animate-slide-up';
-                toast.innerHTML = `
-                    <span class="material-symbols-outlined text-xl sm:text-2xl shrink-0">check_circle</span>
-                    <div class="min-w-0">
-                        <p class="font-bold text-sm sm:text-base">Скопійовано!</p>
-                        <p class="text-xs sm:text-sm opacity-90 truncate">${phone}</p>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
-            });
-        }
-        </script>
-        
-        <style>
-        @keyframes slide-up {
-            from {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .animate-slide-up {
-            animation: slide-up 0.3s ease-out;
-        }
-        </style>
-        {% endif %}
-    </div>
-</section>
-{% endif %}
-
-
-
-                <!-- Weight Categories Section -->
-                {% if event.weight_classes_parsed and event.weight_classes_parsed | length > 0 %}
-                <section class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 shadow-sm">
-                    <h3 class="text-lg sm:text-xl font-bold text-text-main mb-4 sm:mb-6 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">scale</span>
-                        Вагові категорії
-                    </h3>
-
-                    <div class="space-y-4 sm:space-y-6">
-                        {% for division in event.weight_classes_parsed %}
-                        <div>
-                            <!-- Division Header -->
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-xs sm:text-sm font-bold uppercase tracking-wider {% if 'Чоловіки' in division['division'] or 'Хлопці' in division['division'] or 'Юнаки' in division['division'] %}text-blue-700{% else %}text-pink-700{% endif %}">
-                                    {{ division['division'] }}
-                                </span>
-                                <span class="px-2 py-0.5 rounded-full {% if 'Чоловіки' in division['division'] or 'Хлопці' in division['division'] or 'Юнаки' in division['division'] %}bg-blue-100 text-blue-700{% else %}bg-pink-100 text-pink-700{% endif %} text-xs font-bold shrink-0">
-                                    {{ division['weightClasses']|length }}
-                                </span>
-                                <div class="h-px {% if 'Чоловіки' in division['division'] or 'Хлопці' in division['division'] or 'Юнаки' in division['division'] %}bg-blue-200{% else %}bg-pink-200{% endif %} flex-grow"></div>
+            <!-- Program Schedule -->
+            {% if event.program_parsed and event.program_parsed | length > 0 %}
+            <section>
+                <h3 class="text-primary-900 text-2xl font-bold tracking-tight mb-8">Програма заходу</h3>
+                <div class="flex flex-col gap-6">
+                    {% for day in event.program_parsed %}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <!-- Day Header -->
+                        <div class="px-6 py-4 bg-gray-50/60 border-b border-gray-100 flex items-center gap-3">
+                            <div class="bg-white p-1.5 rounded-md shadow-sm border border-gray-100 text-primary">
+                                <span class="material-symbols-outlined text-xl block">calendar_month</span>
                             </div>
-
-                            <!-- Weight Classes -->
-                            <div class="flex flex-wrap gap-2">
-                                {% for weight in division['weightClasses'] %}
-                                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg {% if 'Чоловіки' in division['division'] or 'Хлопці' in division['division'] or 'Юнаки' in division['division']  %}bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100{% else %}bg-pink-50 text-pink-700 border border-pink-100 hover:bg-pink-100{% endif %} text-xs sm:text-sm font-semibold transition-colors cursor-default">
-                                    {{ weight }}
-                                </span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </section>
-                {% endif %}
-
-                <!-- Schedule/Program -->
-                {% if event.program_parsed and event.program_parsed | length > 0 %}
-                <section class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 shadow-sm">
-                    <h3 class="text-lg sm:text-xl font-bold text-text-main mb-4 sm:mb-6 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">schedule</span>
-                        Програма змагань
-                    </h3>
-
-                    <div class="space-y-4 sm:space-y-6">
-                        {% for day in event.program_parsed %}
-                        <div>
-                            <!-- Date Badge -->
-                            <div class="mb-3 sm:mb-4 inline-block">
-                                {% set date_obj = day['date'] if day['date'] is string else day['date'] %}
-                                {% if date_obj is string %}
-                                {% set year = date_obj[:4] %}
-                                {% set month = date_obj[5:7] %}
-                                {% set day_num = date_obj[8:10] %}
-                                {% set months = {
-                                        '01': 'січня', '02': 'лютого', '03': 'березня', 
-                                        '04': 'квітня', '05': 'травня', '06': 'червня',
-                                        '07': 'липня', '08': 'серпня', '09': 'вересня',
-                                        '10': 'жовтня', '11': 'листопада', '12': 'грудня'
-                                    } %}
-                                <div class="px-3 sm:px-4 py-2 rounded-lg bg-blue-600 text-white inline-flex items-center gap-2">
-                                    <span class="text-xl sm:text-2xl font-black">{{ day_num|int }}</span>
-                                    <div class="border-l border-white/30 pl-2">
-                                        <div class="text-xs sm:text-sm font-bold uppercase">{{ months[month] }}</div>
-                                        <div class="text-[10px] sm:text-xs opacity-80">{{ year }}</div>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <div class="px-3 sm:px-4 py-2 rounded-lg bg-blue-600 text-white font-bold text-sm sm:text-base">
-                                    {{ day['date'] }}
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Events List -->
-                            <div class="space-y-2">
-                                {% for item in day['items'] %}
-                                {% if item['start'] or item['end'] %}
-                                <!-- Event WITH time -->
-                                <div class="group flex flex-col sm:flex-row gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50 transition-all">
-                                    <!-- Time -->
-                                    <div class="shrink-0 flex items-center gap-2 sm:block sm:w-20">
-                                        {% if item['start'] and item['end'] %}
-                                        <div class="text-xs sm:text-sm font-bold text-blue-700">{{ item['start'] }}</div>
-                                        <span class="text-gray-400 sm:hidden">—</span>
-                                        <div class="text-xs text-gray-500">{{ item['end'] }}</div>
-                                        {% elif item['start'] %}
-                                        <div class="text-xs sm:text-sm font-bold text-blue-700">{{ item['start'] }}</div>
-                                        {% elif item['end'] %}
-                                        <div class="text-xs text-gray-500">до {{ item['end'] }}</div>
+                            <h4 class="text-lg font-bold text-primary-900">
+                                {% if day.get('date') %}
+                                    {% set date_str = day.date %}
+                                    {% if date_str is string and '-' in date_str %}
+                                        {# Parse date string YYYY-MM-DD #}
+                                        {% set date_parts = date_str.split('-') %}
+                                        {% set year = date_parts[0]|int %}
+                                        {% set month = date_parts[1]|int %}
+                                        {% set day_num = date_parts[2]|int %}
+                                        
+                                        {# Ukrainian month names (genitive case) #}
+                                        {% set months_uk = {
+                                            1: 'січня', 2: 'лютого', 3: 'березня', 4: 'квітня',
+                                            5: 'травня', 6: 'червня', 7: 'липня', 8: 'серпня',
+                                            9: 'вересня', 10: 'жовтня', 11: 'листопада', 12: 'грудня'
+                                        } %}
+                                        
+                                        {# Calculate day of week (simplified Zeller's algorithm) #}
+                                        {% set m = month %}
+                                        {% set y = year %}
+                                        {% if m < 3 %}
+                                            {% set m = m + 12 %}
+                                            {% set y = y - 1 %}
                                         {% endif %}
-                                    </div>
-
-                                    <!-- Divider (hidden on mobile) -->
-                                    <div class="hidden sm:block w-px bg-gray-300 group-hover:bg-blue-400 transition-colors"></div>
-
-                                    <!-- Activity -->
-                                    <div class="flex-1">
-                                        <p class="text-sm text-gray-900 leading-relaxed">{{ item['activity'] }}</p>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <!-- Event WITHOUT time (full width with icon) -->
-                                <div class="group flex gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border-2 border-blue-200 bg-blue-50 hover:border-blue-400 hover:bg-blue-100 transition-all">
-                                    <span class="material-symbols-outlined text-blue-600 shrink-0 text-lg sm:text-xl">info</span>
-                                    <p class="text-sm text-gray-900 leading-relaxed font-medium">{{ item['activity'] }}</p>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        {% if not loop.last %}
-                        <div class="border-t-2 border-dashed border-gray-200"></div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="mt-4 sm:mt-6 p-3 rounded-lg bg-yellow-50 border-l-4 border-yellow-400 text-xs sm:text-sm text-gray-700 flex gap-2">
-                        <span class="material-symbols-outlined text-yellow-600 text-base sm:text-lg shrink-0">info</span>
-                        <span>Програма змагання може бути змінена за рішенням суддівської колегії.</span>
-                    </div>
-                </section>
-                {% endif %}
-
-                <!-- Info Blocks (Horizontal) -->
-                {% if event.info_blocks_parsed and event.info_blocks_parsed | length > 0 %}
-                <div class="space-y-4">
-                    {% for block in event.info_blocks_parsed %}
-                    <div class="group relative bg-white rounded-xl border-2 {% if block['type'] == 'expenses' %}border-purple-100 hover:border-purple-300{% elif block['type'] == 'prizes' %}border-yellow-100 hover:border-yellow-300{% elif block['type'] == 'applications' %}border-green-100 hover:border-green-300{% elif block['type'] == 'important' %}border-red-100 hover:border-red-300{% else %}border-blue-100 hover:border-blue-300{% endif %} p-4 sm:p-6 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                            <!-- Icon -->
-                            <div class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl {% if block['type'] == 'expenses' %}bg-gradient-to-br from-purple-500 to-purple-600{% elif block['type'] == 'prizes' %}bg-gradient-to-br from-yellow-500 to-yellow-600{% elif block['type'] == 'applications' %}bg-gradient-to-br from-green-500 to-green-600{% elif block['type'] == 'important' %}bg-gradient-to-br from-red-500 to-red-600{% else %}bg-gradient-to-br from-blue-500 to-blue-600{% endif %} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                                {% if block['type'] == 'expenses' %}
-                                <span class="material-symbols-outlined text-white text-xl sm:text-2xl">payments</span>
-                                {% elif block['type'] == 'prizes' %}
-                                <span class="material-symbols-outlined text-white text-xl sm:text-2xl">emoji_events</span>
-                                {% elif block['type'] == 'applications' %}
-                                <span class="material-symbols-outlined text-white text-xl sm:text-2xl">how_to_reg</span>
-                                {% elif block['type'] == 'important' %}
-                                <span class="material-symbols-outlined text-white text-xl sm:text-2xl">priority_high</span>
-                                {% else %}
-                                <span class="material-symbols-outlined text-white text-xl sm:text-2xl">info</span>
-                                {% endif %}
-                            </div>
-
-                            <!-- Content -->
-                            <div class="flex-1 min-w-0 w-full">
-                                <div class="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4 mb-3">
-                                    <div class="w-full sm:w-auto">
-                                        <h3 class="text-lg sm:text-xl font-bold text-text-main mb-2">{{ block['title'] }}</h3>
-                                        <div class="h-1 w-12 sm:w-16 rounded-full {% if block['type'] == 'expenses' %}bg-purple-500{% elif block['type'] == 'prizes' %}bg-yellow-500{% elif block['type'] == 'applications' %}bg-green-500{% elif block['type'] == 'important' %}bg-red-500{% else %}bg-blue-500{% endif %}"></div>
-                                    </div>
-
-                                    <!-- Deadline Badge -->
-                                    {% if block.get('deadline') %}
-                                    <div class="shrink-0 flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-50 border-2 border-yellow-400 rounded-lg self-start">
-                                        <span class="material-symbols-outlined text-yellow-600 text-base sm:text-lg">schedule</span>
-                                        <div>
-                                            <p class="text-[10px] font-semibold text-yellow-800 uppercase leading-tight">Термін</p>
-                                            <p class="text-xs sm:text-sm font-bold text-yellow-900 leading-tight">{{ block['deadline'] }}</p>
-                                        </div>
-                                    </div>
+                                        {% set k = y % 100 %}
+                                        {% set j = y // 100 %}
+                                        {% set h = (day_num + ((13 * (m + 1)) // 5) + k + (k // 4) + (j // 4) - (2 * j)) % 7 %}
+                                        
+                                        {# Convert to weekday (0=Saturday, 1=Sunday, ..., 6=Friday) #}
+                                        {% set weekday = (h + 5) % 7 %}
+                                        
+                                        {# Ukrainian weekday names #}
+                                        {% set weekdays_uk = {
+                                            0: 'понеділок', 1: 'вівторок', 2: 'середа', 3: 'четвер',
+                                            4: 'п\'ятниця', 5: 'субота', 6: 'неділя'
+                                        } %}
+                                        
+                                        {{ day_num }} {{ months_uk[month] }}, {{ weekdays_uk[weekday] }}
+                                    {% else %}
+                                        {{ day.date }}
                                     {% endif %}
-                                </div>
-
-                                <!-- Content Text -->
-                                <div class="prose prose-sm text-text-secondary max-w-none leading-relaxed">
-                                    {{ block['content'] | safe }}
-                                </div>
-
-                                <!-- FITOFAN CTA Block -->
-                                {% if block.get('fitofan_url') %}
-                                <div class="mt-4 sm:mt-6 relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 p-4 sm:p-6 shadow-xl">
-                                    <!-- Decorative elements -->
-                                    <div class="absolute top-0 right-0 w-32 sm:w-40 h-32 sm:h-40 bg-white/10 rounded-full -mr-16 sm:-mr-20 -mt-16 sm:-mt-20"></div>
-                                    <div class="absolute bottom-0 left-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/5 rounded-full -ml-12 sm:-ml-16 -mb-12 sm:-mb-16"></div>
-
-                                    <div class="relative z-10">
-                                        <div class="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4">
-                                            <div class="flex-1">
-                                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm mb-3">
-                                                    <span class="relative flex h-2 w-2">
-                                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                                                    </span>
-                                                    <span class="text-white text-xs font-bold uppercase tracking-wider">Обов'язково</span>
-                                                </div>
-                                                <h4 class="text-xl sm:text-2xl font-black text-white mb-2">Онлайн-реєстрація FITOFAN</h4>
-                                                <p class="text-white/90 text-xs sm:text-sm">Реєстрація на платформі є обов'язковою для всіх учасників</p>
-                                            </div>
-                                            <div class="shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                                <span class="material-symbols-outlined text-white text-2xl sm:text-4xl">app_registration</span>
-                                            </div>
-                                        </div>
-
-                                        <a href="{{ block['fitofan_url'] }}" target="_blank" class="group/btn flex items-center justify-between p-3 sm:p-4 rounded-xl bg-white hover:bg-gray-50 transition-all shadow-lg hover:shadow-2xl">
-                                            <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center group-hover/btn:scale-110 transition-transform shrink-0">
-                                                    <span class="material-symbols-outlined text-white text-xl sm:text-2xl">open_in_new</span>
-                                                </div>
-                                                <div class="min-w-0">
-                                                    <p class="text-xs sm:text-sm font-bold text-gray-900 group-hover/btn:text-green-600 transition-colors">Перейти до реєстрації</p>
-                                                    <p class="text-[10px] sm:text-xs text-gray-500 truncate">fitofan.com/e763861514</p>
-                                                </div>
-                                            </div>
-                                            <span class="material-symbols-outlined text-green-600 text-xl sm:text-2xl group-hover/btn:translate-x-1 transition-transform shrink-0 ml-2">arrow_forward</span>
-                                        </a>
-
-                                        <div class="mt-3 sm:mt-4 flex items-center gap-2 text-white/80 text-[10px] sm:text-xs">
-                                            <span class="material-symbols-outlined text-xs sm:text-sm shrink-0">verified</span>
-                                            <span>Офіційна платформа для реєстрації учасників змагань</span>
-                                        </div>
-                                    </div>
-                                </div>
                                 {% endif %}
-                            </div>
+                            </h4>
                         </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <!-- Protocols -->
-                {% if event.protocols_parsed and event.protocols_parsed | length > 0 %}
-                <section class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 shadow-sm">
-                    <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-md shrink-0">
-                            <span class="material-symbols-outlined text-white text-lg sm:text-xl">folder_open</span>
-                        </div>
-                        <h3 class="text-lg sm:text-xl font-bold text-text-main">Протоколи та результати</h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-3">
-                        {% for protocol in event.protocols_parsed %}
-                        <a href="/static/{{ protocol['path'] }}" target="_blank" class="group flex items-center gap-3 p-3 rounded-xl border-2 border-gray-100 hover:border-red-200 bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-white transition-all">
-                            <div class="w-10 h-10 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-all shrink-0">
-                                <span class="material-symbols-outlined text-red-500 group-hover:text-white transition-colors text-lg sm:text-xl">picture_as_pdf</span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-text-main group-hover:text-red-600 transition-colors truncate">{{ protocol['name'] }}</p>
-                                <p class="text-xs text-text-secondary">PDF документ</p>
-                            </div>
-                            <span class="material-symbols-outlined text-gray-400 group-hover:text-red-500 group-hover:translate-x-1 transition-all shrink-0">download</span>
-                        </a>
-                        {% endfor %}
-                    </div>
-                </section>
-                {% endif %}
-
-                <!-- Back Button -->
-                <div class="pt-6 sm:pt-8 border-t border-gray-200">
-                    <a href="/calendar" class="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl border-2 border-gray-200 bg-white text-text-main font-bold text-sm hover:border-primary hover:bg-blue-50 hover:text-primary transition-all group shadow-sm hover:shadow-md">
-                        <span class="material-symbols-outlined text-lg sm:text-[20px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
-                        <span class="hidden sm:inline">Повернутись до календаря</span>
-                        <span class="sm:hidden">Назад</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Sidebar (Sticky) -->
-            <aside class="lg:col-span-4 space-y-4 sm:space-y-6 order-1 lg:order-2">
-                <div class="space-y-4 sm:space-y-6 lg:sticky lg:top-24">
-                    <!-- Live Streams Section (if available) -->
-                    {% if event.live_streams_parsed and event.live_streams_parsed | length > 0 %}
-                    <div class="bg-gradient-to-br from-red-500 to-red-700 rounded-xl p-4 sm:p-6 text-white shadow-lg overflow-hidden relative">
-                        <div class="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                <div class="relative">
-                                    <span class="material-symbols-outlined text-2xl sm:text-3xl">videocam</span>
-                                    <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-white"></span>
-                                    </span>
-                                </div>
-                                <div>
-                                    <h4 class="text-base sm:text-lg font-bold">Трансляції</h4>
-                                    <p class="text-white/80 text-[10px] sm:text-xs">
-                                        {% if event.live_streams_parsed | length == 1 %}
-                                        1 трансляція
-                                        {% elif event.live_streams_parsed | length < 5 %}
-                                        {{ event.live_streams_parsed | length }} трансляції
-                                        {% else %}
-                                        {{ event.live_streams_parsed | length }} трансляцій
+                        
+                        <!-- Day Schedule -->
+                        <div class="p-6 md:p-8">
+                            <div class="space-y-6">
+                                {% if day.get('items') %}
+                                    {% for item in day['items'] %}
+                                    <div class="flex flex-col md:flex-row gap-4 md:gap-10">
+                                        {% if item.get('start') or item.get('end') %}
+                                        <div class="w-36 shrink-0">
+                                            <span class="text-sm font-bold font-mono text-primary-900 bg-primary-50 px-3 py-1.5 rounded-md">
+                                                {% if item.get('start') and item.get('end') %}
+                                                {{ item.start }} - {{ item.end }}
+                                                {% elif item.get('start') %}
+                                                {{ item.start }}
+                                                {% else %}
+                                                {{ item.end }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
                                         {% endif %}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                                {% for stream in event.live_streams_parsed %}
-                                <a href="{{ stream['url'] }}" target="_blank" class="group flex items-center justify-between p-2.5 sm:p-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 transition-all backdrop-blur-sm">
-                                    <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                                            {% if 'youtube.com' in stream['url'] or 'youtu.be' in stream['url'] %}
-                                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                            </svg>
-                                            {% elif 'judotv' in stream['url'] %}
-                                            <span class="material-symbols-outlined text-white text-base sm:text-xl">sports_martial_arts</span>
-                                            {% else %}
-                                            <span class="material-symbols-outlined text-white text-base sm:text-xl">live_tv</span>
+                                        
+                                        <div class="flex-1 pb-6 border-b border-gray-50 last:border-0 last:pb-0">
+                                            {% if item.get('activity') %}
+                                            <p class="text-base text-gray-700 leading-relaxed">{{ item.activity }}</p>
                                             {% endif %}
                                         </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-xs sm:text-sm font-bold text-white truncate">{{ stream['title'] }}</p>
-                                            <p class="text-[10px] sm:text-xs text-white/70">
-                                                {% if 'youtube.com' in stream['url'] or 'youtu.be' in stream['url'] %}
-                                                YouTube
-                                                {% elif 'judotv' in stream['url'] %}
-                                                JudoTV
-                                                {% else %}
-                                                Онлайн трансляція
-                                                {% endif %}
-                                            </p>
-                                        </div>
                                     </div>
-                                    <span class="material-symbols-outlined text-white/80 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 text-base sm:text-lg">arrow_forward</span>
-                                </a>
-                                {% endfor %}
-                            </div>
-
-                            {% if event.live_streams_parsed | length == 1 %}
-                            <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/20 text-center">
-                                <a href="{{ event.live_streams_parsed[0]['url'] }}" target="_blank" class="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-white hover:bg-white/90 text-red-600 rounded-lg font-bold transition-all hover:scale-105 shadow-lg text-sm">
-                                    <span class="material-symbols-outlined text-base sm:text-xl">play_arrow</span>
-                                    <span>Дивитись зараз</span>
-                                </a>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    <!-- Quick Actions Card -->
-                    <div class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 shadow-sm">
-                        <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-text-secondary mb-3 sm:mb-4">Швидкі дії</h3>
-
-                        <div class="space-y-2 sm:space-y-3">
-                            {% if event.regulation_url %}
-                            <a href="{{ event.regulation_url }}" target="_blank" class="group relative overflow-hidden w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-xl border-2 border-blue-400">
-                                <!-- Animated Background -->
-                                <div class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-
-                                <!-- Icon -->
-                                <div class="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                                    <span class="material-symbols-outlined text-white text-xl sm:text-2xl">picture_as_pdf</span>
-                                </div>
-
-                                <!-- Text -->
-                                <div class="relative z-10 flex-1 text-left min-w-0">
-                                    <p class="text-white font-bold text-sm sm:text-base leading-tight">Регламент змагань</p>
-                                    <p class="text-white/80 text-[10px] sm:text-xs mt-0.5">PDF документ</p>
-                                </div>
-
-                                <!-- Arrow -->
-                                <span class="relative z-10 material-symbols-outlined text-white text-lg sm:text-xl group-hover:translate-x-1 transition-transform shrink-0">download</span>
-                            </a>
-                            {% endif %}
-
-                            <button onclick="shareEvent()" class="w-full flex items-center justify-center gap-2 rounded-lg h-10 sm:h-12 border-2 border-gray-200 hover:border-primary hover:bg-gray-50 transition-all text-text-main font-bold text-sm sm:text-base">
-                                <span class="material-symbols-outlined text-lg sm:text-xl">share</span>
-                                <span>Поділитися</span>
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <!-- Countdown Card (if applicable) -->
-                    {% if days_until is not none and days_until >= 0 %}
-                    <div class="bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-xl p-4 sm:p-6 text-white shadow-xl overflow-hidden relative">
-                        <!-- Animated Background Circles -->
-                        <div class="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-white/10 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 animate-pulse"></div>
-                        <div class="absolute bottom-0 left-0 w-16 sm:w-24 h-16 sm:h-24 bg-white/5 rounded-full -ml-8 sm:-ml-12 -mb-8 sm:-mb-12"></div>
-                        <div class="absolute top-1/2 right-1/4 w-12 sm:w-16 h-12 sm:h-16 bg-white/5 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
-
-                        <div class="relative z-10">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between mb-4 sm:mb-6">
-                                <div class="flex items-center gap-2 sm:gap-3">
-                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-2xl sm:text-3xl">schedule</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-base sm:text-lg font-bold leading-tight">Зворотній відлік</h4>
-                                        <p class="text-white/70 text-[10px] sm:text-xs">до початку події</p>
-                                    </div>
-                                </div>
-                                {% if days_until == 0 %}
-                                <span class="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-yellow-400"></span>
-                                </span>
+                                    {% endfor %}
                                 {% endif %}
                             </div>
-
-                            <!-- Countdown Display -->
-                            <div class="text-center py-4 sm:py-6 mb-4 sm:mb-6 relative">
-                                {% if days_until == 0 %}
-                                <!-- Today - Special Animation -->
-                                <div class="relative inline-block">
-                                    <div class="absolute inset-0 bg-yellow-300 blur-xl sm:blur-2xl opacity-50 animate-pulse"></div>
-                                    <div class="relative">
-                                        <div class="text-4xl sm:text-6xl font-black text-yellow-300 mb-2 sm:mb-3 animate-pulse">
-                                            Сьогодні!
-                                        </div>
-                                        <div class="flex items-center justify-center gap-2 text-yellow-200 text-sm sm:text-base">
-                                            <span class="material-symbols-outlined text-xl sm:text-2xl animate-bounce">celebration</span>
-                                            <span class="font-bold">Подія розпочинається</span>
-                                            <span class="material-symbols-outlined text-xl sm:text-2xl animate-bounce" style="animation-delay: 0.2s;">celebration</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% elif days_until == 1 %}
-                                <!-- Tomorrow -->
-                                <div class="relative">
-                                    <div class="text-5xl sm:text-7xl font-black mb-2 bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
-                                        1
-                                    </div>
-                                    <div class="text-xl sm:text-2xl font-bold text-white/90 mb-2 sm:mb-3">день</div>
-                                    <div class="flex items-center justify-center gap-2 text-white/80 text-xs sm:text-sm">
-                                        <span class="material-symbols-outlined text-base sm:text-lg">arrow_forward</span>
-                                        <span>Вже завтра!</span>
-                                    </div>
-                                </div>
-                                {% else %}
-                                <!-- Multiple days -->
-                                <div class="relative">
-                                    <div class="text-5xl sm:text-7xl font-black mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                                        {{ days_until }}
-                                    </div>
-                                    <div class="text-xl sm:text-2xl font-bold text-white/90">
-                                        {% if days_until < 5 %}днів{% else %}днів{% endif %}
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Date Info -->
-                            <div class="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-white/20">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                                            <span class="material-symbols-outlined text-base sm:text-xl">calendar_today</span>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <p class="text-white/70 text-[10px] sm:text-xs mb-0.5">Дата початку</p>
-                                            <p class="font-bold text-xs sm:text-sm truncate">
-                                                {% if event.date_start %}
-                                                {{ event.date_start.strftime('%d %B %Y').replace('January', 'січня').replace('February', 'лютого').replace('March', 'березня').replace('April', 'квітня').replace('May', 'травня').replace('June', 'червня').replace('July', 'липня').replace('August', 'серпня').replace('September', 'вересня').replace('October', 'жовтня').replace('November', 'листопада').replace('December', 'грудня') }}
-                                                {% endif %}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="material-symbols-outlined text-white/60 text-lg sm:text-xl shrink-0 ml-2">arrow_forward</span>
-                                </div>
-                            </div>
-
-                            <!-- Progress Bar (if more than 1 day) -->
-                            {% if days_until > 1 and days_until < 30 %}
-                            <div class="mt-3 sm:mt-4">
-                                <div class="flex justify-between text-[10px] sm:text-xs text-white/70 mb-2">
-                                    <span>Залишилось</span>
-                                    <span>{{ days_until }} з 30 днів</span>
-                                </div>
-                                <div class="h-1.5 sm:h-2 bg-white/20 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-yellow-300 to-white rounded-full transition-all duration-1000" style="width: {{ ((30 - days_until) / 30 * 100) }}%">
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            <!-- Quick Actions -->
-                            <div class="mt-4 sm:mt-6 pt-4 sm:pt-5 border-t border-white/20 flex gap-2">
-                                <button onclick="addToCalendar()" class="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 transition-all text-xs sm:text-sm font-semibold backdrop-blur-sm">
-                                    <span class="material-symbols-outlined text-base sm:text-lg">event</span>
-                                    <span class="hidden sm:inline">Додати в календар</span>
-                                    <span class="sm:hidden">Календар</span>
-                                </button>
-                                <button onclick="setReminder()" class="flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 transition-all backdrop-blur-sm" title="Нагадати">
-                                    <span class="material-symbols-outlined text-base sm:text-xl">notifications</span>
-                                </button>
-                            </div>
                         </div>
                     </div>
-
-                    <script>
-                        function addToCalendar() {
-                            {
-                                %
-                                if event.date_start %
-                            }
-                            const title = "{{ event.title }}";
-                            const startDate = "{{ event.date_start.strftime('%Y%m%d') }}";
-                            {
-                                %
-                                if event.date_end %
-                            }
-                            const endDate = "{{ event.date_end.strftime('%Y%m%d') }}";
-                            {
-                                %
-                                else %
-                            }
-                            const endDate = startDate;
-                            {
-                                %
-                                endif %
-                            }
-                            const location = "{{ event.city }}{% if event.address %}, {{ event.address }}{% endif %}";
-                            const description = "{{ event.description[:100] if event.description else '' }}";
-
-                            // Google Calendar URL
-                            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&location=${encodeURIComponent(location)}&details=${encodeURIComponent(description)}`;
-
-                            window.open(googleCalUrl, '_blank');
-                            {
-                                %
-                                endif %
-                            }
-                        }
-
-                        function setReminder() {
-                            if ('Notification' in window) {
-                                Notification.requestPermission().then(permission => {
-                                    if (permission === 'granted') {
-                                        alert('Нагадування встановлено! Ви отримаєте повідомлення за день до події.');
-                                    }
-                                });
-                            } else {
-                                alert('Ваш браузер не підтримує push-повідомлення');
-                            }
-                        }
-                    </script>
-
-                    <style>
-                        @keyframes bounce {
-
-                            0%,
-                            100% {
-                                transform: translateY(0);
-                            }
-
-                            50% {
-                                transform: translateY(-10px);
-                            }
-                        }
-                    </style>
-                    {% endif %}
-
-                    <!-- Contacts Section -->
-                    {% if event.contacts_parsed and event.contacts_parsed | length > 0 %}
-                    <script>
-                        function copyPhone(phone) {
-                            navigator.clipboard.writeText(phone).then(() => {
-                                // Show toast notification
-                                const toast = document.createElement('div');
-                                toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-xl flex items-center gap-2 z-50 animate-slide-up';
-                                toast.innerHTML = `
-                                    <span class="material-symbols-outlined">check_circle</span>
-                                    <span class="font-semibold">Номер скопійовано!</span>
-                                `;
-                                document.body.appendChild(toast);
-
-                                setTimeout(() => {
-                                    toast.remove();
-                                }, 3000);
-                            }).catch(err => {
-                                console.error('Failed to copy:', err);
-                                alert('Не вдалося скопіювати номер');
-                            });
-                        }
-                    </script>
-
-                    <style>
-                        @keyframes slide-up {
-                            from {
-                                transform: translateY(100%);
-                                opacity: 0;
-                            }
-
-                            to {
-                                transform: translateY(0);
-                                opacity: 1;
-                            }
-                        }
-
-                        .animate-slide-up {
-                            animation: slide-up 0.3s ease-out;
-                        }
-                    </style>
-                </div>
-
-                <!-- Contact CTA -->
-                <div class="mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-gray-100">
-                    <div class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
-                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-primary text-base sm:text-lg">info</span>
-                        </div>
-                        <div class="flex-1 text-xs sm:text-sm min-w-0">
-                            <p class="text-text-main font-semibold">Потрібна допомога?</p>
-                            <p class="text-text-secondary text-[10px] sm:text-xs mt-0.5">Зв'яжіться з організаторами для отримання додаткової інформації</p>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        {% endif %}
-
-        <!-- Documents Section -->
-        {% if event.protocols_parsed and event.protocols_parsed | length > 0 %}
-        <div class="bg-white rounded-xl border border-[#e5e7eb] p-4 sm:p-6 shadow-sm">
-            <h4 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-text-secondary mb-4 sm:mb-5 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-base sm:text-lg">folder_open</span>
-                <span class="truncate">Протоколи та результати</span>
-            </h4>
-
-            <div class="space-y-2">
-                {% for protocol in event.protocols_parsed[:3] %}
-                <a href="/static/{{ protocol['path'] }}" target="_blank" class="group flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border-2 border-gray-100 hover:border-primary/50 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all">
-                    <!-- Icon -->
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-500 group-hover:to-blue-600 flex items-center justify-center shrink-0 transition-all group-hover:scale-105">
-                        {% if protocol.get('type') == 'results' %}
-                        <span class="material-symbols-outlined text-blue-600 group-hover:text-white text-lg sm:text-xl transition-colors">emoji_events</span>
-                        {% else %}
-                        <span class="material-symbols-outlined text-blue-600 group-hover:text-white text-lg sm:text-xl transition-colors">description</span>
-                        {% endif %}
-                    </div>
-
-                    <!-- Document Info -->
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xs sm:text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate">
-                            {{ protocol['name'] }}
-                        </p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 group-hover:bg-blue-100 text-[10px] sm:text-xs font-semibold text-blue-700 transition-colors">
-                                {% if protocol.get('type') == 'results' %}
-                                <span class="material-symbols-outlined text-[10px] sm:text-xs">military_tech</span>
-                                Результати
-                                {% elif protocol.get('type') == 'schedule' %}
-                                <span class="material-symbols-outlined text-[10px] sm:text-xs">schedule</span>
-                                Розклад
-                                {% elif protocol.get('type') == 'participants' %}
-                                <span class="material-symbols-outlined text-[10px] sm:text-xs">groups</span>
-                                Учасники
-                                {% else %}
-                                <span class="material-symbols-outlined text-[10px] sm:text-xs">description</span>
-                                Протокол
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Download Icon -->
-                    <div class="shrink-0">
-                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gray-100 group-hover:bg-primary flex items-center justify-center transition-all">
-                            <span class="material-symbols-outlined text-gray-600 group-hover:text-white text-base sm:text-lg transition-colors">download</span>
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-
-                <!-- Show All Button -->
-                {% if event.protocols_parsed | length > 3 %}
-                <button onclick="toggleAllDocuments()" id="showAllDocsBtn" class="w-full mt-2 sm:mt-3 flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary hover:bg-blue-50 text-text-secondary hover:text-primary font-semibold text-xs sm:text-sm transition-all group">
-                    <span class="material-symbols-outlined text-base sm:text-lg">expand_more</span>
-                    <span class="truncate">Показати ще {{ event.protocols_parsed | length - 3 }}</span>
-                </button>
-
-                <!-- Hidden Documents -->
-                <div id="hiddenDocuments" class="hidden space-y-2 mt-2">
-                    {% for protocol in event.protocols_parsed[3:] %}
-                    <a href="/static/{{ protocol['path'] }}" target="_blank" class="group flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border-2 border-gray-100 hover:border-primary/50 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-500 group-hover:to-blue-600 flex items-center justify-center shrink-0 transition-all group-hover:scale-105">
-                            {% if protocol.get('type') == 'results' %}
-                            <span class="material-symbols-outlined text-blue-600 group-hover:text-white text-lg sm:text-xl transition-colors">emoji_events</span>
-                            {% else %}
-                            <span class="material-symbols-outlined text-blue-600 group-hover:text-white text-lg sm:text-xl transition-colors">description</span>
-                            {% endif %}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs sm:text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate">
-                                {{ protocol['name'] }}
-                            </p>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 group-hover:bg-blue-100 text-[10px] sm:text-xs font-semibold text-blue-700 transition-colors">
-                                    {% if protocol.get('type') == 'results' %}
-                                    <span class="material-symbols-outlined text-[10px] sm:text-xs">military_tech</span>
-                                    Результати
-                                    {% else %}
-                                    <span class="material-symbols-outlined text-[10px] sm:text-xs">description</span>
-                                    Протокол
-                                    {% endif %}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="shrink-0">
-                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gray-100 group-hover:bg-primary flex items-center justify-center transition-all">
-                                <span class="material-symbols-outlined text-gray-600 group-hover:text-white text-base sm:text-lg transition-colors">download</span>
-                            </div>
-                        </div>
-                    </a>
                     {% endfor %}
                 </div>
+            </section>
+            {% endif %}
+            
+            <!-- Info Blocks Grid -->
+            {% if event.info_blocks_parsed and event.info_blocks_parsed | length > 0 %}
+            <section>
+                <h3 class="text-primary-900 text-2xl font-bold tracking-tight mb-6">Інформація</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    {% for block in event.info_blocks_parsed %}
+                    <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <!-- Icon -->
+                        <div class="w-10 h-10 rounded-full 
+                            {% if block.type == 'expenses' %}bg-purple-50 text-purple-600
+                            {% elif block.type == 'prizes' %}bg-yellow-50 text-yellow-600
+                            {% elif block.type == 'applications' %}bg-green-50 text-green-600
+                            {% elif block.type == 'important' %}bg-red-50 text-red-600
+                            {% else %}bg-primary-50 text-primary
+                            {% endif %}
+                            flex items-center justify-center mb-4">
+                            {% if block.type == 'expenses' %}
+                            <span class="material-symbols-outlined">payments</span>
+                            {% elif block.type == 'prizes' %}
+                            <span class="material-symbols-outlined">emoji_events</span>
+                            {% elif block.type == 'applications' %}
+                            <span class="material-symbols-outlined">how_to_reg</span>
+                            {% elif block.type == 'important' %}
+                            <span class="material-symbols-outlined">priority_high</span>
+                            {% else %}
+                            <span class="material-symbols-outlined">info</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Title -->
+                        <h4 class="text-lg font-bold text-primary-900 mb-2">{{ block.title }}</h4>
+                        
+                        <!-- Content -->
+                        <div class="text-sm text-gray-600 leading-relaxed prose prose-sm max-w-none">
+                            {{ block.content | safe }}
+                        </div>
+                        
+                        <!-- Deadline if exists -->
+                        {% if block.get('deadline') %}
+                        <div class="mt-4 px-3 py-2 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                            <p class="text-xs font-bold text-yellow-800 uppercase">Дедлайн</p>
+                            <p class="text-sm font-semibold text-yellow-900">{{ block.deadline }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- FITOFAN CTA if exists -->
+                        {% if block.get('fitofan_url') %}
+                        <div class="mt-4">
+                            <a href="{{ block.fitofan_url }}" target="_blank" 
+                               class="flex items-center justify-center gap-2 px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-sm transition-all shadow-sm hover:shadow-md">
+                                <span class="material-symbols-outlined text-lg">open_in_new</span>
+                                <span>Подати заявку на FITOFAN</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+            
+            <!-- Empty State if no content -->
+            {% if not event.description and not (event.program_parsed and event.program_parsed | length > 0) and not (event.info_blocks_parsed and event.info_blocks_parsed | length > 0) %}
+            <section class="py-16 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl text-gray-400">event_note</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Детальна інформація незабаром</h3>
+                <p class="text-gray-500">Ми працюємо над наповненням сторінки події</p>
+            </section>
+            {% endif %}
+            
+        </div>
+        
+        <!-- Sidebar (Right) -->
+        <aside class="w-full lg:w-[340px] shrink-0">
+            <div class="lg:sticky lg:top-[90px] flex flex-col gap-6">
+                
+                <!-- Event Summary Card -->
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                    <h4 class="text-base font-bold text-primary-900 mb-4 pb-3 border-b border-gray-50 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-[20px]">info</span>
+                        Основна інформація
+                    </h4>
+                    
+                    <ul class="space-y-4">
+                        {% if event.date_start %}
+                        <li class="flex items-start gap-3">
+                            <div class="mt-0.5 w-6 flex justify-center text-gray-400">
+                                <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wide font-medium mb-0.5">Дата</p>
+                                <p class="text-sm font-semibold text-primary-900">
+                                    {% if event.date_end and event.date_end != event.date_start %}
+                                        {{ event.date_start.strftime('%d') }}-{{ event.date_end.strftime('%d %B %Y')
+                                            .replace('January', 'січня')
+                                            .replace('February', 'лютого')
+                                            .replace('March', 'березня')
+                                            .replace('April', 'квітня')
+                                            .replace('May', 'травня')
+                                            .replace('June', 'червня')
+                                            .replace('July', 'липня')
+                                            .replace('August', 'серпня')
+                                            .replace('September', 'вересня')
+                                            .replace('October', 'жовтня')
+                                            .replace('November', 'листопада')
+                                            .replace('December', 'грудня') }}
+                                    {% else %}
+                                        {{ event.date_start.strftime('%d %B %Y')
+                                            .replace('January', 'січня')
+                                            .replace('February', 'лютого')
+                                            .replace('March', 'березня')
+                                            .replace('April', 'квітня')
+                                            .replace('May', 'травня')
+                                            .replace('June', 'червня')
+                                            .replace('July', 'липня')
+                                            .replace('August', 'серпня')
+                                            .replace('September', 'вересня')
+                                            .replace('October', 'жовтня')
+                                            .replace('November', 'листопада')
+                                            .replace('December', 'грудня') }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if event.city %}
+                        <li class="flex items-start gap-3">
+                            <div class="mt-0.5 w-6 flex justify-center text-gray-400">
+                                <span class="material-symbols-outlined text-[18px]">location_on</span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wide font-medium mb-0.5">Локація</p>
+                                <p class="text-sm font-semibold text-primary-900">{{ event.city }}</p>
+                                {% if event.address %}
+                                <p class="text-xs text-gray-500 mt-1">{{ event.address }}</p>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if event.organizer %}
+                        <li class="flex items-start gap-3">
+                            <div class="mt-0.5 w-6 flex justify-center text-gray-400">
+                                <span class="material-symbols-outlined text-[18px]">group</span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wide font-medium mb-0.5">Організатор</p>
+                                <p class="text-sm font-semibold text-primary-900">{{ event.organizer }}</p>
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if event.age_group %}
+                        <li class="flex items-start gap-3">
+                            <div class="mt-0.5 w-6 flex justify-center text-gray-400">
+                                <span class="material-symbols-outlined text-[18px]">badge</span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wide font-medium mb-0.5">Вікова група</p>
+                                <p class="text-sm font-semibold text-primary-900">{{ event.age_group_label }}</p>
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if event.category %}
+                        <li class="flex items-start gap-3">
+                            <div class="mt-0.5 w-6 flex justify-center text-gray-400">
+                                <span class="material-symbols-outlined text-[18px]">emoji_events</span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wide font-medium mb-0.5">Категорія</p>
+                                <p class="text-sm font-semibold text-primary-900">{{ event.category_label }}</p>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Live Streams -->
+                {% if event.live_streams_parsed and event.live_streams_parsed | length > 0 %}
+                <div class="bg-white rounded-xl border border-gray-100 shadow-lg shadow-gray-200/50 p-5 overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-base font-bold text-primary-900">Трансляції</h4>
+                        <span class="px-2 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                            Live
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        {% for stream in event.live_streams_parsed %}
+                        <a href="{{ stream.url }}" target="_blank" 
+                           class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer">
+                            <div class="relative w-12 h-12 rounded-lg bg-gray-900 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-white group-hover:scale-110 transition-transform">play_arrow</span>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-primary-900 group-hover:text-primary transition-colors truncate">
+                                    {{ stream.title }}
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    {% if 'youtube' in stream.url %}YouTube
+                                    {% elif 'judotv' in stream.url %}JudoTV
+                                    {% else %}Live{% endif %}
+                                </p>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
                 {% endif %}
+                
+                <!-- Documents & Protocols -->
+                {% if event.regulation_url or (event.protocols_parsed and event.protocols_parsed | length > 0) %}
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                    <h4 class="text-base font-bold text-primary-900 mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">description</span>
+                        Документи та протоколи
+                    </h4>
+                    
+                    <ul class="space-y-3">
+                        <!-- Regulation Document -->
+                        {% if event.regulation_url %}
+                        <li>
+                            <a href="{{ event.regulation_url }}" target="_blank" class="flex items-start gap-3 group">
+                                <div class="mt-0.5 bg-primary-50 p-1.5 rounded border border-primary/10 text-primary">
+                                    <span class="material-symbols-outlined text-[18px] block">picture_as_pdf</span>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-sm font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                                        Регламент
+                                    </p>
+                                    <p class="text-xs text-gray-400">PDF документ</p>
+                                </div>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <!-- Protocols -->
+                        {% if event.protocols_parsed and event.protocols_parsed | length > 0 %}
+                            {% for protocol in event.protocols_parsed %}
+                            <li>
+                                <a href="/static/{{ protocol.path }}" target="_blank" class="flex items-start gap-3 group">
+                                    <div class="mt-0.5 bg-primary-50 p-1.5 rounded border border-primary/10 text-primary">
+                                        <span class="material-symbols-outlined text-[18px] block">picture_as_pdf</span>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                                            {{ protocol.name }}
+                                        </p>
+                                        <p class="text-xs text-gray-400">PDF документ</p>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <!-- Weight Categories -->
+                {% if event.weight_classes_parsed and event.weight_classes_parsed | length > 0 %}
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                    <h4 class="text-base font-bold text-primary-900 mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">fitness_center</span>
+                        Вагові категорії
+                    </h4>
+                    
+                    <div class="space-y-4">
+                        {% for division in event.weight_classes_parsed %}
+                        <div>
+                            <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                {{ division.get('division', 'Категорія') }}
+                            </h5>
+                            <div class="flex flex-wrap gap-1.5">
+                                {% if division.get('weightClasses') %}
+                                    {% for weight in division['weightClasses'] %}
+                                    <span class="px-2 py-1 bg-gray-50 text-gray-600 rounded text-xs font-medium border border-gray-100 hover:border-primary/30 cursor-default">
+                                        {{ weight }}
+                                    </span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Contacts -->
+                {% if event.contacts_parsed and event.contacts_parsed | length > 0 %}
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                    <h4 class="text-base font-bold text-primary-900 mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">contact_phone</span>
+                        Контакти
+                    </h4>
+                    
+                    <div class="space-y-3">
+                        {% for contact in event.contacts_parsed %}
+                        <div class="p-3 rounded-lg bg-gray-50 border border-gray-100">
+                            <p class="font-bold text-sm text-gray-900 mb-1">{{ contact.name }}</p>
+                            <a href="tel:{{ contact.phone }}" class="text-sm text-primary hover:text-primary/80 transition-colors">
+                                {{ contact.phone }}
+                            </a>
+                            {% if contact.get('comments') %}
+                            <p class="text-xs text-gray-500 mt-1">{{ contact.comments }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
             </div>
-        </div>
-
-        <script>
-            function toggleAllDocuments() {
-                const hiddenDocs = document.getElementById('hiddenDocuments');
-                const btn = document.getElementById('showAllDocsBtn');
-                const icon = btn.querySelector('.material-symbols-outlined');
-                const text = btn.querySelector('span:last-child');
-
-                if (hiddenDocs.classList.contains('hidden')) {
-                    hiddenDocs.classList.remove('hidden');
-                    icon.textContent = 'expand_less';
-                    text.textContent = 'Приховати документи';
-                } else {
-                    hiddenDocs.classList.add('hidden');
-                    icon.textContent = 'expand_more';
-                    const count = {
-                        {
-                            event.protocols_parsed | length - 3
-                        }
-                    };
-                    let word = 'документів';
-                    if (count === 1) word = 'документ';
-                    else if (count < 5) word = 'документи';
-                    text.textContent = `Показати ще ${count} ${word}`;
-                }
-            }
-        </script>
-
-        <!-- Social Share Card -->
-        <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 sm:p-6 border border-gray-200">
-            <h4 class="text-xs sm:text-sm font-bold text-text-main mb-3 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-base sm:text-lg">share</span>
-                <span>Поділитися подією</span>
-            </h4>
-            <div class="flex gap-2">
-                <button onclick="shareOnFacebook()" class="flex-1 h-9 sm:h-10 rounded-lg bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center transition-all hover:scale-105" aria-label="Поділитися в Facebook">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                    </svg>
-                </button>
-                <button onclick="shareOnTwitter()" class="flex-1 h-9 sm:h-10 rounded-lg bg-[#1da1f2] hover:bg-[#1a91da] text-white flex items-center justify-center transition-all hover:scale-105" aria-label="Поділитися в Twitter">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                    </svg>
-                </button>
-                <button onclick="shareOnTelegram()" class="flex-1 h-9 sm:h-10 rounded-lg bg-[#0088cc] hover:bg-[#0077b5] text-white flex items-center justify-center transition-all hover:scale-105" aria-label="Поділитися в Telegram">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+        </aside>
+        
     </div>
-    {% endif %}
-    </aside>
+</div>
 
-    <style>
-        /* Custom Scrollbar for Streams */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
+<!-- Back Button -->
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <a href="/calendar" data-page="calendar" onclick="navigateToPage(event, '/calendar')" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-900 font-bold text-sm hover:border-primary hover:bg-blue-50 hover:text-primary transition-all group shadow-sm hover:shadow-md">
+        <span class="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        <span>Повернутися до календаря</span>
+    </a>
+</div>
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-    </style>
-
-    </div>
-    </div>
-</main>
-
-<script>
-    function shareEvent() {
-        if (navigator.share) {
-            navigator.share({
-                title: '{{ event.title }}',
-                text: 'Подивіться цю подію від Федерації Дзюдо України',
-                url: window.location.href
-            }).catch(err => console.log('Error sharing:', err));
-        } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                alert('Посилання скопійовано в буфер обміну!');
-            });
-        }
-    }
-
-    function shareOnFacebook() {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-    }
-
-    function shareOnTwitter() {
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('{{ event.title }}')}`, '_blank');
-    }
-
-    function shareOnTelegram() {
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('{{ event.title }}')}`, '_blank');
-    }
-</script>
 {% endblock %}

@@ -5,7 +5,9 @@ from app.models.schemas import EventListItem, EventDetail
 from app.services.supabase import supabase
 from datetime import date as date_type, datetime
 
+
 router = APIRouter(prefix="/events", tags=["Events"])
+
 
 @router.get("", response_model=List[EventListItem])
 async def get_events(
@@ -54,6 +56,87 @@ async def get_events(
         print(f"Error in get_events: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
+
+@router.get("/search", response_model=List[EventListItem])
+async def search_events(
+    q: str = Query(..., min_length=2, description="Пошуковий запит"),
+    year: Optional[int] = Query(None, description="Рік для пошуку"),
+    event_type: Optional[str] = Query(None, description="Тип події"),
+    category: Optional[str] = Query(None, description="Категорія"),
+    status: Optional[str] = Query(None, description="Статус"),
+    limit: int = Query(100, ge=1, le=200, description="Макс. результатів")
+):
+    """
+    Пошук подій по року за назвою, містом, регіоном, організатором
+    """
+    try:
+        from datetime import datetime as dt
+        
+        # Визначаємо рік
+        search_year = year if year else dt.now().year
+        
+        # Діапазон дат для року
+        start_date = f"{search_year}-01-01"
+        end_date = f"{search_year}-12-31"
+        
+        # Базовий запит
+        query = supabase.table("events").select("*")
+        query = query.gte("date_start", start_date).lte("date_start", end_date)
+        
+        # Додаткові фільтри
+        if event_type:
+            query = query.eq("event_type", event_type)
+        
+        if category:
+            query = query.eq("category", category)
+        
+        query = query.order("date_start", desc=False).limit(limit)
+        
+        response = query.execute()
+        events = response.data if response.data else []
+        
+        # Client-side filtering для пошуку (Supabase не підтримує LIKE/ILIKE в деяких планах)
+        search_lower = q.lower().strip()
+        filtered_events = []
+        
+        for event in events:
+            # Пошук в різних полях
+            title_match = search_lower in (event.get('title') or '').lower()
+            city_match = search_lower in (event.get('city') or '').lower()
+            region_match = search_lower in (event.get('region') or '').lower()
+            organizer_match = search_lower in (event.get('organizer') or '').lower()
+            
+            if title_match or city_match or region_match or organizer_match:
+                # Автовизначення статусу
+                today = date_type.today()
+                event_start = datetime.fromisoformat(event['date_start'].replace('Z', '+00:00')).date()
+                event_end = event_start
+                
+                if event.get('date_end'):
+                    event_end = datetime.fromisoformat(event['date_end'].replace('Z', '+00:00')).date()
+                
+                if event.get('status') != 'cancelled':
+                    if event_start <= today <= event_end:
+                        event['status'] = 'ongoing'
+                    elif today > event_end:
+                        event['status'] = 'completed'
+                    else:
+                        event['status'] = 'planned'
+                
+                # Статус фільтр після автовизначення
+                if status:
+                    if event.get('status') == status:
+                        filtered_events.append(event)
+                else:
+                    filtered_events.append(event)
+        
+        return [EventListItem(**item) for item in filtered_events]
+    
+    except Exception as e:
+        print(f"Error in search_events: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Search error: {str(e)}")
+
+
 @router.get("/upcoming", response_model=List[EventListItem])
 async def get_upcoming_events(
     limit: int = Query(10, ge=1, le=50, description="Кількість подій")
@@ -75,6 +158,7 @@ async def get_upcoming_events(
     except Exception as e:
         print(f"Error in get_upcoming_events: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
 
 @router.get("/by-month/{year}/{month}", response_model=List[EventListItem])
 async def get_events_by_month(year: int, month: int):
@@ -119,6 +203,7 @@ async def get_events_by_month(year: int, month: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{event_slug}", response_model=EventDetail)
 async def get_event_by_slug(
     event_slug: str = Path(..., description="Slug події")
@@ -140,6 +225,7 @@ async def get_event_by_slug(
     except Exception as e:
         print(f"Error in get_event_by_slug: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
 
 @router.get("/featured/list", response_model=List[EventListItem])
 async def get_featured_events(
