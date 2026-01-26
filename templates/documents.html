@@ -36,10 +36,6 @@
 <!-- Spacer for fixed subheader -->
 <div class="h-[52px]"></div>
 {% endblock %}
-<!-- Page Loader -->
-<div class="page-loader" id="pageLoader">
-    <div class="loader-spinner"></div>
-</div>
 
 <!-- Main Content Layout -->
 <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -447,42 +443,6 @@
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
-    /* ===== LOADER ===== */
-    .page-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
-    }
-
-    .page-loader.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .loader-spinner {
-        width: 48px;
-        height: 48px;
-        border: 4px solid #E5E7EB;
-        border-top-color: #111418;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
     /* ===== CONTAINER TRANSITION ===== */
     #documents-container {
         transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -515,132 +475,81 @@
     }
 </style>
 
-<script>
-    // ===== ГЛОБАЛЬНІ ЗМІННІ =====
+<script data-page-script="true">
+// ============================================
+// DOCUMENTS PAGE SCRIPT - Використовує Navigation Manager
+// ============================================
+
+(function() {
+    'use strict';
+    
     let currentFilters = {
-        category: '{{ category or "all" }}',
-        search: '{{ search_query }}',
-        page: {{ current_page }}
+        category: 'all',
+        search: '',
+        page: 1
     };
+    
+    let searchTimeout = null;
+    let isInitialized = false;
 
-    // ===== LOADER FUNCTIONS =====
-    function showLoader() {
-        document.getElementById('pageLoader').classList.add('active');
+    // ==================== INITIALIZATION ====================
+    
+    function initFiltersFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        currentFilters = {
+            category: urlParams.get('category') || 'all',
+            search: urlParams.get('search') || '',
+            page: parseInt(urlParams.get('page')) || 1
+        };
+        
+        const searchInput = document.getElementById('search-input');
+        if (searchInput && currentFilters.search) {
+            searchInput.value = currentFilters.search;
+        }
+        
+        updateSidebarActive(currentFilters.category);
     }
 
-    function hideLoader() {
-        document.getElementById('pageLoader').classList.remove('active');
+    // ==================== URL BUILDER ====================
+    
+    function buildDocumentsURL(filters) {
+        const url = new URL('/documents', window.location.origin);
+        
+        url.searchParams.set('page', filters.page);
+        
+        if (filters.category && filters.category !== 'all') {
+            url.searchParams.set('category', filters.category);
+        }
+        
+        if (filters.search) {
+            url.searchParams.set('search', filters.search);
+        }
+        
+        return url.pathname + url.search;
     }
 
-    // ===== URL MANAGEMENT =====
-    function updateURL(filters) {
-        let url = '/documents?page=' + filters.page;
+    // ==================== NAVIGATION ====================
+    
+    function loadDocuments(filters, scrollToTop = true) {
+        const url = buildDocumentsURL(filters);
         
-        if (filters.category && filters.category !== 'all') url += '&category=' + filters.category;
-        if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
+        console.log('[Documents] Loading with filters:', filters);
         
-        window.history.pushState({ filters: filters }, '', url);
-    }
-
-    // ===== AJAX LOAD DOCUMENTS =====
-    async function loadDocuments(filters, scrollToTop = true) {
-        showLoader();
+        currentFilters = { ...filters };
         
-        try {
-            let url = '/documents?page=' + filters.page;
-            
-            if (filters.category && filters.category !== 'all') url += '&category=' + filters.category;
-            if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
-            
-            console.log('Loading documents from:', url); // Debug
-            
-            const response = await fetch(url, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
-            
-            if (!response.ok) throw new Error('Network error');
-            
-            const html = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Отримуємо нові елементи
-            const newContainer = doc.querySelector('#documents-container');
-            const newPagination = doc.querySelector('#documents-pagination');
-            const newStats = doc.querySelector('#documents-stats');
-            
-            const currentContainer = document.querySelector('#documents-container');
-            const currentPaginationWrapper = document.querySelector('#pagination-wrapper');
-            const currentStats = document.querySelector('#documents-stats');
-            
-            if (!currentContainer) {
-                console.error('Container not found');
-                hideLoader();
-                return;
-            }
-            
-            // Fade out
-            currentContainer.classList.add('loading');
-            
-            setTimeout(() => {
-                // Update content
-                if (newContainer) {
-                    currentContainer.outerHTML = newContainer.outerHTML;
-                }
-                
-                // ✅ ВИПРАВЛЕНО: Оновлення пагінації
-                if (currentPaginationWrapper) {
-                    if (newPagination) {
-                        // Є нова пагінація - замінюємо
-                        currentPaginationWrapper.innerHTML = newPagination.outerHTML;
-                    } else {
-                        // Немає пагінації - очищаємо
-                        currentPaginationWrapper.innerHTML = '';
-                    }
-                }
-                
-                // Update stats
-                if (newStats && currentStats) {
-                    currentStats.textContent = newStats.textContent;
-                }
-                
-                // Отримуємо оновлений елемент після заміни
-                const updatedContainer = document.querySelector('#documents-container');
-                if (updatedContainer) {
-                    updatedContainer.classList.remove('loading');
-                    updatedContainer.classList.add('fade-content');
-                }
-                
-                // Update sidebar active state
-                updateSidebarActive(filters.category);
-                
-                // Scroll to top if needed
-                if (scrollToTop) {
-                    const mainSection = document.querySelector('main');
-                    if (mainSection) {
-                        mainSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-                
-                hideLoader();
-            }, 300);
-            
-            updateURL(filters);
-            currentFilters = { ...filters };
-            
-        } catch (error) {
-            console.error('Error loading documents:', error);
-            hideLoader();
-            // Fallback: повна перезагрузка
+        if (window.navigationManager) {
+            window.navigationManager.navigateTo(url);
+        } else {
             window.location.href = url;
         }
     }
 
-    // ===== UPDATE SIDEBAR ACTIVE STATE =====
+    // ==================== SIDEBAR ====================
+    
     function updateSidebarActive(category) {
         const links = document.querySelectorAll('.category-link');
+        
         links.forEach(link => {
             const linkCategory = link.getAttribute('data-category');
             const isActive = linkCategory === category;
@@ -648,8 +557,10 @@
             if (isActive) {
                 link.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-600');
                 link.classList.remove('text-gray-600', 'border-transparent');
+                
                 const icon = link.querySelector('.material-symbols-outlined');
                 const text = link.querySelector('span:last-child');
+                
                 if (icon) icon.classList.add('icon-filled');
                 if (text) {
                     text.classList.add('font-semibold');
@@ -658,8 +569,10 @@
             } else {
                 link.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-600');
                 link.classList.add('text-gray-600', 'border-transparent');
+                
                 const icon = link.querySelector('.material-symbols-outlined');
                 const text = link.querySelector('span:last-child');
+                
                 if (icon) icon.classList.remove('icon-filled');
                 if (text) {
                     text.classList.remove('font-semibold');
@@ -669,45 +582,42 @@
         });
     }
 
-    // ===== FILTER FUNCTIONS =====
+    // ==================== FILTERS ====================
+    
     function filterByCategory(category) {
         const search = document.getElementById('search-input')?.value?.trim() || '';
         
-        const filters = {
+        loadDocuments({
             category: category,
             search: search,
             page: 1
-        };
-        
-        console.log('Filtering by category:', filters); // Debug
-        loadDocuments(filters, true);
+        }, true);
     }
 
     function applySearch() {
         const search = document.getElementById('search-input')?.value?.trim() || '';
         
-        const filters = {
+        loadDocuments({
             category: currentFilters.category || 'all',
             search: search,
             page: 1
-        };
-        
-        console.log('Applying search:', filters); // Debug
-        loadDocuments(filters, true);
+        }, true);
     }
 
     function clearSearch() {
-        document.getElementById('search-input').value = '';
-        const filters = {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
+        
+        loadDocuments({
             category: currentFilters.category || 'all',
             search: '',
             page: 1
-        };
-        loadDocuments(filters, true);
+        }, true);
     }
 
     function clearAllFilters() {
-        document.getElementById('search-input').value = '';
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
         
         loadDocuments({
             category: 'all',
@@ -716,34 +626,98 @@
         }, true);
     }
 
-    // ===== PAGINATION =====
+    // ==================== PAGINATION ====================
+    
     function goToPage(page) {
-        loadDocuments({ ...currentFilters, page: page }, true);
+        loadDocuments({ 
+            ...currentFilters, 
+            page: page 
+        }, true);
     }
 
-    // ===== EVENT LISTENERS =====
-    document.addEventListener('DOMContentLoaded', function() {
-        // Search on input with debounce
+    // ==================== UTILITY FUNCTIONS ====================
+    
+    function trackDownload(docId) {
+        if (window.gtag) {
+            gtag('event', 'download', {
+                'event_category': 'document',
+                'event_label': docId
+            });
+        }
+        console.log('[Documents] Download tracked:', docId);
+    }
+
+    function copyLink(url) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification('Посилання скопійовано!', 'success');
+            }).catch(err => {
+                showNotification('Помилка копіювання', 'error');
+            });
+        } else {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showNotification('Посилання скопійовано!', 'success');
+        }
+    }
+
+    function shareDocument(title, url) {
+        if (navigator.share) {
+            navigator.share({ title, url }).catch(() => {});
+        } else {
+            copyLink(url);
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
+            type === 'success' ? 'bg-green-500 text-white' : 
+            type === 'error' ? 'bg-red-500 text-white' : 
+            'bg-blue-500 text-white'
+        }`;
+        notification.textContent = message;
+        notification.style.transition = 'all 0.3s ease';
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(20px)';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    
+    function attachCategoryLinks() {
+        document.querySelectorAll('.category-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                filterByCategory(this.getAttribute('data-category'));
+            });
+        });
+    }
+
+    function attachSearchHandlers() {
         const searchInput = document.getElementById('search-input');
+        
         if (searchInput) {
-            let searchTimeout;
-            
             searchInput.addEventListener('input', function(e) {
                 clearTimeout(searchTimeout);
                 const value = e.target.value.trim();
                 
-                // Якщо поле порожнє, одразу застосувати
                 if (value === '') {
                     applySearch();
                 } else {
-                    // Інакше чекати 500ms
-                    searchTimeout = setTimeout(() => {
-                        applySearch();
-                    }, 500);
+                    searchTimeout = setTimeout(() => applySearch(), 500);
                 }
             });
             
-            // Search on Enter
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -752,22 +726,64 @@
                 }
             });
         }
+    }
+
+    // ==================== INITIALIZATION ====================
+    
+    function init() {
+        if (isInitialized) {
+            console.log('[Documents] Already initialized, skipping...');
+            return;
+        }
         
-        // Browser back/forward
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.filters) {
-                loadDocuments(event.state.filters, false);
-                
-                // Оновлюємо UI фільтрів
-                const filters = event.state.filters;
-                if (searchInput) {
-                    searchInput.value = filters.search || '';
-                }
-            } else {
-                location.reload();
-            }
-        });
+        console.log('[Documents] Initializing...');
+        
+        initFiltersFromURL();
+        attachCategoryLinks();
+        attachSearchHandlers();
+        
+        isInitialized = true;
+        console.log('[Documents] Ready');
+    }
+
+    // ==================== CLEANUP ====================
+    
+    function cleanup() {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+            searchTimeout = null;
+        }
+        isInitialized = false;
+    }
+
+    // ==================== GLOBAL EXPORTS ====================
+    
+    window.filterByCategory = filterByCategory;
+    window.applySearch = applySearch;
+    window.clearSearch = clearSearch;
+    window.clearAllFilters = clearAllFilters;
+    window.goToPage = goToPage;
+    window.trackDownload = trackDownload;
+    window.copyLink = copyLink;
+    window.shareDocument = shareDocument;
+
+    // ==================== AUTO-INIT ====================
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    window.addEventListener('pageCleanup', cleanup);
+    
+    window.addEventListener('pageInit', () => {
+        if (window.location.pathname.startsWith('/documents')) {
+            init();
+        }
     });
+
+})();
 </script>
 
 
