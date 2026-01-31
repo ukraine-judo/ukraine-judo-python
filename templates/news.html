@@ -1,452 +1,559 @@
 {% extends "base.html" %}
 
-{% block title %}Новини - Федерація Дзюдо України{% endblock %}
+{% block title %}Новини - {{ settings.site_name }}{% endblock %}
 
 {% block content %}
-<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
-    <!-- Hero: Main Featured News (тільки якщо немає пошуку) -->
-    {% if news and news|length > 0 and not search_query %}
-    <section class="mb-10">
-        <a href="/news/{{ news[0].id }}" class="block group cursor-pointer relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 transition-opacity duration-300 group-hover:from-black/90"></div>
+
+<main class="flex-grow w-full">
+    
+    <!-- Page Header -->
+    <div class="border-b border-[#e7ebf3]">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-5 py-6 md:py-6">
+            <h1 class="text-4xl md:text-5xl font-black text-[#111418] tracking-tight mb-3">
+                <span class="text-[#135bec]">Останні</span> Новини
+            </h1>
+            <p class="text-[#617589] text-lg leading-relaxed">
+                Актуальні події та досягнення українського дзюдо
+            </p>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
             
-            <!-- Background Image -->
-            <div class="h-[500px] md:h-[600px] w-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105" 
-                 style="background-image: url('{{ news[0].image_full_url if news[0].image_full_url else 'https://via.placeholder.com/1280x600/137fec/FFFFFF?text=Featured+News' }}');">
-            </div>
-            
-            <!-- Content Overlay -->
-            <div class="absolute bottom-0 left-0 w-full z-20 p-6 md:p-12 flex flex-col items-start gap-4">
-                <span class="bg-primary text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-md">
-                    {{ news[0].display_category }}
-                </span>
+            <!-- Main Content (8 cols) -->
+            <div class="lg:col-span-8">
                 
-                <h1 class="text-white text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight max-w-4xl drop-shadow-md">
-                    {{ news[0].title }}
-                </h1>
+                {% if news and news|length > 0 %}
                 
-                <p class="text-gray-200 text-base md:text-lg max-w-2xl line-clamp-2 md:line-clamp-none">
-                    {{ news[0].excerpt }}
-                </p>
-                
-                <div class="mt-4 flex items-center gap-2 text-white/80 text-sm font-medium">
-                    <span class="material-symbols-outlined text-[18px]">calendar_today</span>
-                    <span>{{ news[0].publishedAt }}</span>
-                    <span class="mx-2">•</span>
-                    <span class="material-symbols-outlined text-[18px]">schedule</span>
-                    <span>5 хв</span>
-                </div>
-            </div>
-        </a>
-    </section>
-    {% endif %}
-
-    <!-- Main Content Grid: Sidebar + News -->
-    <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10 mt-10">
-        <!-- Sidebar: Quick Navigation -->
-        <aside class="order-2 lg:order-1 lg:sticky lg:top-24 h-fit flex flex-col gap-5">
-            <!-- Header -->
-            <div class="flex items-center gap-3 pb-3 border-b-2 border-gray-200">
-                <span class="material-symbols-outlined text-[#111418] text-[28px]">explore</span>
-                <h2 class="text-xl font-black text-[#111418] tracking-tight">Швидкий перехід</h2>
-            </div>
-            
-            <!-- Navigation Cards -->
-            <div class="flex flex-col gap-4">
-                <!-- Calendar Card -->
-                <a href="/events" class="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-white text-[32px]">calendar_month</span>
-                        </div>
-                        <h3 class="text-white text-lg font-black mb-2 leading-tight">
-                            Календар змагань
-                        </h3>
-                        <p class="text-white/90 text-sm leading-relaxed mb-4">
-                            Перегляньте актуальні події, турніри та семінари
-                        </p>
-                        <div class="flex items-center gap-2 text-white font-semibold text-sm">
-                            <span>Переглянути календар</span>
-                            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- National Team Card -->
-                <a href="/team" class="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-white text-[32px]">military_tech</span>
-                        </div>
-                        <h3 class="text-white text-lg font-black mb-2 leading-tight">
-                            Збірна України
-                        </h3>
-                        <p class="text-white/90 text-sm leading-relaxed mb-4">
-                            Познайомтесь з нашими спортсменами та тренерами
-                        </p>
-                        <div class="flex items-center gap-2 text-white font-semibold text-sm">
-                            <span>Наша команда</span>
-                            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Documents Card -->
-                <a href="/documents" class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-white text-[32px]">description</span>
-                        </div>
-                        <h3 class="text-white text-lg font-black mb-2 leading-tight">
-                            Документи
-                        </h3>
-                        <p class="text-white/90 text-sm leading-relaxed mb-4">
-                            Положення, регламенти та офіційні документи
-                        </p>
-                        <div class="flex items-center gap-2 text-white font-semibold text-sm">
-                            <span>Відкрити архів</span>
-                            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </aside>
-
-        <!-- News Content -->
-        <div class="order-1 lg:order-2 flex flex-col">
-            <!-- Search Section -->
-            <section class="mb-8">
-                <!-- Search Bar -->
-                <div class="bg-white rounded-2xl shadow-sm border-2 border-gray-100 p-6 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-[32px]">article</span>
-                        <div>
-                            <h2 class="text-2xl font-black text-[#111418]">Пошук новин</h2>
-                            <p class="text-sm text-[#617589]">Знайдіть цікаві статті про дзюдо</p>
-                        </div>
-                    </div>
+                <!-- News Container -->
+                <div id="news-container" class="flex flex-col gap-10">
                     
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                            <span class="material-symbols-outlined text-[#617589] text-[24px]">search</span>
-                        </div>
-                        <input 
-                            type="text" 
-                            id="searchInput"
-                            placeholder="Введіть ключове слово або тему..." 
-                            value="{{ search_query }}"
-                            class="w-full pl-14 pr-14 py-4 rounded-xl border-2 border-gray-200 text-[#111418] text-base placeholder-[#617589] focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
-                            onkeypress="handleSearchKeyPress(event)"
-                        />
-                        {% if search_query %}
-                        <button 
-                            onclick="clearSearch()" 
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-red-500 transition-colors group"
-                            title="Очистити пошук">
-                            <div class="bg-gray-100 group-hover:bg-red-50 rounded-lg p-2 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">close</span>
+                    <!-- Hero Article (тільки на сторінці 1 БЕЗ пошуку) -->
+                    {% if current_page == 1 and not search_query %}
+                    <article class="group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow bg-white cursor-pointer"
+                             onclick="window.navigationManager.navigateTo('/news/{{ news[0].id }}')">
+                        <div class="relative w-full aspect-[16/9] sm:aspect-[2/1] overflow-hidden">
+                            <!-- Top Story Badge -->
+                            <div class="absolute top-4 left-4 z-10">
+                                <span class="bg-[#ffd700] text-[#111418] text-xs font-black uppercase px-3 py-1 rounded shadow-lg tracking-wide">
+                                    Головна новина
+                                </span>
                             </div>
-                        </button>
-                        {% else %}
-                        <button 
-                            onclick="performSearch()" 
-                            class="absolute inset-y-0 right-0 flex items-center pr-3">
-                            <div class="bg-primary hover:bg-blue-600 text-white font-bold px-6 py-2.5 rounded-lg transition-all hover:shadow-lg hover:scale-105 active:scale-95">
-                                Шукати
+                            
+                            <!-- Image -->
+                            <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                 style="background-image: url('{{ news[0].image_full_url if news[0].image_full_url else '/static/placeholder-news.jpg' }}');">
                             </div>
-                        </button>
-                        {% endif %}
-                    </div>
-
-                    {% if search_query %}
-                    <div class="flex items-center gap-2 pt-2">
-                        <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
-                        <span class="text-sm text-[#617589]">
-                            Результати пошуку для: <strong class="text-[#111418]">"{{ search_query }}"</strong>
-                        </span>
-                    </div>
-                    {% endif %}
-                </div>
-            </section>
-
-            <!-- News Grid (3 columns) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% if news %}
-                    {% for item in news %}
-                    {% if not loop.first or search_query %}
-                    <article class="relative group cursor-pointer overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300" data-news-id="{{ item.id }}">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent z-10 opacity-100 group-hover:from-black/95 transition-opacity duration-300"></div>
-                        <a href="/news/{{ item.id }}">
-                            <div class="h-96 w-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105" 
-                                 style='background-image: url("{{ item.image_full_url if item.image_full_url else 'https://via.placeholder.com/400x400/137fec/FFFFFF?text=News' }}");'>
-                            </div>
-                        </a>
-                        <div class="absolute inset-0 z-20 p-6 flex flex-col justify-end text-white">
-                            <span class="text-xs font-bold uppercase tracking-wider text-primary mb-2 drop-shadow-sm">
-                                {{ item.display_category }}
-                            </span>
-                            <h3 class="text-xl font-bold leading-tight mb-2 drop-shadow-md">{{ item.title }}</h3>
-                            <p class="text-sm line-clamp-2 text-gray-200 drop-shadow-sm">{{ item.excerpt }}</p>
-                            <div class="mt-3 flex items-center gap-2 text-white/80 text-xs font-medium drop-shadow-sm">
-                                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                <span>{{ item.publishedAt }}</span>
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            
+                            <!-- Content -->
+                            <div class="absolute bottom-0 left-0 w-full p-6 sm:p-8">
+                                <div class="flex items-center gap-3 text-white/80 text-sm font-medium mb-2">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                        {{ news[0].publishedAt }}
+                                    </span>
+                                    <span>•</span>
+                                    <span>{{ news[0].display_category }}</span>
+                                </div>
+                                
+                                <h3 class="text-white text-2xl sm:text-3xl lg:text-4xl font-black leading-tight mb-2">
+                                    {{ news[0].title }}
+                                </h3>
+                                
+                                <p class="text-white/90 line-clamp-2 max-w-2xl mb-4 hidden sm:block">
+                                    {{ news[0].excerpt }}
+                                </p>
+                                
+                                <div class="inline-flex items-center text-[#ffd700] font-bold text-sm uppercase tracking-wide group-hover:text-white transition-colors">
+                                    Читати далі <span class="material-symbols-outlined text-[18px] ml-1">arrow_forward</span>
+                                </div>
                             </div>
                         </div>
                     </article>
                     {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div class="col-span-full text-center py-16">
-                        <span class="material-symbols-outlined text-gray-300 text-[80px] mb-4 block">search_off</span>
-                        <p class="text-[#111418] text-lg font-semibold mb-2">Новин не знайдено</p>
-                        <p class="text-[#617589] text-sm mb-6">Спробуйте інший пошуковий запит</p>
-                        <button onclick="clearSearch()" class="bg-primary hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors inline-flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[20px]">refresh</span>
-                            Показати всі новини
-                        </button>
-                    </div>
-                {% endif %}
-            </div>
 
-            <!-- Pagination -->
-            {% if total_pages and total_pages > 1 %}
-            <div class="mt-12 space-y-4">
-                <!-- Results Info -->
-                <div class="text-center">
-                    <p class="text-sm text-[#617589]">
-                        Сторінка <span class="font-bold text-[#111418]">{{ current_page }}</span> з <span class="font-bold text-[#111418]">{{ total_pages }}</span>
-                    </p>
+                    <!-- News Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {% for item in news %}
+                        {# Пропускаємо першу новину тільки якщо вона показана як Hero #}
+                        {% if loop.first and current_page == 1 and not search_query %}
+                            {# Skip - вже показана як Hero #}
+                        {% else %}
+                        <article class="news-card group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-[#e7ebf3] cursor-pointer"
+                                 onclick="window.navigationManager.navigateTo('/news/{{ item.id }}')">
+                            <!-- Image -->
+                            <div class="aspect-video w-full bg-gray-200 relative overflow-hidden">
+                                <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                                     style="background-image: url('{{ item.image_full_url if item.image_full_url else '/static/placeholder-news.jpg' }}');">
+                                </div>
+                                <!-- Category Badge -->
+                                <div class="absolute top-3 left-3">
+                                    <span class="bg-[#135bec]/90 text-white text-[10px] font-bold uppercase px-2 py-1 rounded">
+                                        {{ item.display_category }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="p-5 flex flex-col flex-grow">
+                                <div class="text-[#617589] text-xs font-medium mb-2">{{ item.publishedAt }}</div>
+                                
+                                <h4 class="text-lg font-bold text-[#111418] leading-tight mb-3 group-hover:text-[#135bec] transition-colors line-clamp-2">
+                                    {{ item.title }}
+                                </h4>
+                                
+                                <p class="text-[#617589] text-sm line-clamp-3 mb-4 flex-grow">
+                                    {{ item.excerpt }}
+                                </p>
+                                
+                                <div class="text-[#135bec] text-xs font-bold uppercase tracking-wide flex items-center gap-1 group/btn">
+                                    Читати <span class="material-symbols-outlined text-[14px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                                </div>
+                            </div>
+                        </article>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <!-- Pagination Controls -->
-                <div class="flex items-center justify-center gap-2">
-                    <!-- First Page Button -->
-                    {% if current_page > 2 %}
-                    <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" 
-                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                       title="Перша сторінка">
-                        <span class="material-symbols-outlined text-[20px]">first_page</span>
-                    </a>
-                    {% endif %}
+                <!-- Pagination -->
+                {% if total_pages and total_pages > 1 %}
+                <div class="mt-12 pt-8 border-t border-[#e7ebf3]">
+                    <div class="space-y-4">
+                        <!-- Results Info -->
+                        <p class="text-center text-sm text-[#617589]">
+                            Сторінка <strong class="text-[#111418]">{{ current_page }}</strong> з <strong class="text-[#111418]">{{ total_pages }}</strong>
+                        </p>
 
-                    <!-- Previous Button -->
-                    {% if has_prev %}
-                    <a href="?page={{ current_page - 1 }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                       title="Попередня">
-                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                    </a>
-                    {% else %}
-                    <button disabled 
-                            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed">
-                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                    </button>
-                    {% endif %}
+                        <!-- Pagination Controls -->
+                        <div class="flex items-center justify-center gap-1" id="pagination-controls">
+                            <!-- Previous -->
+                            {% if has_prev %}
+                            <button
+                                data-page="{{ current_page - 1 }}"
+                                class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] hover:border-[#135bec] hover:bg-blue-50 transition-all duration-300 hover:scale-110"
+                                title="Попередня сторінка"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </button>
+                            {% else %}
+                            <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] bg-gray-50 text-gray-300 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </button>
+                            {% endif %}
 
-                    <!-- Page Numbers -->
-                    <div class="flex items-center gap-2">
-                        <div class="hidden sm:flex items-center gap-2">
-                            {% if total_pages <= 7 %}
-                                {% for page_num in range(1, total_pages + 1) %}
+                            <!-- Pages -->
+                            <div class="flex items-center gap-1 mx-2">
+                                {% set start_page = [1, current_page - 2]|max %}
+                                {% set end_page = [total_pages, current_page + 2]|min %}
+
+                                {% if start_page > 1 %}
+                                <button data-page="1" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] hover:border-[#135bec] hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">1</button>
+                                {% if start_page > 2 %}<span class="text-gray-400 px-1">...</span>{% endif %}
+                                {% endif %}
+
+                                {% for page_num in range(start_page, end_page + 1) %}
                                     {% if page_num == current_page %}
-                                    <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">
-                                        {{ page_num }}
-                                    </span>
+                                    <span class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#135bec] text-white text-sm font-bold shadow-md scale-110">{{ page_num }}</span>
                                     {% else %}
-                                    <a href="?page={{ page_num }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">
-                                        {{ page_num }}
-                                    </a>
+                                    <button data-page="{{ page_num }}" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] hover:border-[#135bec] hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">{{ page_num }}</button>
                                     {% endif %}
                                 {% endfor %}
-                            {% else %}
-                                <!-- Smart pagination for many pages -->
-                                {% if current_page <= 4 %}
-                                    {% for page_num in range(1, 6) %}
-                                        {% if page_num == current_page %}
-                                        <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">{{ page_num }}</span>
-                                        {% else %}
-                                        <a href="?page={{ page_num }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                           class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">{{ page_num }}</a>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <span class="flex items-center justify-center w-10 h-10 text-gray-400">...</span>
-                                    <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">{{ total_pages }}</a>
-                                {% elif current_page >= total_pages - 3 %}
-                                    <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">1</a>
-                                    <span class="flex items-center justify-center w-10 h-10 text-gray-400">...</span>
-                                    {% for page_num in range(total_pages - 4, total_pages + 1) %}
-                                        {% if page_num == current_page %}
-                                        <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">{{ page_num }}</span>
-                                        {% else %}
-                                        <a href="?page={{ page_num }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                           class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">{{ page_num }}</a>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">1</a>
-                                    <span class="flex items-center justify-center w-10 h-10 text-gray-400">...</span>
-                                    {% for page_num in range(current_page - 1, current_page + 2) %}
-                                        {% if page_num == current_page %}
-                                        <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">{{ page_num }}</span>
-                                        {% else %}
-                                        <a href="?page={{ page_num }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                           class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">{{ page_num }}</a>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <span class="flex items-center justify-center w-10 h-10 text-gray-400">...</span>
-                                    <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105">{{ total_pages }}</a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
 
-                        {# Mobile #}
-                        <div class="flex sm:hidden items-center gap-2">
-                            {% if current_page > 1 %}
-                            <a href="?page={{ current_page - 1 }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                               class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold">{{ current_page - 1 }}</a>
-                            {% endif %}
-                            <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">{{ current_page }}</span>
-                            {% if current_page < total_pages %}
-                            <a href="?page={{ current_page + 1 }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                               class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold">{{ current_page + 1 }}</a>
+                                {% if end_page < total_pages %}
+                                {% if end_page < total_pages - 1 %}<span class="text-gray-400 px-1">...</span>{% endif %}
+                                <button data-page="{{ total_pages }}" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] hover:border-[#135bec] hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">{{ total_pages }}</button>
+                                {% endif %}
+                            </div>
+
+                            <!-- Next -->
+                            {% if has_next %}
+                            <button
+                                data-page="{{ current_page + 1 }}"
+                                class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] hover:border-[#135bec] hover:bg-blue-50 transition-all duration-300 hover:scale-110"
+                                title="Наступна сторінка"
+                            >
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </button>
+                            {% else %}
+                            <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-[#e7ebf3] bg-gray-50 text-gray-300 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </button>
                             {% endif %}
                         </div>
                     </div>
-
-                    <!-- Next Button -->
-                    {% if has_next %}
-                    <a href="?page={{ current_page + 1 }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                       title="Наступна">
-                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                    </a>
-                    {% else %}
-                    <button disabled 
-                            class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed">
-                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                </div>
+                {% endif %}
+                
+                {% else %}
+                <!-- Empty State -->
+                <div class="text-center py-20">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                        <span class="material-symbols-outlined text-gray-400 text-[32px]">search_off</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#111418] mb-2">Новин не знайдено</h3>
+                    <p class="text-[#617589] mb-6">Спробуйте змінити пошуковий запит</p>
+                    <button onclick="window.NewsPage?.clearFilters()"> class="inline-flex items-center gap-2 px-4 py-2 bg-[#135bec] hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">refresh</span>
+                        Показати всі новини
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            <!-- Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 flex flex-col gap-8">
+                
+                <!-- Search Widget -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-[#e7ebf3]">
+                    <h3 class="text-sm font-black uppercase text-[#111418] mb-4 tracking-wide border-l-4 border-[#ffd700] pl-3">
+                        Пошук Новин
+                    </h3>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            placeholder="Введіть ключові слова..." 
+                            value="{{ search_query }}"
+                            class="w-full pl-10 pr-4 py-3 bg-[#f8f9fc] border-none rounded-lg text-sm text-[#111418] focus:ring-2 focus:ring-[#135bec] placeholder:text-gray-400 focus:outline-none"
+                        />
+                        <span class="material-symbols-outlined absolute left-3 top-3 text-gray-400">search</span>
+                    </div>
+                    {% if search_query %}
+                    <button onclick="window.NewsPage?.clearFilters()" class="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-semibold text-[#111418] transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">close</span>
+                        Очистити пошук
                     </button>
                     {% endif %}
-
-                    <!-- Last Page Button -->
-                    {% if current_page < total_pages - 1 %}
-                    <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" 
-                       class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                       title="Остання сторінка">
-                        <span class="material-symbols-outlined text-[20px]">last_page</span>
-                    </a>
-                    {% endif %}
                 </div>
 
-                <!-- Quick Jump -->
-                <div class="flex items-center justify-center gap-3">
-                    <span class="text-sm text-[#617589]">Перейти до:</span>
-                    <div class="relative">
-                        <select onchange="window.location.href='?page=' + this.value + '{% if search_query %}&search={{ search_query }}{% endif %}'"
-                                class="appearance-none bg-white border-2 border-gray-200 rounded-lg px-4 py-2 pr-10 text-sm font-semibold text-[#111418] hover:border-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors cursor-pointer">
-                            {% for page_num in range(1, total_pages + 1) %}
-                            <option value="{{ page_num }}" {% if page_num == current_page %}selected{% endif %}>
-                                Сторінка {{ page_num }}
-                            </option>
+                <!-- Calendar Widget -->
+                <div class="bg-[#135bec] text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                    
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <h3 class="text-sm font-black uppercase tracking-wide border-l-4 border-[#ffd700] pl-3">
+                            Календар Подій
+                        </h3>
+                        <a href="/calendar" class="text-xs font-bold underline decoration-[#ffd700] hover:text-[#ffd700] transition-colors">
+                            Всі події
+                        </a>
+                    </div>
+                    
+                    <div class="flex flex-col gap-4 relative z-10">
+                        {% if upcoming_events and upcoming_events|length > 0 %}
+                            {% for event in upcoming_events %}
+                                {% if not loop.first %}
+                                <hr class="border-white/10"/>
+                                {% endif %}
+                                
+                                <div class="flex gap-4 items-start group cursor-pointer" 
+                                    onclick="window.navigationManager?.navigateTo('/calendar/{{ event.slug }}')">
+                                    <div class="flex-shrink-0 w-12 h-14 bg-white/10 rounded flex flex-col items-center justify-center border border-white/20 group-hover:bg-white group-hover:text-[#135bec] transition-colors">
+                                        <span class="text-[10px] font-bold uppercase opacity-80">{{ event.month }}</span>
+                                        <span class="text-xl font-black leading-none">{{ event.day }}</span>
+                                    </div>
+                                    
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-bold text-sm leading-tight mb-1 group-hover:text-[#ffd700] transition-colors line-clamp-2">
+                                            {{ event.title }}
+                                        </h4>
+                                        <p class="text-xs text-blue-200 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">location_on</span>
+                                            <span class="truncate">{{ event.location }}</span>
+                                        </p>
+                                    </div>
+                                </div>
                             {% endfor %}
-                        </select>
-                        <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <span class="material-symbols-outlined text-[20px] text-[#617589]">expand_more</span>
-                        </span>
+                        {% else %}
+                            <div class="text-sm text-white/80 text-center py-4">
+                                Немає найближчих подій
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-            {% endif %}
-        </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 overflow-hidden relative mb-10 mt-16">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
-        <div class="relative z-10 px-6 py-12 md:px-20 md:py-16 text-center">
-            <div class="max-w-2xl mx-auto">
-                <span class="material-symbols-outlined text-white text-[48px] mb-4 inline-block">emoji_events</span>
-                <h2 class="text-white text-2xl md:text-3xl font-black mb-4">Слідкуйте за нашими успіхами!</h2>
-                <p class="text-white/90 text-base mb-6">Підтримайте українське дзюдо — слідкуйте за змаганнями та перемогами наших спортсменів</p>
-                <div class="flex flex-wrap items-center justify-center gap-3">
-                    <a href="/events" class="bg-white hover:bg-gray-100 text-[#111418] font-bold py-3 px-6 rounded-lg transition-colors inline-flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[20px]">calendar_month</span>
-                        Календар подій
-                    </a>
-                    <a href="/team" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 rounded-lg transition-colors inline-flex items-center gap-2 border-2 border-white/30">
-                        <span class="material-symbols-outlined text-[20px]">groups</span>
-                        Збірна України
-                    </a>
+                <!-- Popular Tags Widget -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-[#e7ebf3]">
+                    <h3 class="text-sm font-black uppercase text-[#111418] mb-4 tracking-wide border-l-4 border-[#135bec] pl-3">
+                        Популярні теми
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="/news?search=збірна" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Збірна
+                        </a>
+                        <a href="/news?search=чемпіонат" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Чемпіонат
+                        </a>
+                        <a href="/news?search=медалі" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Медалі
+                        </a>
+                        <a href="/news?search=тренування" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Тренування
+                        </a>
+                        <a href="/news?search=міжнародні" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Міжнародні
+                        </a>
+                        <a href="/news?search=юніори" class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-[#135bec] hover:text-white text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                            #Юніори
+                        </a>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Quick Links Widget -->
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl border border-gray-200">
+                    <h3 class="text-sm font-black uppercase text-[#111418] mb-4 tracking-wide border-l-4 border-[#ffd700] pl-3">
+                        Корисні посилання
+                    </h3>
+                    <div class="flex flex-col gap-3">
+                        <a href="/team" class="flex items-center gap-3 p-3 bg-white hover:bg-[#135bec] hover:text-white rounded-lg transition-all group border border-gray-200 hover:border-[#135bec]">
+                            <span class="material-symbols-outlined text-[20px] text-[#135bec] group-hover:text-white">groups</span>
+                            <span class="text-sm font-semibold">Національна збірна</span>
+                        </a>
+                        <a href="/calendar" class="flex items-center gap-3 p-3 bg-white hover:bg-[#135bec] hover:text-white rounded-lg transition-all group border border-gray-200 hover:border-[#135bec]">
+                            <span class="material-symbols-outlined text-[20px] text-[#135bec] group-hover:text-white">event</span>
+                            <span class="text-sm font-semibold">Календар змагань</span>
+                        </a>
+                        <a href="/documents" class="flex items-center gap-3 p-3 bg-white hover:bg-[#135bec] hover:text-white rounded-lg transition-all group border border-gray-200 hover:border-[#135bec]">
+                            <span class="material-symbols-outlined text-[20px] text-[#135bec] group-hover:text-white">folder</span>
+                            <span class="text-sm font-semibold">Документи та протоколи</span>
+                        </a>
+                        <a href="/contacts" class="flex items-center gap-3 p-3 bg-white hover:bg-[#135bec] hover:text-white rounded-lg transition-all group border border-gray-200 hover:border-[#135bec]">
+                            <span class="material-symbols-outlined text-[20px] text-[#135bec] group-hover:text-white">contact_mail</span>
+                            <span class="text-sm font-semibold">Контакти ФДУ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social Media Widget -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-[#e7ebf3]">
+                    <h3 class="text-sm font-black uppercase text-[#111418] mb-4 tracking-wide border-l-4 border-[#135bec] pl-3">
+                        Слідкуйте за нами
+                    </h3>
+                    <div class="flex flex-col gap-3">
+                        <a href="https://www.facebook.com/UkraineJudoFederation" target="_blank" class="flex items-center gap-3 p-3 bg-[#1877f2]/5 hover:bg-[#1877f2] hover:text-white rounded-lg transition-all group border border-[#1877f2]/20">
+                            <div class="w-10 h-10 rounded-lg bg-[#1877f2] group-hover:bg-white flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white group-hover:text-[#1877f2]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-sm font-bold">Facebook</div>
+                                <div class="text-xs opacity-70">@UkraineJudo</div>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.instagram.com/ukrainejudofederation" target="_blank" class="flex items-center gap-3 p-3 bg-gradient-to-br from-purple-500/5 to-pink-500/5 hover:from-purple-500 hover:to-pink-500 hover:text-white rounded-lg transition-all group border border-purple-500/20">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 group-hover:bg-white flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white group-hover:text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-sm font-bold">Instagram</div>
+                                <div class="text-xs opacity-70">@UkraineJudo</div>
+                            </div>
+                        </a>
+                        
+                        <a href="https://t.me/ukrainejudo" target="_blank" class="flex items-center gap-3 p-3 bg-[#0088cc]/5 hover:bg-[#0088cc] hover:text-white rounded-lg transition-all group border border-[#0088cc]/20">
+                            <div class="w-10 h-10 rounded-lg bg-[#0088cc] group-hover:bg-white flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white group-hover:text-[#0088cc]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-sm font-bold">Telegram</div>
+                                <div class="text-xs opacity-70">@UkraineJudo</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
         </div>
-    </section>
+    </div>
+
 </main>
 
 <style>
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
+    .news-card {
+        transition: transform 0.2s ease;
+    }
+    
+    .news-card:hover {
+        transform: translateY(-4px);
+    }
 </style>
 
-<script>
-    function performSearch() {
-        const searchInput = document.getElementById('searchInput');
-        const searchQuery = searchInput.value.trim();
-        
-        if (!searchQuery) return;
-        
-        window.location.href = '/news?search=' + encodeURIComponent(searchQuery) + '&page=1';
-    }
+{% endblock %}
 
-    function clearSearch() {
-        window.location.href = '/news';
-    }
-
-    function handleSearchKeyPress(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            performSearch();
+{% block scripts %}
+<script data-page-script="true">
+(function() {
+    'use strict';
+    
+    let isInitialized = false;
+    let searchTimeout = null;
+    
+    // ❌ ВИДАЛЕНО: loadUpcomingEvents()
+    
+    // ==================== SEARCH ====================
+    
+    function clearFilters() {
+        if (window.navigationManager) {
+            window.navigationManager.navigateTo('/news');
+        } else {
+            window.location.href = '/news';
         }
     }
-
-    // Обробник кліків на картки новин
-    document.addEventListener('DOMContentLoaded', function() {
-        const newsCards = document.querySelectorAll('article[data-news-id]');
+    
+    function performSearch() {
+        const search = document.getElementById('search-input')?.value?.trim() || '';
+        let url = '/news?page=1';
+        if (search) url += '&search=' + encodeURIComponent(search);
         
-        newsCards.forEach(card => {
-            card.style.cursor = 'pointer';
+        if (window.navigationManager) {
+            window.navigationManager.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
+    }
+    
+    function attachSearchHandlers() {
+        const searchInput = document.getElementById('search-input');
+        
+        if (searchInput) {
+            const newInput = searchInput.cloneNode(true);
+            searchInput.parentNode.replaceChild(newInput, searchInput);
             
-            card.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON' && !e.target.closest('a')) {
-                    const newsId = this.dataset.newsId;
-                    if (newsId) {
-                        window.location.href = `/news/${newsId}`;
-                    }
+            newInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    clearTimeout(searchTimeout);
+                    performSearch();
+                }
+            });
+            
+            newInput.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                const value = e.target.value.trim();
+                
+                if (value === '') {
+                    performSearch();
+                } else {
+                    searchTimeout = setTimeout(() => {
+                        performSearch();
+                    }, 500);
+                }
+            });
+        }
+    }
+    
+    // ==================== PAGINATION ====================
+    
+    function goToPage(page) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', page);
+        
+        const url = '/news?' + urlParams.toString();
+        
+        if (window.navigationManager) {
+            window.navigationManager.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
+    }
+    
+    function attachPaginationHandlers() {
+        const paginationButtons = document.querySelectorAll('.pagination-btn');
+        
+        paginationButtons.forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
+            newBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = parseInt(this.getAttribute('data-page'));
+                if (page && !this.disabled) {
+                    goToPage(page);
                 }
             });
         });
-
-        // Focus на поле пошуку при Ctrl+K або Cmd+K
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
-            }
-        });
+        
+        console.log('[News] Pagination handlers attached to', paginationButtons.length, 'buttons');
+    }
+    
+    // ==================== NEWSLETTER ====================
+    
+    function subscribeNewsletter(e) {
+        e.preventDefault();
+        const email = e.target.querySelector('input[type="email"]').value;
+        
+        if (window.ToastManager) {
+            window.ToastManager.success(`Email ${email} підписано!`, 'Дякуємо!');
+        }
+        e.target.reset();
+    }
+    
+    // ==================== INIT ====================
+    
+    function init() {
+        console.log('[News] Initializing...');
+        
+        attachSearchHandlers();
+        attachPaginationHandlers();
+        // ❌ ВИДАЛЕНО: loadUpcomingEvents();
+        
+        isInitialized = true;
+        console.log('[News] Ready');
+    }
+    
+    function cleanup() {
+        console.log('[News] Cleaning up...');
+        
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+            searchTimeout = null;
+        }
+        
+        delete window.NewsPage;
+        
+        isInitialized = false;
+    }
+    
+    // ==================== GLOBAL EXPORTS ====================
+    
+    window.NewsPage = {
+        goToPage,
+        clearFilters,
+        subscribeNewsletter
+    };
+    
+    // ==================== AUTO-INIT ====================
+    
+    window.addEventListener('pageCleanup', cleanup);
+    
+    window.addEventListener('pageInit', () => {
+        if (window.location.pathname.startsWith('/news')) {
+            console.log('[News] pageInit triggered');
+            init();
+        }
     });
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[News] DOMContentLoaded');
+            init();
+        });
+    } else {
+        console.log('[News] Document already loaded');
+        init();
+    }
+    
+})();
 </script>
 {% endblock %}

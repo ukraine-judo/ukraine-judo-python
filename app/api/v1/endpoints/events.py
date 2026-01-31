@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Path, Query
 from typing import List, Optional
 from app.models.schemas import EventListItem, EventDetail
 from app.services.supabase import supabase
-from datetime import date as date_type, datetime
+from datetime import date as date_type, datetime, date
 
 
 router = APIRouter(prefix="/events", tags=["Events"])
@@ -54,6 +54,45 @@ async def get_events(
     
     except Exception as e:
         print(f"Error in get_events: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+@router.get("/upcoming")
+async def get_upcoming_events(
+    limit: int = Query(3, ge=1, le=10, description="Number of events to return")
+):
+    """Get upcoming events (future or recent)"""
+    try:
+        today = date.today().isoformat()
+        
+        # Спочатку шукаємо майбутні події
+        response = (
+            supabase.table("events")
+            .select("slug, title, date_start, date_end, city, region, event_type, category")
+            .gte("date_start", today)
+            .order("date_start", desc=False)
+            .limit(limit)
+            .execute()
+        )
+        
+        events = response.data if response.data else []
+        
+        # Якщо майбутніх подій мало, додаємо останні минулі
+        if len(events) < limit:
+            past_response = (
+                supabase.table("events")
+                .select("slug, title, date_start, date_end, city, region, event_type, category")
+                .lt("date_start", today)
+                .order("date_start", desc=True)
+                .limit(limit - len(events))
+                .execute()
+            )
+            
+            if past_response.data:
+                events.extend(past_response.data)
+        
+        return events
+        
+    except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 

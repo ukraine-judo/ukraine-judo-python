@@ -1,1436 +1,782 @@
 {% extends "base.html" %}
 
-{% block title %}Збірна України з дзюдо{% endblock %}
+{% block title %}Збірна України з дзюдо - Федерація Дзюдо України{% endblock %}
 
 {% block content %}
-<main class="flex-grow w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 md:px-10 py-6 md:py-10">
-  
-  <!-- Hero Section -->
-  <section class="mb-10 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 rounded-2xl overflow-hidden relative">
-    <div class="absolute inset-0 bg-[url('https://via.placeholder.com/1280x400/137fec/FFFFFF?text=Team')] bg-cover bg-center opacity-10"></div>
-    <div class="relative z-10 p-8 md:p-16 text-center">
-      <div class="flex items-center justify-center gap-3 mb-4">
-        <span class="material-symbols-outlined text-white text-[48px] md:text-[64px]">military_tech</span>
-      </div>
-      <h1 class="text-white text-4xl md:text-6xl font-black mb-4 tracking-tight">
-        Збірна України з дзюдо
-      </h1>
-      <p class="text-white/90 text-lg md:text-xl max-w-3xl mx-auto">
-        Наші спортсмени та тренери, які представляють Україну на міжнародних змаганнях
-      </p>
-    </div>
-  </section>
-
-  <!-- Main Content: Grid (Sidebar + Team Content) -->
-  <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10">
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
-    <!-- Sidebar Navigation -->
-    <aside class="order-2 lg:order-1 lg:sticky lg:top-24 h-fit flex flex-col gap-5">
-      <!-- Header -->
-      <div class="flex items-center gap-3 pb-3 border-b-2 border-gray-200">
-        <span class="material-symbols-outlined text-[#111418] text-[28px]">explore</span>
-        <h2 class="text-xl font-black text-[#111418] tracking-tight">Навігація</h2>
-      </div>
-
-      <!-- Navigation Cards -->
-      <div class="flex flex-col gap-4">
-        <!-- News Card -->
-        <a href="/news" class="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-          <div class="relative z-10">
-            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-white text-[32px]">article</span>
-            </div>
-            <h3 class="text-white text-lg font-black mb-2 leading-tight">Новини</h3>
-            <p class="text-white/90 text-sm leading-relaxed mb-4">
-              Останні події та досягнення
-            </p>
-            <div class="flex items-center gap-2 text-white font-semibold text-sm">
-              <span>Читати</span>
-              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Events Card -->
-        <a href="/events" class="group relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-          <div class="relative z-10">
-            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-white text-[32px]">calendar_month</span>
-            </div>
-            <h3 class="text-white text-lg font-black mb-2 leading-tight">Події</h3>
-            <p class="text-white/90 text-sm leading-relaxed mb-4">
-              Календар змагань та заходів
-            </p>
-            <div class="flex items-center gap-2 text-white font-semibold text-sm">
-              <span>Переглянути</span>
-              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
-          </div>
-        </a>
-
-        <!-- Documents Card -->
-        <a href="/documents" class="group relative overflow-hidden bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
-          <div class="relative z-10">
-            <div class="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-white text-[32px]">description</span>
-            </div>
-            <h3 class="text-white text-lg font-black mb-2 leading-tight">Документи</h3>
-            <p class="text-white/90 text-sm leading-relaxed mb-4">
-              Положення та регламенти
-            </p>
-            <div class="flex items-center gap-2 text-white font-semibold text-sm">
-              <span>Завантажити</span>
-              <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </div>
-          </div>
-        </a>
-      </div>
-    </aside>
-
-    <!-- Team Content -->
-    <div class="order-1 lg:order-2 flex flex-col">
-      
-      <!-- Tabs -->
-      <div class="mb-8">
-        <div class="bg-white rounded-2xl shadow-sm border-2 border-gray-100 p-2">
-          <div class="flex gap-2">
-            <button 
-              onclick="switchTab('athletes')" 
-              id="tab-athletes" 
-              class="tab-button flex-1 py-3 px-6 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-[#111418] text-white"
-            >
-              <span class="material-symbols-outlined text-[24px]">sports_martial_arts</span>
-              <span>Спортсмени</span>
-            </button>
-            <button 
-              onclick="switchTab('coaches')" 
-              id="tab-coaches" 
-              class="tab-button flex-1 py-3 px-6 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 text-[#617589] hover:bg-gray-50"
-            >
-              <span class="material-symbols-outlined text-[24px]">supervisor_account</span>
-              <span>Тренери</span>
-            </button>
-          </div>
+    <!-- Page Header -->
+    <div class="mb-8">
+        <!-- Breadcrumbs -->
+        <div class="flex flex-wrap items-center gap-2 text-sm mb-4">
+            <a class="text-gray-600 font-medium hover:text-blue-600 transition-colors" href="/">Головна</a>
+            <span class="text-gray-400 font-medium">/</span>
+            <span class="text-gray-900 font-semibold">Збірна</span>
         </div>
-      </div>
-
-      <!-- ATHLETES SECTION -->
-      <div id="athletes-section" class="tab-content">
-        <!-- Athletes Filters - З ПОВНІСТЮ КАСТОМНИМИ ДРОПДАУНАМИ -->
-        <section class="mb-8">
-        <div class="bg-white rounded-xl border border-gray-200 p-6">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-gray-400 text-[24px]">filter_list</span>
-                <h2 class="text-lg font-bold text-[#111418]">Фільтри</h2>
+        
+        <!-- Title & Description -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="max-w-2xl">
+                <h1 class="text-gray-900 text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2">Збірна України з дзюдо</h1>
+                <p class="text-[var(--muted)] leading-relaxed mb-1">
+                    Наші спортсмени та тренери, які представляють Україну на світовій арені
+                </p>
             </div>
             
-            {% if search_query or current_sex != 'all' or current_status != 'all' %}
-                <button 
-                onclick="clearAllFilters()" 
-                class="text-sm font-medium text-gray-500 hover:text-[#111418] transition-colors"
-                >
-                Скинути
-                </button>
-            {% endif %}
-            </div>
-
-            <!-- Filters Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Sex Filter - КАСТОМНИЙ ДРОПДАУН -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Стать</label>
-                <div class="custom-dropdown" data-value="{% if current_sex %}{{ current_sex }}{% else %}all{% endif %}" data-name="sex">
-                <div class="custom-dropdown-trigger">
-                    <span class="custom-dropdown-value">
-                    {% if current_sex == 'men' %}Чоловіки
-                    {% elif current_sex == 'women' %}Жінки
-                    {% else %}Усі{% endif %}
-                    </span>
-                    <span class="custom-dropdown-arrow">
-                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                        <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </span>
-                </div>
-                <div class="custom-dropdown-menu">
-                    <div class="custom-dropdown-item" data-value="all">Усі</div>
-                    <div class="custom-dropdown-item" data-value="men">Чоловіки</div>
-                    <div class="custom-dropdown-item" data-value="women">Жінки</div>
-                </div>
-                </div>
-            </div>
-
-            <!-- Status Filter - КАСТОМНИЙ ДРОПДАУН -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Статус</label>
-                <div class="custom-dropdown" data-value="{% if current_status %}{{ current_status }}{% else %}all{% endif %}" data-name="status">
-                <div class="custom-dropdown-trigger">
-                    <span class="custom-dropdown-value">
-                    {% if current_status == 'main' %}Основа
-                    {% elif current_status == 'candidate' %}Кандидат
-                    {% elif current_status == 'reserve' %}Резерв
-                    {% else %}Усі{% endif %}
-                    </span>
-                    <span class="custom-dropdown-arrow">
-                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                        <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    </span>
-                </div>
-                <div class="custom-dropdown-menu">
-                    <div class="custom-dropdown-item" data-value="all">Усі</div>
-                    <div class="custom-dropdown-item" data-value="main">Основа</div>
-                    <div class="custom-dropdown-item" data-value="candidate">Кандидат</div>
-                    <div class="custom-dropdown-item" data-value="reserve">Резерв</div>
-                </div>
-                </div>
-            </div>
-
-            <!-- Search Filter -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Пошук</label>
-                <div class="relative">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Введіть ім'я..." 
-                    value="{{ search_query }}"
-                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-[#111418] text-sm placeholder:text-gray-400 focus:border-[#111418] focus:outline-none focus:ring-1 focus:ring-[#111418] transition-all"
-                    onkeypress="if(event.key === 'Enter') filterAthletes()"
-                >
-                
-                {% if search_query %}
-                    <button 
-                    onclick="clearSearch()" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#111418] transition-colors"
-                    >
-                    <span class="material-symbols-outlined text-[18px]">close</span>
-                    </button>
-                {% endif %}
-                </div>
-            </div>
-            </div>
-
-            <!-- Search Button -->
-            <div class="mt-4">
-            <button 
-                onclick="filterAthletes()" 
-                class="w-full bg-[#111418] text-white font-medium py-2.5 px-6 rounded-lg hover:bg-[#1a1f28] transition-all duration-200"
-            >
-                Застосувати
-            </button>
+            <!-- Quick Stats -->
+            <div class="hidden md:flex items-center gap-2 text-sm text-[var(--muted)] bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">groups</span>
+                <span class="font-semibold">{{ total_athletes + national_coaches_total + regional_coaches_total }}</span>
+                <span>учасників</span>
             </div>
         </div>
-        </section>
+    </div>
 
-        <!-- Athletes Grid -->
-        <div id="athletes-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-          {% if athletes and athletes|length > 0 %}
-            {% for athlete in athletes %}
-              <article 
-                class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
-                onclick="window.location.href='/team/athletes/{{ athlete.slug }}'"
-                style="aspect-ratio: 3/4"
-              >
-                <!-- Background Photo -->
-                <div class="absolute inset-0 overflow-hidden rounded-2xl">
-                  {% if athlete.photo_url %}
-                    <img 
-                      src="{{ athlete.photo_url }}" 
-                      alt="{{ athlete.name }}" 
-                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    >
-                  {% else %}
-                    <div class="w-full h-full bg-gradient-to-br from-blue-200 to-blue-400 flex items-center justify-center">
-                      <span class="material-symbols-outlined text-white text-[80px] opacity-50">person</span>
-                    </div>
-                  {% endif %}
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="w-full lg:sticky lg:top-24 h-fit">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <!-- Header -->
+                <div class="p-4 border-b border-gray-200 bg-gray-50">
+                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wider">Навігація</span>
                 </div>
-
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-black/75 group-hover:via-black/35 transition-all duration-300"></div>
-
-                <!-- Status Badge -->
-                <div class="absolute top-3 right-3 z-20">
-                  {% if athlete.status == 'main' %}
-                    <span class="inline-block bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-                      Основа
-                    </span>
-                  {% elif athlete.status == 'candidate' %}
-                    <span class="inline-block bg-purple-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-                      Кандидат
-                    </span>
-                  {% elif athlete.status == 'reserve' %}
-                    <span class="inline-block bg-amber-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-                      Резерв
-                    </span>
-                  {% endif %}
-                </div>
-
-                <!-- Content -->
-                <div class="absolute bottom-0 left-0 right-0 z-10 p-4 md:p-5 transition-all duration-300 group-hover:pb-5 group-hover:md:pb-6">
-                  <h3 class="text-white text-lg md:text-xl font-black leading-tight mb-1.5 drop-shadow-lg">
-                    {{ athlete.name }}
-                  </h3>
-                  
-                  <!-- ✅ ТУТ ВІДОБРАЖАЄМО КАТЕГОРІЮ! -->
-                  <div class="text-white/95 text-sm md:text-base font-semibold drop-shadow-md">
-                    {% if athlete.age_category %}
-                      {{ athlete.age_category }}
-                    {% else %}
-                      Спортсмен
-                    {% endif %}
-                    {% if athlete.weight %} • {{ athlete.weight }}{% endif %}
-                  </div>
-                </div>
-              </article>
-            {% endfor %}
-          {% else %}
-            <!-- Empty state -->
-          {% endif %}
-        </div>
-
-        <!-- Pagination -->
-        {% if total_pages and total_pages > 1 %}
-        <div id="athletes-pagination" class="mt-12 space-y-4">
-            <!-- Results Info -->
-            <div class="text-center">
-              <p class="text-sm text-[#617589]">
-                Сторінка <span class="font-bold text-[#111418]">{{ current_page }}</span> з 
-                <span class="font-bold text-[#111418]">{{ total_pages }}</span>
-                <span class="mx-2">•</span>
-                Всього спортсменів: <span class="font-bold text-[#111418]">{{ total_athletes }}</span>
-              </p>
-            </div>
-
-            <!-- Pagination Controls -->
-            <div class="flex items-center justify-center gap-2">
-              <!-- Previous Button -->
-              {% if has_prev %}
-                <a 
-                  href="?page={{ current_page - 1 }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                  title="Попередня сторінка"
-                >
-                  <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                </a>
-              {% else %}
-                <button 
-                  disabled 
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-                >
-                  <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                </button>
-              {% endif %}
-
-              <!-- Page Numbers -->
-              <div class="flex items-center gap-2">
-                {% set start_page = [1, current_page - 2]|max %}
-                {% set end_page = [total_pages, current_page + 2]|min %}
                 
-                {# Перша сторінка #}
-                {% if start_page > 1 %}
-                  <a 
-                    href="?page=1{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                    class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
-                  >
-                    1
-                  </a>
-                  {% if start_page > 2 %}
-                    <span class="text-gray-400 px-1">...</span>
-                  {% endif %}
-                {% endif %}
-                
-                {# Номери сторінок #}
-                {% for page_num in range(start_page, end_page + 1) %}
-                  {% if page_num == current_page %}
-                    <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">
-                      {{ page_num }}
-                    </span>
-                  {% else %}
-                    <a 
-                      href="?page={{ page_num }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200 hover:scale-105"
-                    >
-                      {{ page_num }}
+                <!-- Nav Links -->
+                <nav class="flex flex-col p-2 space-y-1">
+                    <!-- Athletes -->
+                    <a href="#athletes-section" 
+                       class="nav-anchor-link group flex items-center justify-between px-3 py-3 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-3 border-transparent transition-all"
+                       data-section="athletes-section">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-[20px]">sports_martial_arts</span>
+                            <span class="font-medium text-sm">Спортсмени</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{{ total_athletes }}</span>
                     </a>
-                  {% endif %}
-                {% endfor %}
-                
-                {# Остання сторінка #}
-                {% if end_page < total_pages %}
-                  {% if end_page < total_pages - 1 %}
-                    <span class="text-gray-400 px-1">...</span>
-                  {% endif %}
-                  <a 
-                    href="?page={{ total_pages }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                    class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
-                  >
-                    {{ total_pages }}
-                  </a>
-                {% endif %}
-              </div>
-
-              <!-- Next Button -->
-              {% if has_next %}
-                <a 
-                  href="?page={{ current_page + 1 }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105"
-                  title="Наступна сторінка"
-                >
-                  <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                </a>
-              {% else %}
-                <button 
-                  disabled 
-                  class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-                >
-                  <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                </button>
-              {% endif %}
+                    
+                    <!-- Coaches -->
+                    <a href="#coaches-section" 
+                       class="nav-anchor-link group flex items-center justify-between px-3 py-3 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-3 border-transparent transition-all"
+                       data-section="coaches-section">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-[20px]">supervisor_account</span>
+                            <span class="font-medium text-sm">Тренери</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{{ national_coaches_total + regional_coaches_total }}</span>
+                    </a>
+                </nav>
             </div>
-          </div>
-        {% endif %}
-
-      </div>
-
-<!-- COACHES SECTION -->
-<div id="coaches-section" class="tab-content hidden">
-  
-  <!-- Coaches Filters -->
-  <section class="mb-8">
-    <div class="bg-white rounded-xl border border-gray-200 p-6">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-        <div class="flex items-center gap-3">
-          <span class="material-symbols-outlined text-gray-400 text-[24px]">filter_list</span>
-          <h2 class="text-lg font-bold text-[#111418]">Фільтри тренерів</h2>
-        </div>
-        
-        {% if coaches_search_query or coaches_tab != 'all' or current_coach_category %}
-        <button 
-          onclick="clearCoachFilters()" 
-          class="text-sm font-medium text-gray-500 hover:text-[#111418] transition-colors"
-        >
-          Скинути
-        </button>
-        {% endif %}
-      </div>
-
-      <!-- Filters Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <!-- Team Type Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Тип команди</label>
-          <div class="custom-dropdown" data-value="{{ coaches_tab or 'all' }}" data-name="coaches_tab">
-            <div class="custom-dropdown-trigger">
-              <span class="custom-dropdown-value">
-                {% if coaches_tab == 'national' %}Національна збірна
-                {% elif coaches_tab == 'regional' %}Регіональні та клубні
-                {% else %}Усі тренери{% endif %}
-              </span>
-              <span class="custom-dropdown-arrow">
-                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="custom-dropdown-menu">
-              <div class="custom-dropdown-item" data-value="all">Усі тренери</div>
-              <div class="custom-dropdown-item" data-value="national">Національна збірна ({{ national_coaches_total }})</div>
-              <div class="custom-dropdown-item" data-value="regional">Регіональні та клубні ({{ regional_coaches_total }})</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Категорія</label>
-          <div class="custom-dropdown" data-value="{{ current_coach_category or 'all' }}" data-name="coach_category">
-            <div class="custom-dropdown-trigger">
-              <span class="custom-dropdown-value">
-                {% if current_coach_category and current_coach_category != 'all' %}
-                  {{ coach_category_labels.get(current_coach_category, 'Усі категорії') }}
-                {% else %}
-                  Усі категорії
-                {% endif %}
-              </span>
-              <span class="custom-dropdown-arrow">
-                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                  <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="custom-dropdown-menu">
-              <div class="custom-dropdown-item" data-value="all">Усі категорії</div>
-              {% for key, label in coach_category_labels.items() %}
-                <div class="custom-dropdown-item" data-value="{{ key }}">{{ label }}</div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-
-        <!-- ✅ ДОДАНО: Search Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Пошук</label>
-          <div class="relative">
-            <input 
-              type="text" 
-              id="coachesSearchInput" 
-              placeholder="Ім'я, посада, місто..." 
-              value="{{ coaches_search_query }}"
-              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-[#111418] text-sm placeholder:text-gray-400 focus:border-[#111418] focus:outline-none focus:ring-1 focus:ring-[#111418] transition-all"
-              onkeypress="if(event.key === 'Enter') filterCoaches()"
-            >
             
-            {% if coaches_search_query %}
-              <button 
-                onclick="clearCoachSearch()" 
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#111418] transition-colors"
-              >
-                <span class="material-symbols-outlined text-[18px]">close</span>
-              </button>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
-      <!-- Apply Button -->
-      <div class="mt-4">
-        <button 
-          onclick="filterCoaches()" 
-          class="w-full bg-[#111418] text-white font-medium py-2.5 px-6 rounded-lg hover:bg-[#1a1f28] transition-all duration-200"
-        >
-          Застосувати
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Bar -->
-  <div class="mb-6 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-4 border border-orange-200">
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-orange-600 text-[28px]">sports</span>
-        <div>
-          <p class="text-sm text-gray-600">Всього тренерів</p>
-          <p class="text-2xl font-black text-[#111418]">{{ national_coaches_total + regional_coaches_total }}</p>
-        </div>
-      </div>
-      <div class="flex gap-6">
-        <div>
-          <p class="text-xs text-gray-500 mb-1">Національна збірна</p>
-          <p class="text-lg font-bold text-orange-600">{{ national_coaches_total }}</p>
-        </div>
-        <div>
-          <p class="text-xs text-gray-500 mb-1">Регіональні</p>
-          <p class="text-lg font-bold text-amber-600">{{ regional_coaches_total }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Coaches Grid -->
-  <div id="coaches-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-    {% if coaches and coaches|length > 0 %}
-      {% for coach in coaches %}
-        <article 
-          class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1" 
-          onclick="window.location.href='/team/coaches/{{ coach.slug }}'"
-          style="aspect-ratio: 3/4"
-        >
-          <!-- Background Photo -->
-          <div class="absolute inset-0 overflow-hidden rounded-2xl">
-            {% if coach.image_url %}
-              <img 
-                src="{{ coach.image_url }}" 
-                alt="{{ coach.name }}" 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              >
-            {% else %}
-              <div class="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-[80px] opacity-50">person</span>
-              </div>
-            {% endif %}
-          </div>
-          
-          <!-- Gradient Overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-black/75 group-hover:via-black/35 transition-all duration-300"></div>
-          
-          <!-- ✅ ВИПРАВЛЕНО: Badge -->
-          <div class="absolute top-3 right-3 z-20">
-            {% if coach.is_national_team %}
-              <span class="inline-block bg-orange-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-                Збірна України
-              </span>
-            {% else %}
-              <span class="inline-block bg-amber-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-                {{ coach.category_label if coach.category_label else 'Клубний тренер' }}
-              </span>
-            {% endif %}
-          </div>
-
-          <!-- Content -->
-          <div class="absolute bottom-0 left-0 right-0 z-10 p-4 md:p-5 transition-all duration-300 group-hover:pb-5 group-hover:md:pb-6">
-            <h3 class="text-white text-lg md:text-xl font-black leading-tight mb-1.5 drop-shadow-lg">
-              {{ coach.name }}
-            </h3>
-            <div class="text-white/95 text-sm md:text-base font-semibold drop-shadow-md">
-              {% if coach.position %}
-                {{ coach.position }}
-              {% else %}
-                Тренер
-              {% endif %}
-              {% if coach.city %}
-                • {{ coach.city }}
-              {% endif %}
+            <!-- Quick Links Card -->
+            <div class="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-100 hidden lg:block">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-blue-600 text-[24px]">campaign</span>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900 mb-1">Слідкуйте за командою</p>
+                        <p class="text-xs text-gray-600 mb-3">Новини, змагання та досягнення наших спортсменів</p>
+                        <a class="text-xs font-bold text-blue-600 hover:underline" href="/news" data-page="news">Читати новини →</a>
+                    </div>
+                </div>
             </div>
-          </div>
-        </article>
-      {% endfor %}
-    {% else %}
-      <!-- Empty state -->
-      <div class="col-span-full text-center py-16">
-        <span class="material-symbols-outlined text-gray-300 text-[80px] mb-4 block">search_off</span>
-        <p class="text-[#111418] text-lg font-semibold mb-2">Тренерів не знайдено</p>
-        <p class="text-[#617589] text-sm">Спробуйте змінити фільтри</p>
-      </div>
-    {% endif %}
-  </div>
+        </aside>
 
-  <!-- Coaches Pagination -->
-  {% if coaches_total_pages and coaches_total_pages > 1 %}
-  <div class="mt-12 space-y-4">
-    <!-- Results Info -->
-    <div class="text-center">
-      <p class="text-sm text-[#617589]">
-        Сторінка <span class="font-bold text-[#111418]">{{ coaches_page }}</span> з 
-        <span class="font-bold text-[#111418]">{{ coaches_total_pages }}</span>
-        <span class="mx-2">•</span>
-        {% if coaches_tab == 'national' %}
-          Тренерів національної збірної: <span class="font-bold text-[#111418]">{{ national_coaches_total }}</span>
-        {% elif coaches_tab == 'regional' %}
-          Регіональних тренерів: <span class="font-bold text-[#111418]">{{ regional_coaches_total }}</span>
-        {% else %}
-          Всього тренерів: <span class="font-bold text-[#111418]">{{ national_coaches_total + regional_coaches_total }}</span>
-        {% endif %}
-      </p>
+        <!-- Main Content Area -->
+        <div class="flex-1 w-full space-y-12">
+            
+            <!-- ==================== ATHLETES SECTION ==================== -->
+            <section id="athletes-section" class="scroll-mt-24">
+                
+                <!-- Section Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+                            <span class="material-symbols-outlined text-[22px]">sports_martial_arts</span>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900">Спортсмени</h2>
+                            <p class="text-sm text-gray-500">{{ total_athletes }} атлетів збірної</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters Bar (Pills Style) -->
+                <div id="athletes-filters" class="flex flex-wrap items-center gap-2 md:gap-3 bg-white p-3 rounded-xl shadow-sm border border-gray-100 mb-6">
+                    
+                    <!-- Search -->
+                    <div class="relative flex-grow max-w-xs">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-[18px]">search</span>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="athletes-search-input" 
+                            placeholder="Пошук..." 
+                            value="{{ search_query }}"
+                            class="block w-full pl-10 pr-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-lg text-sm placeholder-gray-400 focus:outline-none transition-all"
+                            onkeypress="if(event.key==='Enter') applyAthletesFilters()"
+                        />
+                    </div>
+                    
+                    <!-- Sex Filter -->
+                    <div class="relative group custom-filter-dropdown" data-name="sex" data-value="{{ current_sex or 'all' }}">
+                        <button class="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 active:border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all text-gray-700">
+                            <span class="filter-label">
+                                {% if current_sex == 'men' %}♂️ Чоловіки
+                                {% elif current_sex == 'women' %}♀️ Жінки
+                                {% else %}👥 Всі{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-400 text-[16px] md:text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">👥 Всі</button>
+                            <button class="filter-dropdown-item" data-value="men">♂️ Чоловіки</button>
+                            <button class="filter-dropdown-item" data-value="women">♀️ Жінки</button>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="relative group custom-filter-dropdown" data-name="status" data-value="{{ current_status or 'all' }}">
+                        <button class="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 active:border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all text-gray-700">
+                            <span class="filter-label">
+                                {% if current_status == 'main' %}⭐ Основа
+                                {% elif current_status == 'candidate' %}🎯 Кандидат
+                                {% elif current_status == 'reserve' %}💪 Резерв
+                                {% else %}📋 Всі статуси{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-400 text-[16px] md:text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">📋 Всі статуси</button>
+                            <button class="filter-dropdown-item" data-value="main">⭐ Основний склад</button>
+                            <button class="filter-dropdown-item" data-value="candidate">🎯 Кандидат</button>
+                            <button class="filter-dropdown-item" data-value="reserve">💪 Резерв</button>
+                        </div>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <div class="ml-auto">
+                        <button onclick="clearAthletesFilters()" class="flex items-center justify-center w-8 h-8 md:w-auto md:px-2 md:py-1.5 rounded-lg text-gray-400 hover:text-blue-600 active:bg-gray-100 transition-colors" title="Очистити фільтри">
+                            <span class="material-symbols-outlined text-[20px]">tune</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Athletes Grid -->
+                <div id="athletes-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {% if athletes and athletes|length > 0 %}
+                        {% for athlete in athletes %}
+                        <article class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-soft border border-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1" 
+                                 onclick="window.location.href='/team/athletes/{{ athlete.slug }}'" 
+                                 style="aspect-ratio: 3/4;">
+                            
+                            <!-- Background Photo -->
+                            <div class="absolute inset-0 overflow-hidden">
+                                {% if athlete.photo_url %}
+                                <img src="{{ athlete.photo_url }}" alt="{{ athlete.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                {% else %}
+                                <div class="w-full h-full bg-gradient-to-br from-blue-200 to-blue-400 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-[80px] opacity-50">person</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                            
+                            <!-- Status Badge -->
+                            <div class="absolute top-3 right-3 z-20">
+                                {% if athlete.status == 'main' %}
+                                <span class="inline-block bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-lg shadow-lg">Основа</span>
+                                {% elif athlete.status == 'candidate' %}
+                                <span class="inline-block bg-purple-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-lg shadow-lg">Кандидат</span>
+                                {% elif athlete.status == 'reserve' %}
+                                <span class="inline-block bg-amber-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-lg shadow-lg">Резерв</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="absolute bottom-0 left-0 right-0 z-10 p-4 transition-all duration-300">
+                                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1 drop-shadow-lg">{{ athlete.name }}</h3>
+                                <div class="text-white/90 text-sm font-medium drop-shadow-md">
+                                    {% if athlete.age_category %}{{ athlete.age_category }}{% else %}—{% endif %} • {% if athlete.weight %}{{ athlete.weight }} кг{% endif %}
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                    <!-- Empty State -->
+                    <div class="col-span-full bg-white rounded-xl p-12 text-center border border-gray-100">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                            <span class="material-symbols-outlined text-gray-400 text-[36px]">search_off</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Спортсменів не знайдено</h3>
+                        <p class="text-gray-600 mb-6">Спробуйте змінити фільтри пошуку</p>
+                        <button onclick="clearAthletesFilters()" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-md">
+                            <span class="material-symbols-outlined text-[20px]">refresh</span>
+                            Скинути фільтри
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Pagination -->
+                {% if total_pages and total_pages > 1 %}
+                <div id="athletes-pagination" class="mt-8">
+                    <div class="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+                        <!-- Results Info -->
+                        <p class="text-sm text-gray-700 hidden sm:block">
+                            Показано <span class="font-medium text-gray-900">{{ (current_page - 1) * 16 + 1 }}</span> - 
+                            <span class="font-medium text-gray-900">{{ [current_page * 16, total_athletes]|min }}</span> з 
+                            <span class="font-medium text-gray-900">{{ total_athletes }}</span>
+                        </p>
+
+                        <!-- Pagination Controls -->
+                        <nav class="flex items-center gap-1">
+                            <!-- Previous -->
+                            {% if has_prev %}
+                            <a href="?page={{ current_page - 1 }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                               data-page="team"
+                               class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 transition-all">
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </a>
+                            {% else %}
+                            <span class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </span>
+                            {% endif %}
+
+                            <!-- Pages -->
+                            {% set start_page = [1, current_page - 2]|max %}
+                            {% set end_page = [total_pages, current_page + 2]|min %}
+                            
+                            {% for page_num in range(start_page, end_page + 1) %}
+                                {% if page_num == current_page %}
+                                <span class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-600 text-white text-sm font-bold shadow-md">{{ page_num }}</span>
+                                {% else %}
+                                <a href="?page={{ page_num }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                                   data-page="team"
+                                   class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 text-sm font-medium transition-all">{{ page_num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            <!-- Next -->
+                            {% if has_next %}
+                            <a href="?page={{ current_page + 1 }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                               data-page="team"
+                               class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 transition-all">
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </a>
+                            {% else %}
+                            <span class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </span>
+                            {% endif %}
+                        </nav>
+                    </div>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- ==================== COACHES SECTION ==================== -->
+            <section id="coaches-section" class="scroll-mt-24">
+                
+                <!-- Section Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-lg">
+                            <span class="material-symbols-outlined text-[22px]">supervisor_account</span>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900">Тренерський штаб</h2>
+                            <p class="text-sm text-gray-500">{{ national_coaches_total + regional_coaches_total }} тренерів</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters Bar -->
+                <div id="coaches-filters" class="flex flex-wrap items-center gap-2 md:gap-3 bg-white p-3 rounded-xl shadow-sm border border-gray-100 mb-6">
+                    
+                    <!-- Search -->
+                    <div class="relative flex-grow max-w-xs">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-[18px]">search</span>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="coaches-search-input" 
+                            placeholder="Ім'я, місто..." 
+                            value="{{ coaches_search_query }}"
+                            class="block w-full pl-10 pr-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 focus:border-orange-600 focus:ring-1 focus:ring-orange-600 rounded-lg text-sm placeholder-gray-400 focus:outline-none transition-all"
+                            onkeypress="if(event.key==='Enter') applyCoachesFilters()"
+                        />
+                    </div>
+                    
+                    <!-- Team Type Filter -->
+                    <div class="relative group custom-filter-dropdown" data-name="coaches_tab" data-value="{{ coaches_tab or 'all' }}">
+                        <button class="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 active:border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all text-gray-700">
+                            <span class="filter-label">
+                                {% if coaches_tab == 'national' %}🏆 Національна
+                                {% elif coaches_tab == 'regional' %}🌍 Регіональні
+                                {% else %}👥 Всі тренери{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-400 text-[16px] md:text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">👥 Всі тренери</button>
+                            <button class="filter-dropdown-item" data-value="national">🏆 Національна ({{ national_coaches_total }})</button>
+                            <button class="filter-dropdown-item" data-value="regional">🌍 Регіональні ({{ regional_coaches_total }})</button>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="relative group custom-filter-dropdown" data-name="coach_category" data-value="{{ current_coach_category or 'all' }}">
+                        <button class="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 bg-gray-50 border border-transparent hover:border-gray-200 active:border-gray-300 rounded-lg text-xs md:text-sm font-medium transition-all text-gray-700">
+                            <span class="filter-label">
+                                {% if current_coach_category and current_coach_category != 'all' %}{{ coach_category_labels.get(current_coach_category, 'Всі категорії') }}
+                                {% else %}📋 Всі категорії{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-400 text-[16px] md:text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">📋 Всі категорії</button>
+                            {% for key, label in coach_category_labels.items() %}
+                            <button class="filter-dropdown-item" data-value="{{ key }}">{{ label }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <div class="ml-auto">
+                        <button onclick="clearCoachesFilters()" class="flex items-center justify-center w-8 h-8 md:w-auto md:px-2 md:py-1.5 rounded-lg text-gray-400 hover:text-orange-600 active:bg-gray-100 transition-colors" title="Очистити фільтри">
+                            <span class="material-symbols-outlined text-[20px]">tune</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Coaches List -->
+                <div id="coaches-list" class="space-y-3">
+                    {% if coaches and coaches|length > 0 %}
+                        {% for coach in coaches %}
+                        <article class="group cursor-pointer bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-md transition-all duration-300 overflow-hidden"
+                                 onclick="window.location.href='/team/coaches/{{ coach.slug }}'">
+                            <div class="flex items-center gap-4 p-4">
+                                <!-- Photo -->
+                                <div class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden">
+                                    {% if coach.image_url %}
+                                    <img src="{{ coach.image_url }}" alt="{{ coach.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    {% else %}
+                                    <div class="w-full h-full bg-gradient-to-br from-orange-200 to-amber-300 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-[32px]">person</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Info -->
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-base md:text-lg font-bold text-gray-900 group-hover:text-orange-600 transition-colors truncate">{{ coach.name }}</h3>
+                                    <p class="text-sm text-gray-600 truncate">
+                                        {% if coach.position %}{{ coach.position }}{% else %}Тренер{% endif %}
+                                        {% if coach.city %} • {{ coach.city }}{% endif %}
+                                    </p>
+                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                        {% if coach.is_national_team %}
+                                        <span class="inline-flex items-center px-2 py-0.5 bg-orange-50 text-orange-700 rounded-md text-xs font-medium border border-orange-200">🏆 Національна команда</span>
+                                        {% else %}
+                                        <span class="inline-flex items-center px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md text-xs font-medium border border-amber-200">{{ coach.category_label if coach.category_label else 'Регіональний' }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Arrow Icon -->
+                                <div class="flex-shrink-0 hidden md:flex">
+                                    <span class="material-symbols-outlined text-gray-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all">arrow_forward</span>
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                    <!-- Empty State -->
+                    <div class="bg-white rounded-xl p-12 text-center border border-gray-100">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                            <span class="material-symbols-outlined text-gray-400 text-[36px]">search_off</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Тренерів не знайдено</h3>
+                        <p class="text-gray-600 mb-6">Спробуйте змінити фільтри пошуку</p>
+                        <button onclick="clearCoachesFilters()" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold transition-all shadow-md">
+                            <span class="material-symbols-outlined text-[20px]">refresh</span>
+                            Скинути фільтри
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Coaches Pagination -->
+                {% if coaches_total_pages and coaches_total_pages > 1 %}
+                <div class="mt-8">
+                    <div class="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+                        <!-- Results Info -->
+                        <p class="text-sm text-gray-700 hidden sm:block">
+                            Сторінка <span class="font-medium text-gray-900">{{ coaches_page }}</span> з <span class="font-medium text-gray-900">{{ coaches_total_pages }}</span>
+                        </p>
+
+                        <!-- Pagination Controls -->
+                        <nav class="flex items-center gap-1">
+                            <!-- Previous -->
+                            {% if coaches_has_prev %}
+                            <a href="?page={{ current_page }}&coaches_page={{ coaches_page - 1 }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section" 
+                               data-page="team"
+                               class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 transition-all">
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </a>
+                            {% else %}
+                            <span class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                            </span>
+                            {% endif %}
+
+                            <!-- Pages -->
+                            {% set start_page = [1, coaches_page - 2]|max %}
+                            {% set end_page = [coaches_total_pages, coaches_page + 2]|min %}
+                            
+                            {% for page_num in range(start_page, end_page + 1) %}
+                                {% if page_num == coaches_page %}
+                                <span class="w-9 h-9 flex items-center justify-center rounded-lg bg-orange-600 text-white text-sm font-bold shadow-md">{{ page_num }}</span>
+                                {% else %}
+                                <a href="?page={{ current_page }}&coaches_page={{ page_num }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section" 
+                                   data-page="team"
+                                   class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 text-sm font-medium transition-all">{{ page_num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            <!-- Next -->
+                            {% if coaches_has_next %}
+                            <a href="?page={{ current_page }}&coaches_page={{ coaches_page + 1 }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section" 
+                               data-page="team"
+                               class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 transition-all">
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </a>
+                            {% else %}
+                            <span class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                            </span>
+                            {% endif %}
+                        </nav>
+                    </div>
+                </div>
+                {% endif %}
+            </section>
+
+        </div>
     </div>
-
-    <!-- Pagination Controls -->
-    <div class="flex items-center justify-center gap-2">
-      <!-- Previous Button -->
-      {% if coaches_has_prev %}
-        <a 
-          href="?page={{ current_page }}&coaches_page={{ coaches_page - 1 }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section"
-          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-orange-500 hover:text-orange-600 transition-all duration-200 hover:scale-105"
-          title="Попередня сторінка"
-        >
-          <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-        </a>
-      {% else %}
-        <button 
-          disabled 
-          class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-        >
-          <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-        </button>
-      {% endif %}
-
-      <!-- Page Numbers -->
-      <div class="flex items-center gap-2">
-        {% set start_page = [1, coaches_page - 2]|max %}
-        {% set end_page = [coaches_total_pages, coaches_page + 2]|min %}
-        
-        {% if start_page > 1 %}
-          <a 
-            href="?page={{ current_page }}&coaches_page=1&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section"
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200"
-          >
-            1
-          </a>
-          {% if start_page > 2 %}
-            <span class="text-gray-400 px-1">...</span>
-          {% endif %}
-        {% endif %}
-        
-        {% for page_num in range(start_page, end_page + 1) %}
-          {% if page_num == coaches_page %}
-            <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-600 text-white font-bold shadow-lg">
-              {{ page_num }}
-            </span>
-          {% else %}
-            <a 
-              href="?page={{ current_page }}&coaches_page={{ page_num }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section"
-              class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 hover:scale-105"
-            >
-              {{ page_num }}
-            </a>
-          {% endif %}
-        {% endfor %}
-        
-        {% if end_page < coaches_total_pages %}
-          {% if end_page < coaches_total_pages - 1 %}
-            <span class="text-gray-400 px-1">...</span>
-          {% endif %}
-          <a 
-            href="?page={{ current_page }}&coaches_page={{ coaches_total_pages }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section"
-            class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-orange-500 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200"
-          >
-            {{ coaches_total_pages }}
-          </a>
-        {% endif %}
-      </div>
-
-      <!-- Next Button -->
-      {% if coaches_has_next %}
-        <a 
-          href="?page={{ current_page }}&coaches_page={{ coaches_page + 1 }}&coaches_tab={{ coaches_tab }}{% if current_sex != 'all' %}&sex={{ current_sex }}{% endif %}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}#coaches-section"
-          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-orange-500 hover:text-orange-600 transition-all duration-200 hover:scale-105"
-          title="Наступна сторінка"
-        >
-          <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-        </a>
-      {% else %}
-        <button 
-          disabled 
-          class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-        >
-          <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-        </button>
-      {% endif %}
-    </div>
-  </div>
-  {% endif %}
-
-</div>
-
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-center">
-    <h2 class="text-white text-3xl md:text-4xl font-black mb-4">
-      Слідкуйте за успіхами нашої команди
-    </h2>
-    <p class="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
-      Підтримайте українське дзюдо — слідкуйте за змаганнями та перемогами наших спортсменів
-    </p>
-    <a 
-      href="/news" 
-      class="inline-flex items-center gap-2 bg-white text-blue-600 font-bold py-4 px-8 rounded-xl hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl"
-    >
-      <span>Читати новини</span>
-      <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-    </a>
-  </section>
-
 </main>
 
-<!-- CSS для кастомних дропдаунів -->
 <style>
-  .custom-dropdown,
-  .custom-dropdown-coach {
-    position: relative;
-    user-select: none;
-  }
-
-  .custom-dropdown-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 16px;
-    background: white;
-    border: 1px solid #D1D5DB;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .custom-dropdown-trigger:hover {
-    border-color: #9CA3AF;
-  }
-
-  .custom-dropdown.active .custom-dropdown-trigger,
-  .custom-dropdown-coach.active .custom-dropdown-trigger {
-    border-color: #111418;
-    box-shadow: 0 0 0 1px #111418;
-  }
-
-  .custom-dropdown-value {
-    font-size: 14px;
-    color: #111418;
-    font-weight: 400;
-  }
-
-  .custom-dropdown-arrow {
-    display: flex;
-    align-items: center;
-    color: #6B7280;
-    transition: transform 0.2s;
-  }
-
-  .custom-dropdown.active .custom-dropdown-arrow,
-  .custom-dropdown-coach.active .custom-dropdown-arrow {
-    transform: rotate(180deg);
-  }
-
-  .custom-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.2s;
-    z-index: 50;
-    max-height: 240px;
-    overflow-y: auto;
-  }
-
-  .custom-dropdown.active .custom-dropdown-menu,
-  .custom-dropdown-coach.active .custom-dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .custom-dropdown-item {
-    padding: 10px 16px;
-    font-size: 14px;
-    color: #111418;
-    cursor: pointer;
-    transition: background-color 0.15s;
-  }
-
-  .custom-dropdown-item:hover {
-    background-color: #F3F4F6;
-  }
-
-  .custom-dropdown-item.selected {
-    background-color: #F9FAFB;
-    font-weight: 500;
-  }
-
-  /* Scrollbar для меню */
-  .custom-dropdown-menu::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .custom-dropdown-menu::-webkit-scrollbar-track {
-    background: #F3F4F6;
-    border-radius: 4px;
-  }
-
-  .custom-dropdown-menu::-webkit-scrollbar-thumb {
-    background: #D1D5DB;
-    border-radius: 4px;
-  }
-
-  .custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
-    background: #9CA3AF;
-  }
-</style>
-<style>
-    /* Loader overlay */
-    .page-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
+    /* Custom Filter Dropdowns */
+    .custom-filter-dropdown {
+        position: relative;
     }
-  
-    .page-loader.active {
-      opacity: 1;
-      visibility: visible;
-    }
-  
-    .loader-spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid #E5E7EB;
-      border-top-color: #111418;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-  
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  
-    /* Fade анімація для контенту */
-    .fade-content {
-      animation: fadeIn 0.4s ease-in-out;
-    }
-  
-    @keyframes fadeIn {
-      from {
+
+    .filter-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 200px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s;
+        z-index: 50;
+        overflow: hidden;
+    }
+
+    .custom-filter-dropdown.active .filter-dropdown-menu {
         opacity: 1;
+        visibility: visible;
         transform: translateY(0);
-      }
     }
-  
-    /* Smooth scroll */
+
+    .filter-dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 14px;
+        text-align: left;
+        color: #111418;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.15s;
+    }
+
+    .filter-dropdown-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    .filter-dropdown-item.active {
+        background-color: #eff6ff;
+        font-weight: 600;
+        color: #2563eb;
+    }
+
+    /* Grid Transitions */
+    #athletes-grid,
+    #coaches-list {
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #athletes-grid.loading,
+    #coaches-list.loading {
+        opacity: 0.5;
+    }
+
+    /* Smooth Scroll */
     html {
-      scroll-behavior: smooth;
+        scroll-behavior: smooth;
     }
-  </style>
-  
-  <!-- Loader HTML -->
-  <div class="page-loader" id="pageLoader">
-    <div class="loader-spinner"></div>
-  </div>
-<script>
-// ============================================
-// ГЛОБАЛЬНІ ЗМІННІ
-// ============================================
-let currentFilters = {
-  sex: '{{ current_sex }}' || 'all',
-  status: '{{ current_status }}' || 'all',
-  search: '{{ search_query }}' || '',
-  page: {{ current_page }} || 1
-};
 
-// ============================================
-// ІНІЦІАЛІЗАЦІЯ
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-  initCustomDropdowns();
-  initCoachDropdowns();
-  initPaginationListeners();
-  initCoachesDropdownsFromURL();
-  
-  // CSS transition для grid
-  const grid = document.querySelector('#athletes-grid');
-  if (grid) {
-    grid.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out';
-  }
-  
-  // Відновлюємо активну вкладку
-  const hash = window.location.hash;
-  if (hash === '#coaches-section') {
-    switchTab('coaches');
-  } else {
-    switchTab('athletes');
-  }
-});
-
-// ============================================
-// LOADER FUNCTIONS
-// ============================================
-function showLoader() {
-  document.getElementById('pageLoader').classList.add('active');
-}
-
-function hideLoader() {
-  document.getElementById('pageLoader').classList.remove('active');
-}
-
-// ============================================
-// URL MANAGEMENT
-// ============================================
-function updateURL(filters) {
-  let url = '/team?page=' + filters.page;
-  if (filters.sex !== 'all') url += '&sex=' + filters.sex;
-  if (filters.status !== 'all') url += '&status=' + filters.status;
-  if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
-  
-  window.history.pushState({ filters: filters }, '', url);
-}
-
-// ============================================
-// AJAX - ЗАВАНТАЖЕННЯ АТЛЕТІВ
-// ============================================
-async function loadAthletes(filters, scrollToTop = true) {
-  showLoader();
-  
-  try {
-    let url = '/team?page=' + filters.page;
-    if (filters.sex !== 'all') url += '&sex=' + filters.sex;
-    if (filters.status !== 'all') url += '&status=' + filters.status;
-    if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
-    
-    const response = await fetch(url, {
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    });
-    
-    if (!response.ok) throw new Error('Network error');
-    
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    const newGrid = doc.querySelector('#athletes-grid');
-    const newPaginationWrapper = doc.querySelector('#athletes-pagination');
-    
-    const currentGrid = document.querySelector('#athletes-grid');
-    const currentPaginationWrapper = document.querySelector('#athletes-pagination');
-    
-    if (!currentGrid) {
-      console.error('Grid not found');
-      hideLoader();
-      return;
+    /* Sidebar Active States */
+    .nav-anchor-link.active {
+        background-color: #eff6ff !important;
+        color: #2563eb !important;
+        font-weight: 600;
+        border-left: 3px solid #2563eb;
     }
-    
-    // Fade out з затримкою
-    currentGrid.style.opacity = '0';
-    currentGrid.style.transform = 'translateY(10px)';
-    
-    setTimeout(() => {
-      if (newGrid) {
-        currentGrid.innerHTML = newGrid.innerHTML;
-      }
-      
-      if (newPaginationWrapper && currentPaginationWrapper) {
-        currentPaginationWrapper.innerHTML = newPaginationWrapper.innerHTML;
-      } else if (!newPaginationWrapper && currentPaginationWrapper) {
-        currentPaginationWrapper.innerHTML = '';
-      }
-      
-      initPaginationListeners();
-      
-      currentGrid.style.opacity = '1';
-      currentGrid.style.transform = 'translateY(0)';
-      
-      if (scrollToTop) {
-        const athletesSection = document.getElementById('athletes-section');
-        if (athletesSection) {
-          athletesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    .shadow-soft {
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script data-page-script="true">
+    (function() {
+        'use strict';
+        
+        let isInitialized = false;
+        
+        // ==================== URL BUILDERS ====================
+        
+        function buildAthletesURL(filters) {
+            let url = '/team?page=' + (filters.page || 1);
+            
+            if (filters.sex && filters.sex !== 'all') url += '&sex=' + filters.sex;
+            if (filters.status && filters.status !== 'all') url += '&status=' + filters.status;
+            if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
+            
+            return url;
         }
-      }
-      
-      hideLoader();
-    }, 300);
-    
-    updateURL(filters);
-    currentFilters = { ...filters };
-    
-  } catch (error) {
-    console.error('Error loading athletes:', error);
-    hideLoader();
-    window.location.href = '/team?page=' + filters.page;
-  }
-}
-
-// ============================================
-// ПАГІНАЦІЯ
-// ============================================
-function initPaginationListeners() {
-  const paginationWrapper = document.querySelector('#athletes-pagination');
-  if (!paginationWrapper) return;
-  
-  const paginationLinks = paginationWrapper.querySelectorAll('a[href*="page="]');
-  
-  paginationLinks.forEach(link => {
-    const newLink = link.cloneNode(true);
-    link.parentNode.replaceChild(newLink, link);
-    
-    newLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const url = new URL(this.href);
-      const page = parseInt(url.searchParams.get('page')) || 1;
-      
-      loadAthletes({
-        ...currentFilters,
-        page: page
-      }, true);
-    });
-  });
-}
-
-// ============================================
-// КАСТОМНІ ДРОПДАУНИ (АТЛЕТИ)
-// ============================================
-function initCustomDropdowns() {
-  const dropdowns = document.querySelectorAll('.custom-dropdown');
-  
-  dropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
-    const items = dropdown.querySelectorAll('.custom-dropdown-item');
-    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
-    
-    trigger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      document.querySelectorAll('.custom-dropdown.active, .custom-dropdown-coach.active').forEach(d => {
-        if (d !== dropdown) d.classList.remove('active');
-      });
-      
-      dropdown.classList.toggle('active');
-    });
-    
-    items.forEach(item => {
-      const value = item.getAttribute('data-value');
-      
-      if (value === dropdown.getAttribute('data-value')) {
-        item.classList.add('selected');
-      }
-      
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
         
-        dropdown.setAttribute('data-value', value);
-        valueSpan.textContent = item.textContent;
+        function buildCoachesURL(filters) {
+            const params = new URLSearchParams();
+            
+            params.set('page', filters.page || 1);
+            if (filters.sex && filters.sex !== 'all') params.set('sex', filters.sex);
+            if (filters.status && filters.status !== 'all') params.set('status', filters.status);
+            
+            params.set('coaches_tab', filters.coachesTab || 'all');
+            params.set('coaches_page', filters.coachesPage || 1);
+            
+            if (filters.coachCategory && filters.coachCategory !== 'all') {
+                params.set('coach_category', filters.coachCategory);
+            }
+            
+            if (filters.coachesSearch) {
+                params.set('coaches_search', filters.coachesSearch);
+            }
+            
+            return '/team?' + params.toString() + '#coaches-section';
+        }
         
-        items.forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
+        function navigateToURL(url) {
+            if (window.navigationManager) {
+                window.navigationManager.navigateTo(url);
+            } else {
+                window.location.href = url;
+            }
+        }
         
-        dropdown.classList.remove('active');
-      });
-    });
-  });
-  
-  document.addEventListener('click', function() {
-    document.querySelectorAll('.custom-dropdown.active, .custom-dropdown-coach.active').forEach(d => {
-      d.classList.remove('active');
-    });
-  });
-}
-
-// ============================================
-// КАСТОМНІ ДРОПДАУНИ (ТРЕНЕРИ)
-// ============================================
-function initCoachDropdowns() {
-  const dropdowns = document.querySelectorAll('.custom-dropdown-coach');
-  
-  dropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector('.custom-dropdown-trigger');
-    const items = dropdown.querySelectorAll('.custom-dropdown-item');
-    const valueSpan = dropdown.querySelector('.custom-dropdown-value');
-    
-    trigger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      
-      document.querySelectorAll('.custom-dropdown.active, .custom-dropdown-coach.active').forEach(d => {
-        if (d !== dropdown) d.classList.remove('active');
-      });
-      
-      dropdown.classList.toggle('active');
-    });
-    
-    items.forEach(item => {
-      const value = item.getAttribute('data-value');
-      
-      if (value === dropdown.getAttribute('data-value')) {
-        item.classList.add('selected');
-      }
-      
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
+        // ==================== ATHLETES FILTERS ====================
         
-        dropdown.setAttribute('data-value', value);
-        valueSpan.textContent = item.textContent;
+        function applyAthletesFilters() {
+            const sex = document.querySelector('[data-name="sex"]')?.getAttribute('data-value') || 'all';
+            const status = document.querySelector('[data-name="status"]')?.getAttribute('data-value') || 'all';
+            const search = document.getElementById('athletes-search-input')?.value?.trim() || '';
+            
+            const filters = { sex, status, search, page: 1 };
+            const url = buildAthletesURL(filters);
+            navigateToURL(url);
+        }
         
-        items.forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
+        function clearAthletesFilters() {
+            navigateToURL('/team');
+        }
         
-        dropdown.classList.remove('active');
-      });
-    });
-  });
-}
-
-// ============================================
-// ІНІЦІАЛІЗАЦІЯ ДРОПДАУНІВ ТРЕНЕРІВ З URL
-// ============================================
-function initCoachesDropdownsFromURL() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const coachesTab = urlParams.get('coaches_tab') || 'all';
-  const coachCategory = urlParams.get('coach_category') || 'all';
-  
-  // Оновлюємо дропдаун coaches_tab
-  const coachesTabDropdown = document.querySelector('[data-name="coaches_tab"]');
-  if (coachesTabDropdown) {
-    coachesTabDropdown.dataset.value = coachesTab;
-    const valueSpan = coachesTabDropdown.querySelector('.custom-dropdown-value');
-    if (valueSpan) {
-      if (coachesTab === 'national') {
-        valueSpan.textContent = 'Національна збірна';
-      } else if (coachesTab === 'regional') {
-        valueSpan.textContent = 'Регіональні та клубні';
-      } else {
-        valueSpan.textContent = 'Усі тренери';
-      }
-    }
-  }
-  
-  // Оновлюємо дропдаун coach_category
-  const coachCategoryDropdown = document.querySelector('[data-name="coach_category"]');
-  if (coachCategoryDropdown) {
-    coachCategoryDropdown.dataset.value = coachCategory;
-  }
-}
-
-// ============================================
-// TAB SWITCHING
-// ============================================
-function switchTab(tab) {
-  document.querySelectorAll('.tab-button').forEach(btn => {
-    btn.classList.remove('bg-[#111418]', 'text-white');
-    btn.classList.add('text-[#617589]', 'hover:bg-gray-50');
-  });
-  
-  const activeBtn = document.getElementById(`tab-${tab}`);
-  activeBtn.classList.add('bg-[#111418]', 'text-white');
-  activeBtn.classList.remove('text-[#617589]', 'hover:bg-gray-50');
-  
-  document.querySelectorAll('.tab-content').forEach(section => {
-    section.classList.add('hidden');
-  });
-  
-  document.getElementById(`${tab}-section`).classList.remove('hidden');
-  
-  // Оновлюємо URL з анкором
-  const params = new URLSearchParams(window.location.search);
-  window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}#${tab}-section`);
-}
-
-// ============================================
-// ФІЛЬТРАЦІЯ АТЛЕТІВ
-// ============================================
-function filterAthletes() {
-  const sexDropdown = document.querySelector('.custom-dropdown[data-name="sex"]');
-  const statusDropdown = document.querySelector('.custom-dropdown[data-name="status"]');
-  const search = document.getElementById('searchInput').value.trim();
-  
-  const filters = {
-    sex: sexDropdown.getAttribute('data-value'),
-    status: statusDropdown.getAttribute('data-value'),
-    search: search,
-    page: 1
-  };
-  
-  loadAthletes(filters, true);
-}
-
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  filterAthletes();
-}
-
-function clearAllFilters() {
-  const sexDropdown = document.querySelector('.custom-dropdown[data-name="sex"]');
-  const statusDropdown = document.querySelector('.custom-dropdown[data-name="status"]');
-  
-  sexDropdown.setAttribute('data-value', 'all');
-  sexDropdown.querySelector('.custom-dropdown-value').textContent = 'Усі';
-  sexDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
-    item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
-  });
-  
-  statusDropdown.setAttribute('data-value', 'all');
-  statusDropdown.querySelector('.custom-dropdown-value').textContent = 'Усі';
-  statusDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
-    item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
-  });
-  
-  document.getElementById('searchInput').value = '';
-  
-  loadAthletes({
-    sex: 'all',
-    status: 'all',
-    search: '',
-    page: 1
-  }, true);
-}
-
-// ============================================
-// ФІЛЬТРАЦІЯ ТРЕНЕРІВ
-// ============================================
-// ✅ ОНОВЛЕНО: Фільтрація тренерів з пошуком
-function filterCoaches() {
-  const coachesTabDropdown = document.querySelector('[data-name="coaches_tab"]');
-  const coachCategoryDropdown = document.querySelector('[data-name="coach_category"]');
-  const coachesSearch = document.getElementById('coachesSearchInput').value.trim();
-  
-  if (!coachesTabDropdown || !coachCategoryDropdown) {
-    console.error('Dropdowns not found');
-    return;
-  }
-  
-  const coachesTab = coachesTabDropdown.dataset.value;
-  const coachCategory = coachCategoryDropdown.dataset.value;
-  
-  const params = new URLSearchParams(window.location.search);
-  
-  // Зберігаємо параметри спортсменів
-  if ('{{ current_sex }}' !== 'all') params.set('sex', '{{ current_sex }}');
-  if ('{{ current_status }}' !== 'all') params.set('status', '{{ current_status }}');
-  params.set('page', '{{ current_page }}');
-  
-  // Встановлюємо параметри тренерів
-  params.set('coaches_tab', coachesTab);
-  params.set('coaches_page', '1');
-  
-  if (coachCategory && coachCategory !== 'all') {
-    params.set('coach_category', coachCategory);
-  } else {
-    params.delete('coach_category');
-  }
-  
-  // ✅ ДОДАНО: Пошук
-  if (coachesSearch) {
-    params.set('coaches_search', coachesSearch);
-  } else {
-    params.delete('coaches_search');
-  }
-  
-  window.location.href = `${window.location.pathname}?${params.toString()}#coaches-section`;
-}
-
-// ✅ ДОДАНО: Очистити пошук тренерів
-function clearCoachSearch() {
-  document.getElementById('coachesSearchInput').value = '';
-  filterCoaches();
-}
-
-// ✅ ОНОВЛЕНО: Очистити всі фільтри тренерів
-function clearCoachFilters() {
-  const params = new URLSearchParams(window.location.search);
-  
-  // Зберігаємо параметри спортсменів
-  if ('{{ current_sex }}' !== 'all') params.set('sex', '{{ current_sex }}');
-  if ('{{ current_status }}' !== 'all') params.set('status', '{{ current_status }}');
-  params.set('page', '{{ current_page }}');
-  
-  // Скидаємо параметри тренерів
-  params.set('coaches_tab', 'all');
-  params.set('coaches_page', '1');
-  params.delete('coach_category');
-  params.delete('coaches_search');
-  
-  window.location.href = `${window.location.pathname}?${params.toString()}#coaches-section`;
-}
-
-// ============================================
-// BROWSER HISTORY
-// ============================================
-window.addEventListener('popstate', function(event) {
-  if (event.state && event.state.filters) {
-    loadAthletes(event.state.filters, false);
-  } else {
-    location.reload();
-  }
-});
-
-// ============================================
-// AGE CATEGORY HELPER
-// ============================================
-function getAgeCategory(age, sex) {
-  if (!age || age < 12) {
-    return 'Не вказано';
-  }
-  
-  const isMale = ['men', 'man', 'male', 'м', 'чоловік'].includes(String(sex).toLowerCase());
-  
-  if (age <= 13) {
-    return 'Діти';
-  } else if (age <= 14) {
-    return isMale ? 'Молодші юнаки' : 'Молодші дівчата';
-  } else if (age <= 15) {
-    return isMale ? 'Юнаки' : 'Дівчата';
-  } else if (age <= 16) {
-    return isMale ? 'Молодші кадети' : 'Молодші кадетки';
-  } else if (age <= 17) {
-    return isMale ? 'Кадети' : 'Кадетки';
-  } else if (age <= 20) {
-    return isMale ? 'Юніори' : 'Юніорки';
-  } else if (age <= 22) {
-    return 'Молодь';
-  } else {
-    return isMale ? 'Чоловіки' : 'Жінки';
-  }
-}
-
-// ============================================
-// RENDER COACHES (НЕ ВИКОРИСТОВУЄТЬСЯ ЗАРАЗ)
-// ============================================
-function renderCoaches(coaches) {
-  const grid = document.getElementById('coaches-grid');
-  
-  if (coaches.length === 0) {
-    grid.innerHTML = `
-      <div class="col-span-full text-center py-16">
-        <span class="material-symbols-outlined text-gray-300 text-[80px] mb-4 block">search_off</span>
-        <p class="text-[#111418] text-lg font-semibold mb-2">Тренерів не знайдено</p>
-        <p class="text-[#617589] text-sm">Спробуйте змінити фільтри</p>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = coaches.map(coach => {
-    const awardsHTML = coach.awards_list && coach.awards_list.length > 0 
-      ? `<div class="mt-2 flex items-center gap-1.5">
-           <span class="material-symbols-outlined text-yellow-300 text-[18px]">emoji_events</span>
-           <span class="text-yellow-300 text-xs font-bold">${coach.awards_list.length} нагород</span>
-         </div>`
-      : '';
-
-    const subtitle = coach.position || coach.city || '';
-
-    return `
-      <article 
-        class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
-        style="aspect-ratio: 3/4"
-        onclick="window.location.href='/team/coaches/${coach.slug}'"
-      >
-        <div class="absolute inset-0 overflow-hidden rounded-2xl">
-          ${coach.image_url 
-            ? `<img src="${coach.image_url}" alt="${coach.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">`
-            : `<div class="w-full h-full bg-gradient-to-br from-orange-200 to-orange-400 flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-[80px] opacity-50">person</span>
-              </div>`
-          }
-        </div>
+        // ==================== COACHES FILTERS ====================
         
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-black/75 group-hover:via-black/35 transition-all duration-300"></div>
+        function applyCoachesFilters() {
+            const coachesTab = document.querySelector('[data-name="coaches_tab"]')?.getAttribute('data-value') || 'all';
+            const coachCategory = document.querySelector('[data-name="coach_category"]')?.getAttribute('data-value') || 'all';
+            const coachesSearch = document.getElementById('coaches-search-input')?.value?.trim() || '';
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const filters = {
+                page: parseInt(urlParams.get('page')) || 1,
+                sex: urlParams.get('sex') || 'all',
+                status: urlParams.get('status') || 'all',
+                coachesTab,
+                coachCategory,
+                coachesSearch,
+                coachesPage: 1
+            };
+            
+            const url = buildCoachesURL(filters);
+            navigateToURL(url);
+        }
         
-        <div class="absolute top-3 right-3 z-20">
-          <span class="inline-block bg-orange-600/90 backdrop-blur-sm text-white text-[10px] font-bold uppercase px-3 py-1.5 rounded-lg shadow-lg">
-            ${coach.category_label}
-          </span>
-        </div>
-
-        <div class="absolute bottom-0 left-0 right-0 z-10 p-4 md:p-5 transition-all duration-300 group-hover:pb-5 group-hover:md:pb-6">
-          <h3 class="text-white text-lg md:text-xl font-black leading-tight mb-1.5 drop-shadow-lg">
-            ${coach.name}
-          </h3>
-          ${subtitle ? `<div class="text-white/95 text-sm md:text-base font-semibold drop-shadow-md">${subtitle}</div>` : ''}
-          ${awardsHTML}
-        </div>
-      </article>
-    `;
-  }).join('');
-}
+        function clearCoachesFilters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = '/team?page=' + (urlParams.get('page') || '1') + '&coaches_tab=all#coaches-section';
+            navigateToURL(url);
+        }
+        
+        // ==================== DROPDOWNS ====================
+        
+        function initFilterDropdowns() {
+            const dropdowns = document.querySelectorAll('.custom-filter-dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                const button = dropdown.querySelector('button');
+                const items = dropdown.querySelectorAll('.filter-dropdown-item');
+                const label = dropdown.querySelector('.filter-label');
+                
+                if (!button || !label) return;
+                
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Close others
+                    document.querySelectorAll('.custom-filter-dropdown.active').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('active');
+                    });
+                    
+                    dropdown.classList.toggle('active');
+                });
+                
+                items.forEach(item => {
+                    const value = item.getAttribute('data-value');
+                    if (value === dropdown.getAttribute('data-value')) {
+                        item.classList.add('active');
+                    }
+                    
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        
+                        dropdown.setAttribute('data-value', value);
+                        label.textContent = this.textContent;
+                        
+                        dropdown.querySelectorAll('.filter-dropdown-item').forEach(i => {
+                            i.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Close on outside click
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.custom-filter-dropdown.active').forEach(d => {
+                    d.classList.remove('active');
+                });
+            });
+        }
+        
+        // ==================== SIDEBAR SCROLL SPY ====================
+        
+        function initScrollSpy() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-anchor-link');
+            
+            function updateActiveLink() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-section') === current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink(); // Initial call
+        }
+        
+        // ==================== INITIALIZATION ====================
+        
+        function init() {
+            if (isInitialized) return;
+            
+            console.log('[Team] Initializing...');
+            
+            initFilterDropdowns();
+            initScrollSpy();
+            
+            // Handle hash on load
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const element = document.querySelector(window.location.hash);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
+            }
+            
+            isInitialized = true;
+            console.log('[Team] Ready');
+        }
+        
+        function cleanup() {
+            console.log('[Team] Cleanup');
+            isInitialized = false;
+        }
+        
+        // ==================== GLOBAL EXPORTS ====================
+        
+        window.applyAthletesFilters = applyAthletesFilters;
+        window.clearAthletesFilters = clearAthletesFilters;
+        window.applyCoachesFilters = applyCoachesFilters;
+        window.clearCoachesFilters = clearCoachesFilters;
+        
+        // ==================== AUTO-INIT ====================
+        
+        window.addEventListener('pageCleanup', cleanup);
+        window.addEventListener('pageInit', () => {
+            if (window.location.pathname.startsWith('/team')) init();
+        });
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+    })();
 </script>
-
 {% endblock %}

@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+
+{% block title %}Тренери збірної - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+
+{% block subheader %}
+<!-- Team Subheader Navigation -->
+<div class="fixed top-16 lg:top-20 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide py-2" aria-label="Навігація команди">
+            <!-- Athletes -->
+            <a href="/team/athletes" 
+               data-page="team-athletes"
+               class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">sports_martial_arts</span>
+                <span>Спортсмени</span>
+            </a>
+            
+            <!-- Coaches (Active) -->
+            <a href="/team/coaches" 
+               data-page="team-coaches"
+               class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                <span class="material-symbols-outlined text-[18px]">supervisor_account</span>
+                <span>Тренери</span>
+            </a>
+        </nav>
+    </div>
+</div>
+
+<!-- Spacer for fixed subheader -->
+<div class="h-[52px]"></div>
+{% endblock %}
+
+<main class="flex-grow w-full">
+    
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-600 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <!-- Title -->
+                <div class="flex-1">
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-white/90 text-xs font-medium mb-4">
+                        <span class="material-symbols-outlined text-[16px]">school</span>
+                        <span>Професійні наставники</span>
+                    </div>
+                    <h1 class="text-white text-4xl md:text-5xl font-black leading-tight tracking-tight mb-3">
+                        Тренерський штаб
+                    </h1>
+                    <p class="text-orange-100 text-lg leading-relaxed max-w-2xl">
+                        Досвідчені фахівці, які формують майбутніх чемпіонів та представляють Україну на найвищому рівні
+                    </p>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="flex flex-wrap md:flex-col gap-3">
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 min-w-[140px]">
+                        <div class="text-white/70 text-xs font-medium mb-1">Національна</div>
+                        <div class="text-white text-3xl font-black">{{ national_coaches_total }}</div>
+                        <div class="text-white/60 text-xs mt-1">тренерів</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 min-w-[140px]">
+                        <div class="text-white/70 text-xs font-medium mb-1">Регіональні</div>
+                        <div class="text-white text-3xl font-black">{{ regional_coaches_total }}</div>
+                        <div class="text-white/60 text-xs mt-1">тренерів</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-gray-50 border-b border-gray-200 sticky top-[68px] lg:top-[72px] z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                
+                <!-- Search (Priority) -->
+                <div class="relative flex-1 max-w-md">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-gray-400 text-[20px]">search</span>
+                    </span>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="Знайти тренера за ім'ям або містом..." 
+                        value="{{ search_query }}"
+                        class="block w-full pl-12 pr-4 py-3 bg-white border border-gray-300 hover:border-gray-400 focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 rounded-xl text-sm placeholder-gray-500 focus:outline-none transition-all shadow-sm"
+                    />
+                </div>
+                
+                <!-- Filters Pills -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <!-- Team Type Filter -->
+                    <div class="relative custom-filter-dropdown" data-name="tab" data-value="{{ current_tab or 'all' }}">
+                        <button class="inline-flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-sm font-medium transition-all shadow-sm">
+                            <span class="filter-label">
+                                {% if current_tab == 'national' %}🏆 Національна
+                                {% elif current_tab == 'regional' %}🌍 Регіональні
+                                {% else %}Команда{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-500 text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">👥 Всі тренери</button>
+                            <button class="filter-dropdown-item" data-value="national">🏆 Національна команда</button>
+                            <button class="filter-dropdown-item" data-value="regional">🌍 Регіональні тренери</button>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="relative custom-filter-dropdown" data-name="category" data-value="{{ current_category or 'all' }}">
+                        <button class="inline-flex items-center gap-2 px-4 py-3 bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-sm font-medium transition-all shadow-sm">
+                            <span class="filter-label">
+                                {% if current_category and current_category != 'all' %}{{ coach_category_labels.get(current_category, 'Категорія') }}
+                                {% else %}Категорія{% endif %}
+                            </span>
+                            <span class="material-symbols-outlined text-gray-500 text-[18px]">expand_more</span>
+                        </button>
+                        <div class="filter-dropdown-menu">
+                            <button class="filter-dropdown-item" data-value="all">📋 Всі категорії</button>
+                            {% for key, label in coach_category_labels.items() %}
+                            <button class="filter-dropdown-item" data-value="{{ key }}">{{ label }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Clear Button -->
+                    {% if current_tab != 'all' or (current_category and current_category != 'all') or search_query %}
+                    <button onclick="clearFilters()" class="inline-flex items-center gap-2 px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl text-sm font-medium transition-all" title="Очистити">
+                        <span class="material-symbols-outlined text-[18px]">close</span>
+                        <span class="hidden sm:inline">Скинути</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coaches List -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        {% if coaches and coaches|length > 0 %}
+        <div id="coaches-list" class="space-y-4">
+            {% for coach in coaches %}
+            <article class="coach-card group bg-white rounded-2xl border border-gray-200 hover:border-orange-300 hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+                     onclick="window.navigationManager.navigateTo('/team/coaches/{{ coach.slug }}')">
+                <div class="flex items-center gap-4 md:gap-6 p-4 md:p-6">
+                    <!-- Photo -->
+                    <div class="flex-shrink-0 relative">
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-orange-200 to-amber-300 ring-4 ring-orange-100 group-hover:ring-orange-200 transition-all">
+                            {% if coach.image_url %}
+                            <img src="{{ coach.image_url }}" alt="{{ coach.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-[40px]">person</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- National Team Badge (Absolute) -->
+                        {% if coach.is_national_team %}
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-white text-[16px]">emoji_events</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-4 mb-2">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-lg md:text-xl font-black text-gray-900 group-hover:text-orange-600 transition-colors truncate">
+                                    {{ coach.name }}
+                                </h3>
+                                <p class="text-sm md:text-base text-gray-600 truncate">
+                                    {% if coach.position %}{{ coach.position }}{% else %}Тренер{% endif %}
+                                </p>
+                            </div>
+                            
+                            <!-- Arrow Icon (Desktop) -->
+                            <div class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 group-hover:bg-orange-100 transition-colors">
+                                <span class="material-symbols-outlined text-gray-600 group-hover:text-orange-600 group-hover:translate-x-1 transition-all">arrow_forward</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Meta Info -->
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <!-- Location -->
+                            {% if coach.city %}
+                            <span class="inline-flex items-center gap-1 text-xs text-gray-600">
+                                <span class="material-symbols-outlined text-[16px]">location_on</span>
+                                {{ coach.city }}
+                            </span>
+                            {% endif %}
+                            
+                            <!-- Category Badge -->
+                            {% if coach.is_national_team %}
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg text-xs font-bold shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]">emoji_events</span>
+                                Національна команда
+                            </span>
+                            {% else %}
+                                {% if coach.category_label %}
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-medium">
+                                    {{ coach.category_label }}
+                                </span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-16 px-6">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
+                <span class="material-symbols-outlined text-gray-400 text-[48px]">search_off</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-3">Нічого не знайдено</h3>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                За вашими критеріями пошуку тренерів не знайдено. Спробуйте змінити фільтри
+            </p>
+            <button onclick="clearFilters()" class="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-semibold transition-all shadow-md hover:shadow-lg">
+                <span class="material-symbols-outlined text-[20px]">refresh</span>
+                Скинути фільтри
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if total_pages and total_pages > 1 %}
+        <div class="mt-12">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                <!-- Results Info -->
+                <p class="text-sm text-gray-600">
+                    Сторінка <span class="font-semibold text-gray-900">{{ current_page }}</span> з <span class="font-semibold text-gray-900">{{ total_pages }}</span>
+                    <span class="hidden sm:inline text-gray-400">•</span>
+                    <span class="hidden sm:inline">Всього {{ coaches_total }} тренерів</span>
+                </p>
+
+                <!-- Pagination Controls -->
+                <nav class="flex items-center gap-2">
+                    <!-- Previous -->
+                    {% if has_prev %}
+                    <button data-page="{{ current_page - 1 }}" class="pagination-btn w-10 h-10 flex items-center justify-center rounded-xl border-2 border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </button>
+                    {% else %}
+                    <span class="w-10 h-10 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </span>
+                    {% endif %}
+
+                    <!-- Pages -->
+                    {% set start_page = [1, current_page - 2]|max %}
+                    {% set end_page = [total_pages, current_page + 2]|min %}
+                    
+                    {% for page_num in range(start_page, end_page + 1) %}
+                        {% if page_num == current_page %}
+                        <span class="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-600 text-white text-sm font-bold shadow-md">{{ page_num }}</span>
+                        {% else %}
+                        <button data-page="{{ page_num }}" class="pagination-btn w-10 h-10 flex items-center justify-center rounded-xl border-2 border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 text-sm font-medium transition-all">{{ page_num }}</button>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Next -->
+                    {% if has_next %}
+                    <button data-page="{{ current_page + 1 }}" class="pagination-btn w-10 h-10 flex items-center justify-center rounded-xl border-2 border-gray-300 bg-white hover:border-orange-500 hover:bg-orange-50 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </button>
+                    {% else %}
+                    <span class="w-10 h-10 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </span>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</main>
+
+<style>
+    /* Custom Filter Dropdowns */
+    .custom-filter-dropdown {
+        position: relative;
+    }
+
+    .filter-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 50;
+        overflow: hidden;
+    }
+
+    .custom-filter-dropdown.active .filter-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .filter-dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        text-align: left;
+        color: #111418;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .filter-dropdown-item:hover {
+        background-color: #fff7ed;
+    }
+
+    .filter-dropdown-item.active {
+        background-color: #ffedd5;
+        font-weight: 600;
+        color: #ea580c;
+    }
+
+    /* Coach Card Hover */
+    .coach-card {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+    }
+
+    .coach-card:hover {
+        transform: translateY(-4px);
+    }
+
+    /* List Loading State */
+    #coaches-list.loading {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script data-page-script="true">
+    (function() {
+        'use strict';
+        
+        let isInitialized = false;
+        
+        // ==================== URL BUILDER ====================
+        
+        function buildURL(filters) {
+            let url = '/team/coaches?page=' + (filters.page || 1);
+            
+            if (filters.tab && filters.tab !== 'all') url += '&tab=' + filters.tab;
+            if (filters.category && filters.category !== 'all') url += '&category=' + filters.category;
+            if (filters.search) url += '&search=' + encodeURIComponent(filters.search);
+            
+            return url;
+        }
+        
+        function applyFilters() {
+            const tab = document.querySelector('[data-name="tab"]')?.getAttribute('data-value') || 'all';
+            const category = document.querySelector('[data-name="category"]')?.getAttribute('data-value') || 'all';
+            const search = document.getElementById('search-input')?.value?.trim() || '';
+            
+            const filters = { tab, category, search, page: 1 };
+            const url = buildURL(filters);
+            
+            if (window.navigationManager) {
+                window.navigationManager.navigateTo(url);
+            } else {
+                window.location.href = url;
+            }
+        }
+        
+        function clearFilters() {
+            if (window.navigationManager) {
+                window.navigationManager.navigateTo('/team/coaches');
+            } else {
+                window.location.href = '/team/coaches';
+            }
+        }
+        
+        function goToPage(page) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filters = {
+                tab: urlParams.get('tab') || 'all',
+                category: urlParams.get('category') || 'all',
+                search: urlParams.get('search') || '',
+                page: page
+            };
+            
+            const url = buildURL(filters);
+            
+            if (window.navigationManager) {
+                window.navigationManager.navigateTo(url);
+            } else {
+                window.location.href = url;
+            }
+        }
+        
+        // ==================== DROPDOWNS ====================
+        
+        function initFilterDropdowns() {
+            const dropdowns = document.querySelectorAll('.custom-filter-dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                const button = dropdown.querySelector('button');
+                const items = dropdown.querySelectorAll('.filter-dropdown-item');
+                const label = dropdown.querySelector('.filter-label');
+                
+                if (!button || !label) return;
+                
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    document.querySelectorAll('.custom-filter-dropdown.active').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('active');
+                    });
+                    
+                    dropdown.classList.toggle('active');
+                });
+                
+                items.forEach(item => {
+                    const value = item.getAttribute('data-value');
+                    if (value === dropdown.getAttribute('data-value')) {
+                        item.classList.add('active');
+                    }
+                    
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        
+                        dropdown.setAttribute('data-value', value);
+                        label.textContent = this.textContent;
+                        
+                        dropdown.querySelectorAll('.filter-dropdown-item').forEach(i => {
+                            i.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+            
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.custom-filter-dropdown.active').forEach(d => {
+                    d.classList.remove('active');
+                });
+            });
+        }
+        
+        // ==================== SEARCH ====================
+        
+        function attachSearchHandler() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        applyFilters();
+                    }
+                });
+            }
+        }
+        
+        // ==================== PAGINATION ====================
+        
+        function attachPaginationHandlers() {
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.pagination-btn');
+                if (btn && !btn.disabled) {
+                    e.preventDefault();
+                    const page = parseInt(btn.getAttribute('data-page'));
+                    if (page) goToPage(page);
+                }
+            });
+        }
+        
+        // ==================== INITIALIZATION ====================
+        
+        function init() {
+            if (isInitialized) return;
+            
+            console.log('[Coaches] Initializing...');
+            
+            initFilterDropdowns();
+            attachSearchHandler();
+            attachPaginationHandlers();
+            
+            isInitialized = true;
+            console.log('[Coaches] Ready');
+        }
+        
+        function cleanup() {
+            console.log('[Coaches] Cleanup');
+            isInitialized = false;
+        }
+        
+        // ==================== GLOBAL EXPORTS ====================
+        
+        window.applyFilters = applyFilters;
+        window.clearFilters = clearFilters;
+        window.goToPage = goToPage;
+        
+        // ==================== AUTO-INIT ====================
+        
+        window.addEventListener('pageCleanup', cleanup);
+        window.addEventListener('pageInit', () => {
+            if (window.location.pathname.startsWith('/team/coaches')) init();
+        });
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        
+    })();
+</script>
+{% endblock %}

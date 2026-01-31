@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="uk" class="scroll-smooth">
+
 <head>
-    <!-- Essential Meta Tags -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- Primary Meta Tags -->
+
+
     <title>{% block title %}Федерація Дзюдо України - Офіційний сайт{% endblock %}</title>
     <meta name="title" content="{% block meta_title %}Федерація Дзюдо України - Офіційний сайт{% endblock %}">
     <meta name="description" content="{% block meta_description %}Офіційна організація, що розвиває дзюдо в Україні з 1991 року. Новини, календар змагань, збірна України, результати турнірів та документи.{% endblock %}">
@@ -14,33 +15,33 @@
     <meta name="author" content="Федерація Дзюдо України">
     <meta name="robots" content="index, follow">
     <meta name="language" content="Ukrainian">
-    
-    <!-- Canonical URL -->
+
+
     <link rel="canonical" href="{% block canonical %}https://judoukraine.co.ua/{% endblock %}">
-    
-    <!-- Favicon - Multiple Sizes for All Platforms -->
+
+
     <link rel="icon" type="image/x-icon" href="/static/assets/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/favicon/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="48x48" href="/static/assets/favicon/favicon-48x48.png">
-    
-    <!-- Apple Touch Icons -->
+
+
     <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/favicon/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/static/assets/favicon/apple-touch-icon-152x152.png">
-    
-    <!-- Android Chrome Icons -->
+
+
     <link rel="icon" type="image/png" sizes="192x192" href="/static/assets/favicon/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/static/assets/favicon/android-chrome-512x512.png">
-    
-    <!-- Web App Manifest -->
+
+
     <link rel="manifest" href="/site.webmanifest">
-    
-    <!-- Theme Color -->
+
+
     <meta name="theme-color" content="#0E2A47">
     <meta name="msapplication-TileColor" content="#0E2A47">
     <meta name="msapplication-TileImage" content="/assets/mstile-144x144.png">
-    
-    <!-- Open Graph / Facebook -->
+
+
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://judoukraine.co.ua/{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Федерація Дзюдо України{% endblock %}">
@@ -50,26 +51,26 @@
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="uk_UA">
     <meta property="og:site_name" content="Федерація Дзюдо України">
-    
-    <!-- Twitter Card -->
+
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{% block twitter_url %}https://judoukraine.co.ua/{% endblock %}">
     <meta name="twitter:title" content="{% block twitter_title %}Федерація Дзюдо України{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Офіційна організація, що розвиває дзюдо в Україні з 1991 року.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://judoukraine.co.ua/static/assets/og-image.jpg{% endblock %}">
 
-    <!-- Preconnect to External Resources -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
 
-    <!-- Google Fonts - Inter -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Material Symbols -->
+
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 
-    <!-- Tailwind CSS CDN -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -104,8 +105,8 @@
             }
         }
     </script>
-    
-    <!-- Common Styles -->
+
+
     <style>
         /* Design tokens */
         :root {
@@ -116,7 +117,7 @@
             --brand: #0E2A47;
             --accent: #FFD34E;
             --accent-hover: #F5C842;
-            
+
             /* Base */
             --bg: #F8FAFC;
             --surface: #ffffff;
@@ -124,7 +125,7 @@
             --text-secondary: #334155;
             --muted: #64748B;
             --muted-light: #94A3B8;
-            
+
             /* Effects */
             --radius-1: 8px;
             --radius-2: 12px;
@@ -136,12 +137,12 @@
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-1: var(--shadow-md);
             --shadow-2: var(--shadow-lg);
-            
+
             /* Layout */
             --container: 1200px;
             --gutter: clamp(20px, 4vw, 32px);
             --section-spacing: clamp(3rem, 8vw, 6rem);
-            
+
             /* Type (fluid) */
             --fs-900: clamp(2.5rem, 2rem + 2.5vw, 4rem);
             --fs-800: clamp(1.75rem, 1.5rem + 1.25vw, 2.5rem);
@@ -150,7 +151,7 @@
             --fs-500: 1rem;
             --fs-400: .9375rem;
             --fs-300: .875rem;
-            
+
             /* Animation */
             --speed-1: .2s;
             --speed-2: .3s;
@@ -178,18 +179,22 @@
             width: 100%;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
             color: var(--text);
-            background: 
+            background:
                 radial-gradient(1200px 800px at 10% -10%, #E9F1FA 0%, transparent 60%),
                 radial-gradient(900px 600px at 110% 10%, #E6EFFA 0%, transparent 55%),
                 var(--bg);
         }
 
-        img, svg {
+        img,
+        svg {
             display: block;
             max-width: 100%;
         }
 
-        button, input, select, textarea {
+        button,
+        input,
+        select,
+        textarea {
             font: inherit;
         }
 
@@ -271,169 +276,178 @@
             opacity: 1;
             pointer-events: all;
         }
-/* ============================================
+
+        /* ============================================
    MINIMAL AJAX PAGE TRANSITIONS
    ============================================ */
 
-/* Hide Scrollbar During Transition */
-body.page-transitioning {
-    overflow: hidden !important;
-}
+        /* Hide Scrollbar During Transition */
+        body.page-transitioning {
+            overflow: hidden !important;
+        }
 
-/* Page Transition Overlay - MINIMAL WHITE */
-#pageTransitionOverlay {
-    background: #ffffff;
-    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
+        /* Page Transition Overlay - IMPROVED WITH BACKDROP */
+        #pageTransitionOverlay {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
-#pageTransitionOverlay.active {
-    opacity: 1 !important;
-}
+        #pageTransitionOverlay.active {
+            opacity: 1 !important;
+        }
 
-/* Loader Container - Centered */
-.loader-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-}
+        /* Loader Container - Centered */
+        .loader-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
 
-/* Simple Spinner */
-.loader-spinner {
-    width: 60px;
-    height: 60px;
-    position: relative;
-}
+        /* Simple Spinner */
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
 
-.loader-spinner::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 4px solid #e5e7eb;
-    border-top-color: #2563eb;
-    animation: spinSimple 0.8s linear infinite;
-}
+        .loader-spinner::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #e5e7eb;
+            border-top-color: #2563eb;
+            animation: spinSimple 0.8s linear infinite;
+        }
 
-@keyframes spinSimple {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+        @keyframes spinSimple {
+            0% {
+                transform: rotate(0deg);
+            }
 
-/* Loading Text - Simple */
-.loading-text {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #64748b;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-/* Progress Bar - Bottom */
-.progress-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: #f1f5f9;
-    overflow: hidden;
-}
+        /* Loading Text - Simple */
+        .loading-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
 
-.progress-bar {
-    height: 100%;
-    background: #2563eb;
-    width: 0%;
-    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
+        /* Progress Bar - Bottom */
+        .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
 
-/* Page Content Transitions */
-body.page-transitioning main {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        .progress-bar {
+            height: 100%;
+            background: #2563eb;
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
-main {
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
+        /* Page Content Transitions */
+        body.page-transitioning main {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-/* Content Entering */
-.content-entering {
-    animation: fadeInContent 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+        main {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Content Entering */
+        .content-entering {
+            animation: fadeInContent 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
 
 
 
-/* Navigation Active States */
-.nav-link.active {
-    color: #2563eb !important;
-}
+        /* Navigation Active States */
+        .nav-link.active {
+            color: #2563eb !important;
+        }
 
-.nav-link.active span {
-    transform: scaleX(1) !important;
-}
+        .nav-link.active span {
+            transform: scaleX(1) !important;
+        }
 
-.mobile-nav-link.active {
-    background-color: #eff6ff !important;
-    color: #2563eb !important;
-    font-weight: 600;
-    border-left: 3px solid #2563eb;
-}
+        .mobile-nav-link.active {
+            background-color: #eff6ff !important;
+            color: #2563eb !important;
+            font-weight: 600;
+            border-left: 3px solid #2563eb;
+        }
 
-/* Simple Ripple Effect */
-.nav-ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(37, 99, 235, 0.1);
-    transform: scale(0);
-    animation: simpleRipple 0.5s ease-out;
-    pointer-events: none;
-}
+        /* Simple Ripple Effect */
+        .nav-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+            transform: scale(0);
+            animation: simpleRipple 0.5s ease-out;
+            pointer-events: none;
+        }
 
-@keyframes simpleRipple {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
+        @keyframes simpleRipple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
     </style>
 
     {% block extra_head %}{% endblock %}
 </head>
+
 <body class="min-h-screen">
 
-    <!-- Skip to main content -->
+
     <a href="#main-content" class="skip-link sr-only focus:not-sr-only">Перейти до основного вмісту</a>
 
-<!-- Заміни Page Transition Overlay в body -->
-<div id="pageTransitionOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center hidden" style="opacity: 0;">
-    <div class="loader-container">
-        <!-- Simple Spinner -->
-        <div class="loader-spinner"></div>
-        
-        <!-- Loading Text -->
-        <div class="loading-text">Завантаження</div>
+
+    <div id="pageTransitionOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center hidden" style="opacity: 0;">
+        <div class="loader-container">
+
+            <div class="loader-spinner"></div>
+
+
+            <div class="loading-text">Завантаження</div>
+        </div>
+
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
     </div>
-    
-    <!-- Simple Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-bar"></div>
-    </div>
-</div>
 
 
 
-    <!-- Mobile Backdrop -->
+
     <div id="mobileBackdrop" class="fixed inset-0 bg-black/50 z-40 md:hidden"></div>
 
-    <!-- Mobile Navigation -->
+
     <nav id="mobileNav" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl z-50 md:hidden overflow-y-auto">
         <div class="flex flex-col h-full">
-            <!-- Mobile Nav Header -->
+
             <div class="flex items-center justify-between p-4 border-b border-gray-200">
                 <div class="flex items-center gap-2">
                     <img src="/static/assets/favicon/favicon-48x48.png" alt="ФДУ" class="w-8 h-8" width="48" height="48">
@@ -444,7 +458,7 @@ main {
                 </button>
             </div>
 
-            <!-- Mobile Nav Links -->
+
             <div class="flex-1 py-4">
                 <a href="/" data-page="home" class="mobile-nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                     <span class="material-symbols-outlined mr-3">home</span>
@@ -462,7 +476,7 @@ main {
                     <span class="material-symbols-outlined mr-3">location_city</span>
                     Регіони
                 </a>
-                <a href="/team" data-page="team" class="mobile-nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                <a href="/team/athletes" data-page="team" class="mobile-nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                     <span class="material-symbols-outlined mr-3">groups</span>
                     Збірна
                 </a>
@@ -470,30 +484,34 @@ main {
                     <span class="material-symbols-outlined mr-3">article</span>
                     Новини
                 </a>
+                <a href="/contacts" data-page="contacts" class="mobile-nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <span class="material-symbols-outlined mr-3">article</span>
+                    Контакти
+                </a>
             </div>
 
-            <!-- Mobile Nav Footer (Social) -->
+
             <div class="p-4 border-t border-gray-200">
                 <p class="text-sm text-gray-600 mb-3 font-medium">Слідкуйте за нами:</p>
                 <div class="flex gap-3">
                     <a href="https://www.facebook.com/UkraineJudoFederation" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-500 hover:text-white transition-colors" aria-label="Facebook">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M13 22v-8h3l1-4h-4V7a2 2 0 0 1 2-2h2V1h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z"/>
+                            <path d="M13 22v-8h3l1-4h-4V7a2 2 0 0 1 2-2h2V1h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z" />
                         </svg>
                     </a>
                     <a href="https://www.instagram.com/ukraine_judo_official" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-500 hover:text-white transition-colors" aria-label="Instagram">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
                         </svg>
                     </a>
                     <a href="https://t.me/ukrainianjudofederation" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-500 hover:text-white transition-colors" aria-label="Telegram">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9.5 16.6l-.3 4c.4 0 .6-.2.9-.4l2.1-2 4.3 3.1c.8.5 1.4.2 1.6-.8l2.9-13.6c.3-1.3-.5-1.8-1.3-1.5L2.7 9.7c-1.3.5-1.3 1.2-.2 1.5l4.4 1.4L17.8 6c.6-.4 1.2-.2.7.2l-9 8.3z"/>
+                            <path d="M9.5 16.6l-.3 4c.4 0 .6-.2.9-.4l2.1-2 4.3 3.1c.8.5 1.4.2 1.6-.8l2.9-13.6c.3-1.3-.5-1.8-1.3-1.5L2.7 9.7c-1.3.5-1.3 1.2-.2 1.5l4.4 1.4L17.8 6c.6-.4 1.2-.2.7.2l-9 8.3z" />
                         </svg>
                     </a>
                     <a href="https://www.youtube.com/@ukrainejudo" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-500 hover:text-white transition-colors" aria-label="YouTube">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.5.3c-.4 0-1.3.1-2.1 1-.7.7-.9 2.4-.9 2.4S0 8.3 0 10.4v1.9c0 2.1.5 4.2.5 4.2s.2 1.7.9 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.2.3 8.2.3 0 0 5.8 0 8.6-.3.4-.1 1.3-.1 2.1-1 .7-.7.9-2.4.9-2.4s.5-2.1.5-4.2v-1.9c0-2.1-.5-4.2-.5-4.2zM9.5 14.9V8.9l6.1 3-6.1 3z"/>
+                            <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.5.3c-.4 0-1.3.1-2.1 1-.7.7-.9 2.4-.9 2.4S0 8.3 0 10.4v1.9c0 2.1.5 4.2.5 4.2s.2 1.7.9 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.2.3 8.2.3 0 0 5.8 0 8.6-.3.4-.1 1.3-.1 2.1-1 .7-.7.9-2.4.9-2.4s.5-2.1.5-4.2v-1.9c0-2.1-.5-4.2-.5-4.2zM9.5 14.9V8.9l6.1 3-6.1 3z" />
                         </svg>
                     </a>
                 </div>
@@ -501,31 +519,22 @@ main {
         </div>
     </nav>
 
-    <!-- Header -->
+
     <header class="fixed top-0 left-0 right-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 lg:h-20 whitespace-nowrap">
-                
-                <!-- Brand/Logo -->
+
+
                 <a href="/" class="flex items-center gap-3 flex-1 group" data-page="home">
-                    <img 
-                        src="/static/assets/favicon/favicon-48x48.png"
-                        alt="Логотип ФДУ" 
-                        class="w-10 h-10 lg:w-9 lg:h-9 transition-transform duration-300 group-hover:scale-105"
-                        width="48" 
-                        height="48"
-                    >
+                    <img src="/static/assets/favicon/favicon-48x48.png" alt="Логотип ФДУ" class="w-10 h-10 lg:w-9 lg:h-9 transition-transform duration-300 group-hover:scale-105" width="48" height="48">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                         <h2 class="text-lg lg:text-xl font-bold text-slate-900 leading-tight tracking-tight">
                             Федерація Дзюдо України
                         </h2>
-                        <span class="hidden sm:inline-flex items-center px-2 py-1 text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 rounded-full">
-                            Неофіційний сайт
-                        </span>
                     </div>
                 </a>
-                
-                <!-- Desktop Navigation -->
+
+
                 <nav class="hidden md:flex items-center gap-8 ml-auto" aria-label="Основна навігація">
                     <a href="/" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="home">
                         Головна
@@ -543,7 +552,7 @@ main {
                         Регіони
                         <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
                     </a>
-                    <a href="/team" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="team">
+                    <a href="/team/athletes" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="team">
                         Збірна
                         <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
                     </a>
@@ -551,15 +560,14 @@ main {
                         Новини
                         <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
                     </a>
+                    <a href="/contacts" class="nav-link relative text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group" data-page="contacts">
+                        Контакти
+                        <span class="absolute left-0 right-0 bottom-[-4px] h-0.5 bg-blue-600 rounded-full transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100"></span>
+                    </a>
                 </nav>
-                
-                <!-- Mobile Menu Toggle -->
-                <button 
-                    id="mobileMenuToggle"
-                    class="flex md:hidden flex-col justify-center items-center w-10 h-10 ml-4 p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200 z-50"
-                    aria-label="Відкрити меню навігації"
-                    aria-expanded="false"
-                >
+
+
+                <button id="mobileMenuToggle" class="flex md:hidden flex-col justify-center items-center w-10 h-10 ml-4 p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200 z-50" aria-label="Відкрити меню навігації" aria-expanded="false">
                     <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full"></span>
                     <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full my-1.5"></span>
                     <span class="hamburger-line w-6 h-0.5 bg-slate-900 rounded-full"></span>
@@ -568,14 +576,14 @@ main {
         </div>
     </header>
 
-    <!-- Main Content -->
+
     <main id="main-content" class="pt-16 lg:pt-20 min-h-screen">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+
     <footer class="relative">
-        <!-- Partners Section -->
+
         <section class="py-12 md:py-16 lg:py-20 border-b border-gray-200" aria-labelledby="partners-title">
             <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                 <h2 class="text-center text-sm md:text-base font-bold uppercase tracking-widest text-gray-500 mb-8 md:mb-10 lg:mb-12" id="partners-title">
@@ -621,68 +629,47 @@ main {
             </div>
         </section>
 
-        <!-- Main Footer Content -->
+
         <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1.5fr] gap-10 md:gap-12 lg:gap-16 xl:gap-20 py-12 md:py-16 lg:py-20">
-                
-                <!-- Brand Info Column -->
+
+
                 <div class="flex flex-col gap-6">
                     <a href="/" class="flex items-center gap-4 no-underline transition-transform duration-300 hover:translate-x-1 group" aria-label="Федерація Дзюдо України - повернутися на головну" data-page="home">
-                        <img class="w-12 h-12 md:w-14 md:h-14 shadow-blue-500/15 transition-shadow duration-300 group-hover:shadow-blue-500/25" 
-                            src="/static/assets/favicon/apple-touch-icon-152x152.png"
-                            alt="" 
-                            aria-hidden="true" 
-                            width="48" 
-                            height="48" />
+                        <img class="w-12 h-12 md:w-14 md:h-14 shadow-blue-500/15 transition-shadow duration-300 group-hover:shadow-blue-500/25" src="/static/assets/favicon/apple-touch-icon-152x152.png" alt="" aria-hidden="true" width="48" height="48" />
                         <div class="flex flex-col gap-1">
                             <span class="text-lg md:text-xl font-bold text-gray-900 leading-tight">Федерація Дзюдо України</span>
-                            <span class="text-[13px] text-gray-500 font-medium">Неофіційний вебсайт</span>
+                            <span class="text-[13px] text-gray-500 font-medium">Офіційний вебсайт</span>
                         </div>
                     </a>
                     <p class="text-[15px] leading-relaxed text-gray-600 m-0">
                         Офіційна організація, що розвиває дзюдо в Україні з 1991 року.
                     </p>
                     <nav class="flex gap-3" aria-label="Соціальні мережі">
-                        <a href="https://www.facebook.com/UkraineJudoFederation" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           aria-label="Facebook" 
-                           class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                        <a href="https://www.facebook.com/UkraineJudoFederation" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M13 22v-8h3l1-4h-4V7a2 2 0 0 1 2-2h2V1h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z"/>
+                                <path d="M13 22v-8h3l1-4h-4V7a2 2 0 0 1 2-2h2V1h-3a5 5 0 0 0-5 5v3H6v4h3v8h4z" />
                             </svg>
                         </a>
-                        <a href="https://www.instagram.com/ukraine_judo_official" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           aria-label="Instagram" 
-                           class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                        <a href="https://www.instagram.com/ukraine_judo_official" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
                             </svg>
                         </a>
-                        <a href="https://t.me/ukrainianjudofederation" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           aria-label="Telegram" 
-                           class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                        <a href="https://t.me/ukrainianjudofederation" target="_blank" rel="noopener noreferrer" aria-label="Telegram" class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M9.5 16.6l-.3 4c.4 0 .6-.2.9-.4l2.1-2 4.3 3.1c.8.5 1.4.2 1.6-.8l2.9-13.6c.3-1.3-.5-1.8-1.3-1.5L2.7 9.7c-1.3.5-1.3 1.2-.2 1.5l4.4 1.4L17.8 6c.6-.4 1.2-.2.7.2l-9 8.3z"/>
+                                <path d="M9.5 16.6l-.3 4c.4 0 .6-.2.9-.4l2.1-2 4.3 3.1c.8.5 1.4.2 1.6-.8l2.9-13.6c.3-1.3-.5-1.8-1.3-1.5L2.7 9.7c-1.3.5-1.3 1.2-.2 1.5l4.4 1.4L17.8 6c.6-.4 1.2-.2.7.2l-9 8.3z" />
                             </svg>
                         </a>
-                        <a href="https://www.youtube.com/@ukrainejudo" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           aria-label="YouTube" 
-                           class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
+                        <a href="https://www.youtube.com/@ukrainejudo" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-11 h-11 rounded-xl bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 transition-all duration-400 hover:bg-blue-500 hover:border-blue-500 hover:text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.5.3c-.4 0-1.3.1-2.1 1-.7.7-.9 2.4-.9 2.4S0 8.3 0 10.4v1.9c0 2.1.5 4.2.5 4.2s.2 1.7.9 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.2.3 8.2.3 0 0 5.8 0 8.6-.3.4-.1 1.3-.1 2.1-1 .7-.7.9-2.4.9-2.4s.5-2.1.5-4.2v-1.9c0-2.1-.5-4.2-.5-4.2zM9.5 14.9V8.9l6.1 3-6.1 3z"/>
+                                <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.8-.9-1.7-.9-2.1-1C17.8 2.5 12 2.5 12 2.5h0s-5.8 0-8.5.3c-.4 0-1.3.1-2.1 1-.7.7-.9 2.4-.9 2.4S0 8.3 0 10.4v1.9c0 2.1.5 4.2.5 4.2s.2 1.7.9 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.2.3 8.2.3 0 0 5.8 0 8.6-.3.4-.1 1.3-.1 2.1-1 .7-.7.9-2.4.9-2.4s.5-2.1.5-4.2v-1.9c0-2.1-.5-4.2-.5-4.2zM9.5 14.9V8.9l6.1 3-6.1 3z" />
                             </svg>
                         </a>
                     </nav>
                 </div>
 
-                <!-- Quick Links Column -->
+
                 <nav class="flex flex-col gap-6" aria-labelledby="footer-links-title">
                     <h3 class="text-[15px] font-bold uppercase tracking-wider text-gray-900 m-0" id="footer-links-title">
                         Швидкі посилання
@@ -721,7 +708,7 @@ main {
                     </ul>
                 </nav>
 
-                <!-- Contact Column -->
+
                 <div class="flex flex-col gap-6">
                     <h3 class="text-[15px] font-bold uppercase tracking-wider text-gray-900 m-0">
                         Контакти
@@ -737,13 +724,13 @@ main {
                         </li>
                         <li class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-blue-500 text-xl">email</span>
-                            <a href="mailto:info@judo.ua" class="text-[15px] text-gray-600 hover:text-blue-500 transition-colors">info@judo.ua</a>
+                            <a href="mailto:judoukr@ukr.net" class="text-[15px] text-gray-600 hover:text-blue-500 transition-colors">judoukr@ukr.net</a>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Bottom Bar -->
+
             <div class="border-t border-gray-200 py-6 text-center">
                 <p class="text-sm text-gray-500 m-0">
                     © {{ current_year|default('2026') }} Федерація Дзюдо України. Всі права захищені.
@@ -751,708 +738,772 @@ main {
             </div>
         </div>
     </footer>
-<!-- Оновлений JavaScript (мінімальна версія) -->
-<script>
-/* ============================================
+
+    <script>
+        /* ============================================
    ADVANCED AJAX NAVIGATION SYSTEM
    Полноценная система с обработкой всех edge cases
    ============================================ */
 
-   class NavigationManager {
-    constructor() {
-        // DOM Elements
-        this.overlay = document.getElementById('pageTransitionOverlay');
-        this.progressBar = this.overlay?.querySelector('.progress-bar');
-        this.mainContent = document.getElementById('main-content');
-        
-        // State
-        this.isNavigating = false;
-        this.loadedScripts = new Set();
-        this.loadedInlineScripts = new Set(); // Track inline scripts
-        this.navigationQueue = [];
-        this.abortController = null;
-        this.retryCount = 0;
-        this.maxRetries = 2;
-        
-        // Cache
-        this.pageCache = new Map();
-        this.cacheTimeout = 5 * 60 * 1000; // 5 min
-        this.maxCacheSize = 10;
-        
-        this.navigationStartTime = 0;
-        
-        this.init();
-    }
+        class NavigationManager {
+            constructor() {
 
-    init() {
-        this.trackInitialScripts();
-        this.attachNavigationHandlers();
-        this.setupPopStateHandler();
-        this.setupPreloading();
-        this.setupErrorHandling();
-        
-        this.updateActiveNavigation(window.location.pathname);
-        
-        requestAnimationFrame(() => {
-            document.body.classList.remove('page-transitioning');
-            this.mainContent?.classList.add('content-entering');
-        });
-        
-        console.log('🚀 Navigation Manager initialized');
-    }
+                this.overlay = document.getElementById('pageTransitionOverlay');
+                this.progressBar = this.overlay?.querySelector('.progress-bar');
+                this.mainContent = document.getElementById('main-content');
 
-    /* ==================== INITIALIZATION ==================== */
 
-    trackInitialScripts() {
-        document.querySelectorAll('script[src]').forEach(script => {
-            this.loadedScripts.add(script.src);
-        });
-        
-        // Track initial inline scripts
-        document.querySelectorAll('script:not([src])').forEach(script => {
-            if (script.textContent) {
-                const hash = this.hashCode(script.textContent);
-                this.loadedInlineScripts.add(hash);
-            }
-        });
-    }
+                this.isNavigating = false;
+                this.loadedScripts = new Set();
+                this.loadedInlineScripts = new Set();
+                this.navigationQueue = [];
+                this.abortController = null;
+                this.retryCount = 0;
+                this.maxRetries = 2;
 
-    setupPopStateHandler() {
-        window.addEventListener('popstate', (e) => {
-            if (e.state?.url && !this.isNavigating) {
-                this.navigateToPage(e.state.url, false);
-            } else if (!e.state) {
-                this.navigateToPage(window.location.pathname, false);
-            }
-        });
-    }
 
-    setupPreloading() {
-        let hoverTimeout;
-        document.addEventListener('mouseover', (e) => {
-            const link = e.target.closest('a[data-page]');
-            if (!link || link.hasAttribute('target')) return;
-            
-            clearTimeout(hoverTimeout);
-            hoverTimeout = setTimeout(() => {
-                this.preloadPage(link.getAttribute('href'));
-            }, 100);
-        });
-    }
+                this.pageCache = new Map();
+                this.cacheTimeout = 5 * 60 * 1000;
+                this.maxCacheSize = 10;
 
-    setupErrorHandling() {
-        window.addEventListener('error', (e) => {
-            console.error('Global error:', e.error);
-        });
+                this.navigationStartTime = 0;
 
-        window.addEventListener('unhandledrejection', (e) => {
-            console.error('Unhandled promise rejection:', e.reason);
-        });
-    }
-
-    /* ==================== NAVIGATION HANDLERS ==================== */
-
-    attachNavigationHandlers() {
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[data-page]');
-            
-            if (!link || 
-                link.hasAttribute('target') || 
-                link.pathname === window.location.pathname ||
-                link.getAttribute('href')?.startsWith('#') ||
-                link.host !== window.location.host) {
-                return;
-            }
-            
-            e.preventDefault();
-            this.createRipple(e, link);
-            
-            if (!this.isNavigating) {
-                const url = link.getAttribute('href');
-                this.navigateToPage(url, true);
-            } else {
-                this.queueNavigation(link.getAttribute('href'));
-            }
-        });
-
-        document.addEventListener('submit', (e) => {
-            const form = e.target.closest('form[data-ajax]');
-            if (form) {
-                e.preventDefault();
-                this.handleFormSubmit(form);
-            }
-        });
-    }
-
-    createRipple(e, element) {
-        const ripple = document.createElement('span');
-        ripple.classList.add('nav-ripple');
-        
-        const rect = element.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        
-        element.style.position = 'relative';
-        element.style.overflow = 'hidden';
-        element.appendChild(ripple);
-        
-        setTimeout(() => ripple.remove(), 600);
-    }
-
-    /* ==================== NAVIGATION CORE ==================== */
-
-    async navigateToPage(url, pushState = true) {
-        if (this.isNavigating) {
-            this.queueNavigation(url);
-            return;
-        }
-
-        this.isNavigating = true;
-        this.navigationStartTime = performance.now();
-        this.retryCount = 0;
-
-        try {
-            await this.performNavigation(url, pushState);
-        } catch (error) {
-            await this.handleNavigationError(error, url, pushState);
-        } finally {
-            this.isNavigating = false;
-            this.processNavigationQueue();
-        }
-    }
-
-    async performNavigation(url, pushState) {
-        await this.showOverlay();
-        this.cleanupPage();
-        
-        const html = await this.fetchPage(url);
-        this.updateProgress(60);
-        
-        const newDoc = this.parsePage(html);
-        const newMain = this.extractMainContent(newDoc);
-        
-        if (!newMain) {
-            throw new Error('Main content not found');
-        }
-        
-        this.updateProgress(75);
-        
-        await this.updatePageContent(newMain, newDoc);
-        this.updateProgress(90);
-        
-        if (pushState) {
-            history.pushState({ url, timestamp: Date.now() }, '', url);
-        }
-        
-        await this.finalizeNavigation(url);
-        
-        const duration = performance.now() - this.navigationStartTime;
-        console.log(`✅ Navigation: ${duration.toFixed(2)}ms`);
-    }
-
-    async showOverlay() {
-        document.body.classList.add('page-transitioning');
-        this.overlay.classList.remove('hidden');
-        this.overlay.style.opacity = '0';
-        
-        await this.nextFrame();
-        
-        this.overlay.classList.add('active');
-        this.overlay.style.opacity = '1';
-        this.updateProgress(10);
-        
-        await this.sleep(200);
-    }
-
-    async hideOverlay() {
-        this.updateProgress(100);
-        await this.sleep(150);
-        
-        this.overlay.classList.remove('active');
-        this.overlay.style.opacity = '0';
-        document.body.classList.remove('page-transitioning');
-        
-        await this.sleep(300);
-        
-        this.overlay.classList.add('hidden');
-        this.progressBar.style.width = '0%';
-        
-        this.mainContent?.classList.remove('content-entering');
-        await this.nextFrame();
-        this.mainContent?.classList.add('content-entering');
-    }
-
-    /* ==================== FETCH & CACHE ==================== */
-
-    async fetchPage(url) {
-        const cached = this.getCachedPage(url);
-        if (cached) {
-            console.log('📦 Cache:', url);
-            await this.sleep(100);
-            return cached;
-        }
-
-        this.updateProgress(20);
-
-        this.abortController = new AbortController();
-        const timeoutId = setTimeout(() => this.abortController.abort(), 10000);
-
-        try {
-            const response = await fetch(url, {
-                headers: { 
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Cache-Control': 'no-cache'
-                },
-                signal: this.abortController.signal
-            });
-
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                this.init();
             }
 
-            const html = await response.text();
-            this.cachePage(url, html);
-            this.updateProgress(50);
-            return html;
+            init() {
+                this.trackInitialScripts();
+                this.attachNavigationHandlers();
+                this.setupPopStateHandler();
+                this.setupPreloading();
+                this.setupErrorHandling();
 
-        } catch (error) {
-            clearTimeout(timeoutId);
-            if (error.name === 'AbortError') {
-                throw new Error('Request timeout');
+                this.updateActiveNavigation(window.location.pathname);
+
+                requestAnimationFrame(() => {
+                    document.body.classList.remove('page-transitioning');
+                    this.mainContent?.classList.add('content-entering');
+                });
+
+
             }
-            throw error;
-        }
-    }
 
-    cachePage(url, html) {
-        if (this.pageCache.size >= this.maxCacheSize) {
-            const firstKey = this.pageCache.keys().next().value;
-            this.pageCache.delete(firstKey);
-        }
+            /* ==================== INITIALIZATION ==================== */
 
-        this.pageCache.set(url, {
-            html,
-            timestamp: Date.now()
-        });
-    }
+            trackInitialScripts() {
+                document.querySelectorAll('script[src]').forEach(script => {
+                    this.loadedScripts.add(script.src);
+                });
 
-    getCachedPage(url) {
-        const cached = this.pageCache.get(url);
-        
-        if (!cached) return null;
-        
-        if (Date.now() - cached.timestamp > this.cacheTimeout) {
-            this.pageCache.delete(url);
-            return null;
-        }
-        
-        return cached.html;
-    }
 
-    clearCache() {
-        this.pageCache.clear();
-        console.log('🗑️ Cache cleared');
-    }
-
-    async preloadPage(url) {
-        if (this.pageCache.has(url)) return;
-        
-        try {
-            const response = await fetch(url, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            
-            if (response.ok) {
-                const html = await response.text();
-                this.cachePage(url, html);
-                console.log('⚡ Preloaded:', url);
+                document.querySelectorAll('script:not([src])').forEach(script => {
+                    if (script.textContent) {
+                        const hash = this.hashCode(script.textContent);
+                        this.loadedInlineScripts.add(hash);
+                    }
+                });
             }
-        } catch (error) {
-            console.warn('Preload failed:', url);
-        }
-    }
 
-    /* ==================== PAGE PARSING ==================== */
-
-    parsePage(html) {
-        try {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            const parserError = doc.querySelector('parsererror');
-            if (parserError) {
-                throw new Error('HTML parsing failed');
+            setupPopStateHandler() {
+                window.addEventListener('popstate', (e) => {
+                    if (e.state?.url && !this.isNavigating) {
+                        this.navigateToPage(e.state.url, false);
+                    } else if (!e.state) {
+                        this.navigateToPage(window.location.pathname, false);
+                    }
+                });
             }
-            
-            return doc;
-        } catch (error) {
-            throw new Error(`Parse error: ${error.message}`);
-        }
-    }
 
-    extractMainContent(doc) {
-        const selectors = [
-            '#main-content',
-            'main',
-            '[role="main"]',
-            '.main-content'
-        ];
+            setupPreloading() {
+                let hoverTimeout;
+                document.addEventListener('mouseover', (e) => {
+                    const link = e.target.closest('a[data-page]');
+                    if (!link || link.hasAttribute('target')) return;
 
-        for (const selector of selectors) {
-            const element = doc.querySelector(selector);
-            if (element) return element;
-        }
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(() => {
+                        this.preloadPage(link.getAttribute('href'));
+                    }, 100);
+                });
+            }
 
-        return null;
-    }
+            setupErrorHandling() {
+                window.addEventListener('error', (e) => {
+                    console.error('Global error:', e.error);
+                });
 
-    /* ==================== DOM UPDATES ==================== */
+                window.addEventListener('unhandledrejection', (e) => {
+                    console.error('Unhandled promise rejection:', e.reason);
+                });
+            }
 
-    async updatePageContent(newMain, newDoc) {
-        if (!this.mainContent) {
-            throw new Error('Main content not found');
-        }
+            /* ==================== NAVIGATION HANDLERS ==================== */
 
-        this.mainContent.style.opacity = '0';
-        await this.sleep(150);
+            attachNavigationHandlers() {
+                document.addEventListener('click', (e) => {
+                    const link = e.target.closest('a[data-page]');
 
-        this.mainContent.innerHTML = newMain.innerHTML;
+                    if (!link ||
+                        link.hasAttribute('target') ||
+                        link.pathname === window.location.pathname ||
+                        link.getAttribute('href')?.startsWith('#') ||
+                        link.host !== window.location.host) {
+                        return;
+                    }
 
-        this.updateTitle(newDoc);
-        this.updateMetaTags(newDoc);
-        this.updateCanonical(newDoc);
+                    e.preventDefault();
+                    this.createRipple(e, link);
 
-        await this.loadPageScripts(newDoc);
+                    if (!this.isNavigating) {
+                        const url = link.getAttribute('href');
+                        this.navigateToPage(url, true);
+                    } else {
+                        this.queueNavigation(link.getAttribute('href'));
+                    }
+                });
 
-        this.mainContent.style.opacity = '1';
-    }
+                document.addEventListener('submit', (e) => {
+                    const form = e.target.closest('form[data-ajax]');
+                    if (form) {
+                        e.preventDefault();
+                        this.handleFormSubmit(form);
+                    }
+                });
+            }
 
-    updateTitle(newDoc) {
-        const newTitle = newDoc.querySelector('title');
-        if (newTitle) {
-            document.title = newTitle.textContent;
-        }
-    }
+            createRipple(e, element) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('nav-ripple');
 
-    updateMetaTags(newDoc) {
-        const metaTags = [
-            { type: 'name', values: ['description', 'keywords', 'author'] },
-            { type: 'property', values: ['og:title', 'og:description', 'og:image', 'og:url'] },
-            { type: 'name', values: ['twitter:title', 'twitter:description', 'twitter:image'] }
-        ];
+                const rect = element.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
 
-        metaTags.forEach(({ type, values }) => {
-            values.forEach(value => {
-                const newMeta = newDoc.querySelector(`meta[${type}="${value}"]`);
-                const currentMeta = document.querySelector(`meta[${type}="${value}"]`);
-                
-                if (newMeta && currentMeta) {
-                    currentMeta.setAttribute('content', newMeta.getAttribute('content'));
-                } else if (newMeta && !currentMeta) {
-                    document.head.appendChild(newMeta.cloneNode(true));
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+
+                element.style.position = 'relative';
+                element.style.overflow = 'hidden';
+                element.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            }
+
+            /* ==================== NAVIGATION CORE ==================== */
+
+            async navigateToPage(url, pushState = true) {
+                if (this.isNavigating) {
+                    this.queueNavigation(url);
+                    return;
                 }
-            });
-        });
-    }
 
-    updateCanonical(newDoc) {
-        const newCanonical = newDoc.querySelector('link[rel="canonical"]');
-        const currentCanonical = document.querySelector('link[rel="canonical"]');
-        
-        if (newCanonical && currentCanonical) {
-            currentCanonical.setAttribute('href', newCanonical.getAttribute('href'));
-        } else if (newCanonical && !currentCanonical) {
-            document.head.appendChild(newCanonical.cloneNode(true));
-        }
-    }
+                this.isNavigating = true;
+                this.navigationStartTime = performance.now();
+                this.retryCount = 0;
 
-    /* ==================== SCRIPT MANAGEMENT ==================== */
-
-    cleanupPage() {
-        window.dispatchEvent(new CustomEvent('pageCleanup', {
-            detail: { url: window.location.pathname }
-        }));
-
-        document.querySelectorAll('script[data-page-script="true"]').forEach(script => {
-            script.remove();
-        });
-
-        const pageVars = [
-            'eventFilters', 'applyFilters', 'resetFilters', 'changeMonth',
-            'pageController', 'pageState'
-        ];
-        
-        pageVars.forEach(varName => {
-            if (window[varName]) delete window[varName];
-        });
-
-        const oldMain = this.mainContent?.cloneNode(true);
-        if (oldMain && this.mainContent?.parentNode) {
-            this.mainContent.parentNode.replaceChild(oldMain, this.mainContent);
-            this.mainContent = oldMain;
-        }
-    }
-
-    async loadPageScripts(newDoc) {
-        const scripts = Array.from(newDoc.querySelectorAll('script'));
-        const pageScripts = scripts.filter(script => {
-            // Skip navigation and mobile menu scripts
-            if (!script.src && (
-                script.textContent.includes('NavigationManager') ||
-                script.textContent.includes('MobileMenu') ||
-                script.textContent.includes('class Navigation')
-            )) {
-                return false;
-            }
-
-            // Skip already loaded external scripts
-            if (script.src && this.loadedScripts.has(script.src)) {
-                return false;
-            }
-            
-            // ВАЖЛИВО: Skip inline scripts that are already on the page
-            if (!script.src) {
-                const scriptHash = this.hashCode(script.textContent);
-                if (this.loadedInlineScripts && this.loadedInlineScripts.has(scriptHash)) {
-                    console.log('[NavManager] Skipping duplicate inline script');
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
-        for (const script of pageScripts) {
-            try {
-                await this.loadScript(script);
-            } catch (error) {
-                console.warn('Script load failed:', script.src || 'inline', error);
-            }
-        }
-    }
-    
-    hashCode(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return hash;
-    }
-
-    loadScript(originalScript) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.setAttribute('data-page-script', 'true');
-
-            Array.from(originalScript.attributes).forEach(attr => {
-                if (attr.name !== 'src') {
-                    script.setAttribute(attr.name, attr.value);
-                }
-            });
-
-            if (originalScript.src) {
-                script.src = originalScript.src;
-                script.async = false;
-                
-                script.onload = () => {
-                    this.loadedScripts.add(originalScript.src);
-                    resolve();
-                };
-                
-                script.onerror = () => {
-                    reject(new Error(`Failed: ${originalScript.src}`));
-                };
-                
-                document.body.appendChild(script);
-            } else {
-                script.textContent = originalScript.textContent;
-                
-                // Track inline script
-                const hash = this.hashCode(originalScript.textContent);
-                this.loadedInlineScripts.add(hash);
-                
                 try {
-                    document.body.appendChild(script);
-                    setTimeout(resolve, 0);
-                } catch (e) {
-                    reject(e);
+                    await this.performNavigation(url, pushState);
+                } catch (error) {
+                    await this.handleNavigationError(error, url, pushState);
+                } finally {
+                    this.isNavigating = false;
+                    this.processNavigationQueue();
                 }
             }
-        });
-    }
 
-    /* ==================== FINALIZATION ==================== */
+            async performNavigation(url, pushState) {
+                await this.showOverlay();
+                this.cleanupPage();
 
-    async finalizeNavigation(url) {
-        this.updateActiveNavigation(url);
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        this.closeMobileMenu();
-        this.reinitializePageScripts();
-        await this.hideOverlay();
-        
-        window.dispatchEvent(new CustomEvent('navigationComplete', {
-            detail: { url, timestamp: Date.now() }
-        }));
-    }
+                const html = await this.fetchPage(url);
+                this.updateProgress(60);
 
-    updateActiveNavigation(url) {
-        document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
-            link.classList.remove('active');
-            const underline = link.querySelector('span');
-            if (underline) underline.style.transform = 'scaleX(0)';
-        });
+                const newDoc = this.parsePage(html);
+                const newMain = this.extractMainContent(newDoc);
 
-        const path = new URL(url, window.location.origin).pathname;
-        
-        document.querySelectorAll(`a[href="${path}"]`).forEach(link => {
-            link.classList.add('active');
-            const underline = link.querySelector('span');
-            if (underline) underline.style.transform = 'scaleX(1)';
-        });
-    }
+                if (!newMain) {
+                    throw new Error('Main content not found');
+                }
 
-    reinitializePageScripts() {
-        window.dispatchEvent(new CustomEvent('pageInit', {
-            detail: { url: window.location.pathname }
-        }));
+                this.updateProgress(75);
 
-        this.initializeLazyLoading();
-        this.initializeFormHandlers();
-    }
-
-    initializeLazyLoading() {
-        if ('IntersectionObserver' in window) {
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            images.forEach(img => {
-                if (!img.complete) img.loading = 'lazy';
-            });
-        }
-    }
-
-    initializeFormHandlers() {
-        const forms = document.querySelectorAll('form[data-ajax]');
-        // Form handlers
-    }
-
-    closeMobileMenu() {
-        const mobileNav = document.getElementById('mobileNav');
-        const backdrop = document.getElementById('mobileBackdrop');
-        const toggle = document.getElementById('mobileMenuToggle');
-        
-        if (mobileNav) mobileNav.classList.remove('active');
-        if (backdrop) backdrop.classList.remove('active');
-        if (toggle) {
-            toggle.classList.remove('active');
-            toggle.setAttribute('aria-expanded', 'false');
-        }
-        document.body.style.overflow = '';
-    }
-
-    /* ==================== ERROR HANDLING ==================== */
-
-    async handleNavigationError(error, url, pushState) {
-        console.error('Navigation error:', error);
-
-        if (this.retryCount < this.maxRetries) {
-            this.retryCount++;
-            console.log(`🔄 Retry ${this.retryCount}/${this.maxRetries}...`);
-            
-            await this.sleep(500 * this.retryCount);
-            
-            try {
-                await this.performNavigation(url, pushState);
-                return;
-            } catch (retryError) {
-                console.error('Retry failed:', retryError);
-            }
-        }
-
-        console.log('⚠️ Fallback to normal navigation');
-        await this.hideOverlay();
-        window.location.href = url;
-    }
-
-    /* ==================== QUEUE MANAGEMENT ==================== */
-
-    queueNavigation(url) {
-        this.navigationQueue = [url];
-        console.log('📝 Queued:', url);
-    }
-
-    processNavigationQueue() {
-        if (this.navigationQueue.length > 0) {
-            const nextUrl = this.navigationQueue.shift();
-            console.log('▶️ Processing queued:', nextUrl);
-            this.navigateToPage(nextUrl, true);
-        }
-    }
-
-    /* ==================== FORM HANDLING ==================== */
-
-    async handleFormSubmit(form) {
-        const url = form.action;
-        const method = form.method || 'POST';
-        const formData = new FormData(form);
-
-        try {
-            await this.showOverlay();
-
-            const response = await fetch(url, {
-                method,
-                body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-
-            if (!response.ok) {
-                throw new Error('Form submission failed');
-            }
-
-            const html = await response.text();
-            const newDoc = this.parsePage(html);
-            const newMain = this.extractMainContent(newDoc);
-
-            if (newMain) {
                 await this.updatePageContent(newMain, newDoc);
+                this.updateProgress(90);
+
+                if (pushState) {
+                    history.pushState({
+                        url,
+                        timestamp: Date.now()
+                    }, '', url);
+                }
+
                 await this.finalizeNavigation(url);
+
+                const duration = performance.now() - this.navigationStartTime;
             }
 
-        } catch (error) {
-            console.error('Form error:', error);
-            await this.hideOverlay();
-            this.showNotification('Помилка відправки форми', 'error');
-        }
-    }
+            async showOverlay() {
+                document.body.classList.add('page-transitioning');
+                this.overlay.classList.remove('hidden');
+                this.overlay.style.opacity = '0';
 
-    /* ==================== UTILITIES ==================== */
+                await this.nextFrame();
 
-    updateProgress(percent) {
-        if (this.progressBar) {
-            this.progressBar.style.width = percent + '%';
-        }
-    }
+                this.overlay.classList.add('active');
+                this.overlay.style.opacity = '1';
+                this.updateProgress(10);
 
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+                await this.sleep(200);
+            }
 
-    nextFrame() {
-        return new Promise(resolve => requestAnimationFrame(resolve));
-    }
+            async hideOverlay() {
+                this.updateProgress(100);
+                await this.sleep(150);
 
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        notification.style.cssText = `
+                this.overlay.classList.remove('active');
+                this.overlay.style.opacity = '0';
+                document.body.classList.remove('page-transitioning');
+
+                await this.sleep(300);
+
+                this.overlay.classList.add('hidden');
+                this.progressBar.style.width = '0%';
+
+                this.mainContent?.classList.remove('content-entering');
+                await this.nextFrame();
+                this.mainContent?.classList.add('content-entering');
+            }
+
+            /* ==================== FETCH & CACHE ==================== */
+
+            async fetchPage(url) {
+                const cached = this.getCachedPage(url);
+                if (cached) {
+
+                    await this.sleep(100);
+                    return cached;
+                }
+
+                this.updateProgress(20);
+
+                this.abortController = new AbortController();
+                const timeoutId = setTimeout(() => this.abortController.abort(), 10000);
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Cache-Control': 'no-cache'
+                        },
+                        signal: this.abortController.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const html = await response.text();
+                    this.cachePage(url, html);
+                    this.updateProgress(50);
+                    return html;
+
+                } catch (error) {
+                    clearTimeout(timeoutId);
+                    if (error.name === 'AbortError') {
+                        throw new Error('Request timeout');
+                    }
+                    throw error;
+                }
+            }
+
+            cachePage(url, html) {
+                if (this.pageCache.size >= this.maxCacheSize) {
+                    const firstKey = this.pageCache.keys().next().value;
+                    this.pageCache.delete(firstKey);
+                }
+
+                this.pageCache.set(url, {
+                    html,
+                    timestamp: Date.now()
+                });
+            }
+
+            getCachedPage(url) {
+                const cached = this.pageCache.get(url);
+
+                if (!cached) return null;
+
+                if (Date.now() - cached.timestamp > this.cacheTimeout) {
+                    this.pageCache.delete(url);
+                    return null;
+                }
+
+                return cached.html;
+            }
+
+            clearCache() {
+                this.pageCache.clear();
+
+            }
+
+            async preloadPage(url) {
+                if (this.pageCache.has(url)) return;
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const html = await response.text();
+                        this.cachePage(url, html);
+
+                    }
+                } catch (error) {
+                    console.warn('Preload failed:', url);
+                }
+            }
+
+            /* ==================== PAGE PARSING ==================== */
+
+            parsePage(html) {
+                try {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    const parserError = doc.querySelector('parsererror');
+                    if (parserError) {
+                        throw new Error('HTML parsing failed');
+                    }
+
+                    return doc;
+                } catch (error) {
+                    throw new Error(`Parse error: ${error.message}`);
+                }
+            }
+
+            extractMainContent(doc) {
+                const selectors = [
+                    '#main-content',
+                    'main',
+                    '[role="main"]',
+                    '.main-content'
+                ];
+
+                for (const selector of selectors) {
+                    const element = doc.querySelector(selector);
+                    if (element) return element;
+                }
+
+                return null;
+            }
+
+            /* ==================== DOM UPDATES ==================== */
+
+            async updatePageContent(newMain, newDoc) {
+                if (!this.mainContent) {
+                    throw new Error('Main content not found');
+                }
+
+                this.mainContent.style.opacity = '0';
+                await this.sleep(150);
+
+                this.mainContent.innerHTML = newMain.innerHTML;
+
+                this.updateTitle(newDoc);
+                this.updateMetaTags(newDoc);
+                this.updateCanonical(newDoc);
+
+                await this.loadPageScripts(newDoc);
+
+                this.mainContent.style.opacity = '1';
+            }
+
+            updateTitle(newDoc) {
+                const newTitle = newDoc.querySelector('title');
+                if (newTitle) {
+                    document.title = newTitle.textContent;
+                }
+            }
+
+            updateMetaTags(newDoc) {
+                const metaTags = [{
+                        type: 'name',
+                        values: ['description', 'keywords', 'author']
+                    },
+                    {
+                        type: 'property',
+                        values: ['og:title', 'og:description', 'og:image', 'og:url']
+                    },
+                    {
+                        type: 'name',
+                        values: ['twitter:title', 'twitter:description', 'twitter:image']
+                    }
+                ];
+
+                metaTags.forEach(({
+                    type,
+                    values
+                }) => {
+                    values.forEach(value => {
+                        const newMeta = newDoc.querySelector(`meta[${type}="${value}"]`);
+                        const currentMeta = document.querySelector(`meta[${type}="${value}"]`);
+
+                        if (newMeta && currentMeta) {
+                            currentMeta.setAttribute('content', newMeta.getAttribute('content'));
+                        } else if (newMeta && !currentMeta) {
+                            document.head.appendChild(newMeta.cloneNode(true));
+                        }
+                    });
+                });
+            }
+
+            updateCanonical(newDoc) {
+                const newCanonical = newDoc.querySelector('link[rel="canonical"]');
+                const currentCanonical = document.querySelector('link[rel="canonical"]');
+
+                if (newCanonical && currentCanonical) {
+                    currentCanonical.setAttribute('href', newCanonical.getAttribute('href'));
+                } else if (newCanonical && !currentCanonical) {
+                    document.head.appendChild(newCanonical.cloneNode(true));
+                }
+            }
+
+            /* ==================== SCRIPT MANAGEMENT ==================== */
+
+            cleanupPage() {
+                window.dispatchEvent(new CustomEvent('pageCleanup', {
+                    detail: {
+                        url: window.location.pathname
+                    }
+                }));
+
+                document.querySelectorAll('script[data-page-script="true"]').forEach(script => {
+                    script.remove();
+                });
+
+
+                const pageVars = [
+
+                    'clearAllFilters', 'clearSearch', 'applyFilters', 'navigateToMonth',
+
+                    'filterByCategory', 'trackDownload', 'copyLink', 'shareDocument', 'goToPage',
+
+                    'toggleDropdown',
+
+                    'eventFilters', 'resetFilters', 'changeMonth',
+                    'pageController', 'pageState'
+                ];
+
+                pageVars.forEach(varName => {
+                    if (window[varName]) {
+                        delete window[varName];
+                    }
+                });
+
+                const oldMain = this.mainContent?.cloneNode(true);
+                if (oldMain && this.mainContent?.parentNode) {
+                    this.mainContent.parentNode.replaceChild(oldMain, this.mainContent);
+                    this.mainContent = oldMain;
+                }
+            }
+
+            async loadPageScripts(newDoc) {
+                const scripts = Array.from(newDoc.querySelectorAll('script'));
+                const pageScripts = scripts.filter(script => {
+
+                    if (!script.src && (
+                            script.textContent.includes('NavigationManager') ||
+                            script.textContent.includes('MobileMenu') ||
+                            script.textContent.includes('class Navigation')
+                        )) {
+                        return false;
+                    }
+
+
+                    if (script.src && this.loadedScripts.has(script.src)) {
+                        return false;
+                    }
+
+
+                    if (!script.src) {
+                        const scriptHash = this.hashCode(script.textContent);
+                        if (this.loadedInlineScripts && this.loadedInlineScripts.has(scriptHash)) {
+
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+                for (const script of pageScripts) {
+                    try {
+                        await this.loadScript(script);
+                    } catch (error) {
+                        console.warn('Script load failed:', script.src || 'inline', error);
+                    }
+                }
+            }
+
+            hashCode(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return hash;
+            }
+
+            loadScript(originalScript) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.setAttribute('data-page-script', 'true');
+
+                    Array.from(originalScript.attributes).forEach(attr => {
+                        if (attr.name !== 'src') {
+                            script.setAttribute(attr.name, attr.value);
+                        }
+                    });
+
+                    if (originalScript.src) {
+                        script.src = originalScript.src;
+                        script.async = false;
+
+                        script.onload = () => {
+                            this.loadedScripts.add(originalScript.src);
+                            resolve();
+                        };
+
+                        script.onerror = () => {
+                            reject(new Error(`Failed: ${originalScript.src}`));
+                        };
+
+                        document.body.appendChild(script);
+                    } else {
+                        script.textContent = originalScript.textContent;
+
+
+                        const hash = this.hashCode(originalScript.textContent);
+                        this.loadedInlineScripts.add(hash);
+
+                        try {
+                            document.body.appendChild(script);
+                            setTimeout(resolve, 0);
+                        } catch (e) {
+                            reject(e);
+                        }
+                    }
+                });
+            }
+
+            /* ==================== FINALIZATION ==================== */
+
+            async finalizeNavigation(url) {
+                this.updateActiveNavigation(url);
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'instant'
+                });
+                this.closeMobileMenu();
+                this.reinitializePageScripts();
+                await this.hideOverlay();
+
+                window.dispatchEvent(new CustomEvent('navigationComplete', {
+                    detail: {
+                        url,
+                        timestamp: Date.now()
+                    }
+                }));
+            }
+
+
+
+            updateActiveNavigation(url) {
+
+                document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    const underline = link.querySelector('span');
+                    if (underline) underline.style.transform = 'scaleX(0)';
+                });
+
+                const path = new URL(url, window.location.origin).pathname;
+
+
+                let basePage = '';
+                if (path === '/') {
+                    basePage = 'home';
+                } else if (path.startsWith('/documents')) {
+                    basePage = 'documents';
+                } else if (path.startsWith('/news')) {
+                    basePage = 'news';
+                } else if (path.startsWith('/calendar')) {
+                    basePage = 'calendar';
+                } else if (path.startsWith('/regions')) {
+                    basePage = 'regions';
+                } else if (path.startsWith('/team')) {
+                    basePage = 'team';
+                } else if (path.startsWith('/contacts')) {
+                    basePage = 'contacts';
+                }
+
+
+                if (basePage) {
+                    document.querySelectorAll(`[data-page="${basePage}"]`).forEach(link => {
+
+                        if (link.classList.contains('nav-link') || link.classList.contains('mobile-nav-link')) {
+                            link.classList.add('active');
+                            const underline = link.querySelector('span');
+                            if (underline) underline.style.transform = 'scaleX(1)';
+                        }
+                    });
+                }
+            }
+
+            reinitializePageScripts() {
+                window.dispatchEvent(new CustomEvent('pageInit', {
+                    detail: {
+                        url: window.location.pathname
+                    }
+                }));
+
+                this.initializeLazyLoading();
+                this.initializeFormHandlers();
+            }
+
+            initializeLazyLoading() {
+                if ('IntersectionObserver' in window) {
+                    const images = document.querySelectorAll('img[loading="lazy"]');
+                    images.forEach(img => {
+                        if (!img.complete) img.loading = 'lazy';
+                    });
+                }
+            }
+
+            initializeFormHandlers() {
+                const forms = document.querySelectorAll('form[data-ajax]');
+
+            }
+
+            closeMobileMenu() {
+                const mobileNav = document.getElementById('mobileNav');
+                const backdrop = document.getElementById('mobileBackdrop');
+                const toggle = document.getElementById('mobileMenuToggle');
+
+                if (mobileNav) mobileNav.classList.remove('active');
+                if (backdrop) backdrop.classList.remove('active');
+                if (toggle) {
+                    toggle.classList.remove('active');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+                document.body.style.overflow = '';
+            }
+
+            /* ==================== ERROR HANDLING ==================== */
+
+            async handleNavigationError(error, url, pushState) {
+                console.error('Navigation error:', error);
+
+                if (this.retryCount < this.maxRetries) {
+                    this.retryCount++;
+
+
+                    await this.sleep(500 * this.retryCount);
+
+                    try {
+                        await this.performNavigation(url, pushState);
+                        return;
+                    } catch (retryError) {
+                        console.error('Retry failed:', retryError);
+                    }
+                }
+
+
+                await this.hideOverlay();
+                window.location.href = url;
+            }
+
+            /* ==================== QUEUE MANAGEMENT ==================== */
+
+            queueNavigation(url) {
+                this.navigationQueue = [url];
+
+            }
+
+            processNavigationQueue() {
+                if (this.navigationQueue.length > 0) {
+                    const nextUrl = this.navigationQueue.shift();
+
+                    this.navigateToPage(nextUrl, true);
+                }
+            }
+
+            /* ==================== FORM HANDLING ==================== */
+
+            async handleFormSubmit(form) {
+                const url = form.action;
+                const method = form.method || 'POST';
+                const formData = new FormData(form);
+
+                try {
+                    await this.showOverlay();
+
+                    const response = await fetch(url, {
+                        method,
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Form submission failed');
+                    }
+
+                    const html = await response.text();
+                    const newDoc = this.parsePage(html);
+                    const newMain = this.extractMainContent(newDoc);
+
+                    if (newMain) {
+                        await this.updatePageContent(newMain, newDoc);
+                        await this.finalizeNavigation(url);
+                    }
+
+                } catch (error) {
+                    console.error('Form error:', error);
+                    await this.hideOverlay();
+                    this.showNotification('Помилка відправки форми', 'error');
+                }
+            }
+
+            /* ==================== UTILITIES ==================== */
+
+            updateProgress(percent) {
+                if (this.progressBar) {
+                    this.progressBar.style.width = percent + '%';
+                }
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            nextFrame() {
+                return new Promise(resolve => requestAnimationFrame(resolve));
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.textContent = message;
+                notification.style.cssText = `
             position: fixed; top: 20px; right: 20px;
             padding: 1rem 1.5rem;
             background: ${type === 'error' ? '#ef4444' : '#3b82f6'};
@@ -1460,101 +1511,101 @@ main {
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             z-index: 10000; animation: slideIn 0.3s ease;
         `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
 
-    /* ==================== PUBLIC API ==================== */
+                document.body.appendChild(notification);
 
-    navigateTo(url) {
-        this.navigateToPage(url, true);
-    }
-
-    reload() {
-        this.clearCache();
-        this.navigateToPage(window.location.pathname, false);
-    }
-
-    goBack() {
-        window.history.back();
-    }
-
-    goForward() {
-        window.history.forward();
-    }
-}
-
-/* ==================== MOBILE MENU ==================== */
-
-class MobileMenu {
-    constructor() {
-        this.toggle = document.getElementById('mobileMenuToggle');
-        this.close = document.getElementById('mobileMenuClose');
-        this.nav = document.getElementById('mobileNav');
-        this.backdrop = document.getElementById('mobileBackdrop');
-        this.isOpen = false;
-        
-        this.init();
-    }
-
-    init() {
-        this.toggle?.addEventListener('click', () => this.toggleMenu());
-        this.close?.addEventListener('click', () => this.closeMenu());
-        this.backdrop?.addEventListener('click', () => this.closeMenu());
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.closeMenu();
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
             }
-        });
-    }
 
-    toggleMenu() {
-        this.isOpen ? this.closeMenu() : this.openMenu();
-    }
+            /* ==================== PUBLIC API ==================== */
 
-    openMenu() {
-        this.nav?.classList.add('active');
-        this.backdrop?.classList.add('active');
-        this.toggle?.classList.add('active');
-        this.toggle?.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-        this.isOpen = true;
-    }
+            navigateTo(url) {
+                this.navigateToPage(url, true);
+            }
 
-    closeMenu() {
-        this.nav?.classList.remove('active');
-        this.backdrop?.classList.remove('active');
-        this.toggle?.classList.remove('active');
-        this.toggle?.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        this.isOpen = false;
-    }
-}
+            reload() {
+                this.clearCache();
+                this.navigateToPage(window.location.pathname, false);
+            }
 
-/* ==================== INITIALIZATION ==================== */
+            goBack() {
+                window.history.back();
+            }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeNavigation);
-} else {
-    initializeNavigation();
-}
+            goForward() {
+                window.history.forward();
+            }
+        }
 
-function initializeNavigation() {
-    window.navigationManager = new NavigationManager();
-    window.mobileMenu = new MobileMenu();
-    
-    console.log('✅ Navigation system ready');
-}
+        /* ==================== MOBILE MENU ==================== */
 
-// Notification styles
-const style = document.createElement('style');
-style.textContent = `
+        class MobileMenu {
+            constructor() {
+                this.toggle = document.getElementById('mobileMenuToggle');
+                this.close = document.getElementById('mobileMenuClose');
+                this.nav = document.getElementById('mobileNav');
+                this.backdrop = document.getElementById('mobileBackdrop');
+                this.isOpen = false;
+
+                this.init();
+            }
+
+            init() {
+                this.toggle?.addEventListener('click', () => this.toggleMenu());
+                this.close?.addEventListener('click', () => this.closeMenu());
+                this.backdrop?.addEventListener('click', () => this.closeMenu());
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isOpen) {
+                        this.closeMenu();
+                    }
+                });
+            }
+
+            toggleMenu() {
+                this.isOpen ? this.closeMenu() : this.openMenu();
+            }
+
+            openMenu() {
+                this.nav?.classList.add('active');
+                this.backdrop?.classList.add('active');
+                this.toggle?.classList.add('active');
+                this.toggle?.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+                this.isOpen = true;
+            }
+
+            closeMenu() {
+                this.nav?.classList.remove('active');
+                this.backdrop?.classList.remove('active');
+                this.toggle?.classList.remove('active');
+                this.toggle?.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+                this.isOpen = false;
+            }
+        }
+
+        /* ==================== INITIALIZATION ==================== */
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeNavigation);
+        } else {
+            initializeNavigation();
+        }
+
+        function initializeNavigation() {
+            window.navigationManager = new NavigationManager();
+            window.mobileMenu = new MobileMenu();
+
+
+        }
+
+
+        const style = document.createElement('style');
+        style.textContent = `
     @keyframes slideIn {
         from { transform: translateX(400px); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
@@ -1564,11 +1615,221 @@ style.textContent = `
         to { transform: translateX(400px); opacity: 0; }
     }
 `;
-document.head.appendChild(style);
+        document.head.appendChild(style);
     </script>
-    
-        
+
+
 
     {% block scripts %}{% endblock %}
+        <!-- ==================== GLOBAL TOAST NOTIFICATIONS ==================== -->
+        <div id="toast-container" class="fixed top-24 right-8 z-[9999] space-y-3 pointer-events-none">
+            <!-- Toasts will be inserted here dynamically -->
+        </div>
+    
+        <style>
+            /* Toast Animations */
+            @keyframes toast-slide-in {
+                from {
+                    transform: translateX(120%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+    
+            @keyframes toast-slide-out {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(120%);
+                    opacity: 0;
+                }
+            }
+    
+            @keyframes toast-progress {
+                from {
+                    width: 100%;
+                }
+                to {
+                    width: 0%;
+                }
+            }
+    
+            .toast-enter {
+                animation: toast-slide-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+    
+            .toast-exit {
+                animation: toast-slide-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+    
+            .toast-progress-bar {
+                animation: toast-progress 3s linear forwards;
+            }
+    
+            .toast-item {
+                pointer-events: auto;
+            }
+        </style>
+    
+        <script>
+            // ==================== GLOBAL TOAST NOTIFICATION SYSTEM ====================
+            
+            window.ToastManager = {
+                container: null,
+                toasts: [],
+                
+                init() {
+                    this.container = document.getElementById('toast-container');
+                },
+                
+                show(options = {}) {
+                    const {
+                        type = 'success', // 'success', 'error', 'warning', 'info'
+                        title = '',
+                        message = '',
+                        duration = 3000,
+                        closable = true
+                    } = options;
+                    
+                    if (!this.container) this.init();
+                    
+                    const toastId = 'toast-' + Date.now() + Math.random().toString(36).substr(2, 9);
+                    
+                    const toast = this.createToast(toastId, type, title, message, duration, closable);
+                    
+                    this.container.appendChild(toast);
+                    this.toasts.push(toastId);
+                    
+                    // Trigger enter animation
+                    requestAnimationFrame(() => {
+                        toast.classList.add('toast-enter');
+                    });
+                    
+                    // Auto-hide after duration
+                    if (duration > 0) {
+                        setTimeout(() => {
+                            this.hide(toastId);
+                        }, duration);
+                    }
+                    
+                    return toastId;
+                },
+                
+                createToast(id, type, title, message, duration, closable) {
+                    const toast = document.createElement('div');
+                    toast.id = id;
+                    toast.className = 'toast-item opacity-0';
+                    
+                    const config = this.getTypeConfig(type);
+                    
+                    toast.innerHTML = `
+                        <div class="bg-white rounded-2xl shadow-2xl border-2 ${config.borderColor} overflow-hidden min-w-[340px] max-w-[400px]">
+                            <!-- Progress Bar -->
+                            ${duration > 0 ? `<div class="h-1 ${config.progressBg} toast-progress-bar"></div>` : ''}
+                            
+                            <div class="p-4 flex items-start gap-4">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0 w-12 h-12 ${config.iconBg} rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-[24px]">${config.icon}</span>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="flex-1 min-w-0">
+                                    ${title ? `<div class="font-black text-gray-900 text-base mb-1">${title}</div>` : ''}
+                                    <div class="text-sm text-gray-600 ${title ? '' : 'leading-relaxed'}">${message}</div>
+                                </div>
+                                
+                                <!-- Close Button -->
+                                ${closable ? `
+                                <button onclick="window.ToastManager.hide('${id}')" class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
+                                    <span class="material-symbols-outlined text-gray-400 hover:text-gray-600 text-[20px]">close</span>
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    return toast;
+                },
+                
+                getTypeConfig(type) {
+                    const configs = {
+                        success: {
+                            icon: 'check_circle',
+                            iconBg: 'bg-emerald-600',
+                            borderColor: 'border-emerald-600',
+                            progressBg: 'bg-emerald-600'
+                        },
+                        error: {
+                            icon: 'cancel',
+                            iconBg: 'bg-red-600',
+                            borderColor: 'border-red-600',
+                            progressBg: 'bg-red-600'
+                        },
+                        warning: {
+                            icon: 'warning',
+                            iconBg: 'bg-amber-600',
+                            borderColor: 'border-amber-600',
+                            progressBg: 'bg-amber-600'
+                        },
+                        info: {
+                            icon: 'info',
+                            iconBg: 'bg-blue-600',
+                            borderColor: 'border-blue-600',
+                            progressBg: 'bg-blue-600'
+                        }
+                    };
+                    
+                    return configs[type] || configs.info;
+                },
+                
+                hide(toastId) {
+                    const toast = document.getElementById(toastId);
+                    if (!toast) return;
+                    
+                    toast.classList.remove('toast-enter');
+                    toast.classList.add('toast-exit');
+                    
+                    setTimeout(() => {
+                        toast.remove();
+                        this.toasts = this.toasts.filter(id => id !== toastId);
+                    }, 300);
+                },
+                
+                // Helper methods
+                success(message, title = 'Успіх!') {
+                    return this.show({ type: 'success', title, message });
+                },
+                
+                error(message, title = 'Помилка!') {
+                    return this.show({ type: 'error', title, message });
+                },
+                
+                warning(message, title = 'Увага!') {
+                    return this.show({ type: 'warning', title, message });
+                },
+                
+                info(message, title = 'Інформація') {
+                    return this.show({ type: 'info', title, message });
+                },
+                
+                clearAll() {
+                    this.toasts.forEach(id => this.hide(id));
+                }
+            };
+            
+            // Initialize on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => window.ToastManager.init());
+            } else {
+                window.ToastManager.init();
+            }
+        </script>
 </body>
+
 </html>

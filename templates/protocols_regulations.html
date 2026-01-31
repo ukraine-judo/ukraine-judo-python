@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Протоколи та регламенти - {{ settings.site_name }}{% endblock %}
+{% block title %}Протоколи та регламенти - Федерація Дзюдо України{% endblock %}
 
 {% block content %}
 {% block subheader %}
@@ -9,13 +9,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide py-2" aria-label="Навігація по документах">
             <!-- Документи -->
-            <a href="/documents" class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
+            <a href="/documents" 
+               data-page="documents"
+               class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
                 <span class="material-symbols-outlined text-[18px]">folder</span>
                 <span>Нормативні документи</span>
             </a>
             
             <!-- Протоколи та регламенти (Active) -->
-            <a href="/documents/events" class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+            <a href="/documents/events" 
+               data-page="documents-events"
+               class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
                 <span class="material-symbols-outlined text-[18px]">description</span>
                 <span>Протоколи та регламенти</span>
             </a>
@@ -42,13 +46,7 @@
       <div class="max-w-2xl">
           <h1 class="text-gray-900 text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2">Протоколи та регламенти</h1>
           <p class="text-[var(--muted)] leading-relaxed mb-1">
-              Неофіційний реєстр протоколів змагань, регламентів. Використовуйте фільтри для швидкого пошуку.
-          </p>
-          <p class="text-gray-400 text-sm font-normal">
-              <span class="inline-flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[16px]">link</span>
-                  Джерело: офіційний сайт Федерації Дзюдо України
-              </span>
+              Офіційний реєстр протоколів змагань, регламентів. Використовуйте фільтри для швидкого пошуку.
           </p>
       </div>
       
@@ -332,90 +330,103 @@
             </table>
         </div>
 
-        <!-- Pagination Footer -->
-        <div id="protocols-pagination" class="border-t border-gray-200 px-6 py-4 flex items-center justify-between bg-gray-50/50">
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700">
-                        Показано <span class="font-medium text-gray-900">{{ showing_from }}</span> до <span class="font-medium text-gray-900">{{ showing_to }}</span> з <span class="font-medium text-gray-900">{{ total }}</span> результатів
-                    </p>
-                </div>
-                
-                <!-- Pagination (1+ pages) -->
-                {% if total_pages > 1 %}
-                <div>
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <!-- Previous -->
-                        {% if has_prev %}
-                        <a href="#" data-page="{{ current_page - 1 }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <span class="sr-only">Попередня</span>
-                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                        </a>
-                        {% else %}
-                        <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
-                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                        </span>
-                        {% endif %}
-
-                        <!-- Page Numbers -->
-                        {% for p in page_range %}
-                            {% if p == '...' %}
-                            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
-                            {% elif p == current_page %}
-                            <span class="z-10 bg-primary-500/10 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ p }}</span>
-                            {% else %}
-                            <a href="#" data-page="{{ p }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ p }}</a>
-                            {% endif %}
-                        {% endfor %}
-
-                        <!-- Next -->
-                        {% if has_next %}
-                        <a href="#" data-page="{{ current_page + 1 }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <span class="sr-only">Наступна</span>
-                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                        </a>
-                        {% else %}
-                        <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
-                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                        </span>
-                        {% endif %}
-                    </nav>
-                </div>
-                {% else %}
-                <!-- Single page -->
-                <div class="text-sm text-gray-500">Сторінка 1 з 1</div>
-                {% endif %}
-            </div>
-
-            <!-- Mobile Pagination -->
-            <div class="flex items-center justify-between w-full sm:hidden">
-                {% if has_prev %}
-                <a href="#" data-page="{{ current_page - 1 }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                    Попередня
-                </a>
-                {% else %}
-                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
-                    Попередня
-                </span>
-                {% endif %}
-
-                <span class="text-sm text-gray-500">
-                    Стор. {{ current_page }} з {{ total_pages }}
-                </span>
-
-                {% if has_next %}
-                <a href="#" data-page="{{ current_page + 1 }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                    Наступна
-                </a>
-                {% else %}
-                <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
-                    Наступна
-                </span>
-                {% endif %}
-            </div>
+<!-- Pagination Footer -->
+<div id="protocols-pagination" class="border-t border-gray-200 px-6 py-4 flex items-center justify-between bg-gray-50/50">
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm text-gray-700">
+                Показано <span class="font-medium text-gray-900">{{ showing_from }}</span> до 
+                <span class="font-medium text-gray-900">{{ showing_to }}</span> з 
+                <span class="font-medium text-gray-900">{{ total }}</span> результатів
+            </p>
         </div>
+
+        <!-- Pagination (> 1 pages) -->
+        {% if total_pages > 1 %}
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <!-- Previous -->
+                {% if has_prev %}
+                <button 
+                    data-page="{{ current_page - 1 }}"
+                    class="pagination-btn relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-all duration-300"
+                >
+                    <span class="sr-only">Попередня</span>
+                    <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                </button>
+                {% else %}
+                <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
+                    <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                </span>
+                {% endif %}
+
+                <!-- Page Numbers -->
+                {% for p in page_range %}
+                    {% if p == '...' %}
+                    <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
+                    {% elif p == current_page %}
+                    <span class="z-10 bg-primary-500/10 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ p }}</span>
+                    {% else %}
+                    <button 
+                        data-page="{{ p }}"
+                        class="pagination-btn bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-300"
+                    >
+                        {{ p }}
+                    </button>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Next -->
+                {% if has_next %}
+                <button 
+                    data-page="{{ current_page + 1 }}"
+                    class="pagination-btn relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-all duration-300"
+                >
+                    <span class="sr-only">Наступна</span>
+                    <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                </button>
+                {% else %}
+                <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-300 cursor-not-allowed">
+                    <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                </span>
+                {% endif %}
+            </nav>
+        </div>
+        {% else %}
+        <!-- Single page -->
+        <div class="text-sm text-gray-500">Сторінка 1 з 1</div>
+        {% endif %}
     </div>
-    {% else %}
+
+    <!-- Mobile Pagination -->
+    <div class="flex items-center justify-between w-full sm:hidden">
+        {% if has_prev %}
+        <button 
+            data-page="{{ current_page - 1 }}"
+            class="pagination-btn relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-all duration-300"
+        >
+            Попередня
+        </button>
+        {% else %}
+        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
+            Попередня
+        </span>
+        {% endif %}
+
+        <span class="text-sm text-gray-500">Сторінка {{ current_page }} з {{ total_pages }}</span>
+
+        {% if has_next %}
+        <button 
+            data-page="{{ current_page + 1 }}"
+            class="pagination-btn ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-all duration-300"
+        >
+            Наступна
+        </button>
+        {% else %}
+        <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-300 bg-gray-100 cursor-not-allowed">
+            Наступна
+        </span>
+        {% endif %}
     <!-- Empty State -->
     <div id="protocols-table" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
         <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-4">
@@ -477,11 +488,6 @@
         </div>
     </div>
 </main>
-
-<!-- Page Loader -->
-<div class="page-loader" id="pageLoader">
-    <div class="loader-spinner"></div>
-</div>
 
 <style>
 /* ===========================
@@ -594,59 +600,6 @@
     background: #9CA3AF;
 }
 
-/* ===========================
-   LOADER & ANIMATIONS
-   =========================== */
-.page-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-
-.page-loader.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.loader-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #E5E7EB;
-    border-top-color: #111418;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.fade-content {
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Smooth scroll */
 html {
     scroll-behavior: smooth;
@@ -683,429 +636,459 @@ html {
 </style>
 
 <script data-page-script="true">
-  (function() {
-      'use strict';
-      
-      // Current filters state
-      let currentFilters = {
-          year: '{{ current_year or '' }}',
-          eventtype: '{{ current_event_type }}',
-          category: '{{ current_category }}',
-          search: '{{ search_query }}',
-          page: {{ current_page }}
-      };
-  
-      /* ===========================
-         LOADER FUNCTIONS
-         =========================== */
-      function showLoader() {
-          const loader = document.getElementById('pageLoader');
-          if (loader) loader.classList.add('active');
-      }
-  
-      function hideLoader() {
-          const loader = document.getElementById('pageLoader');
-          if (loader) loader.classList.remove('active');
-      }
-  
-      /* ===========================
-         URL MANAGEMENT
-         =========================== */
-      function updateURL(filters) {
-          let url = `/documents/events?page=${filters.page}`;
-          if (filters.year) url += `&year=${filters.year}`;
-          if (filters.eventtype && filters.eventtype !== 'all') url += `&event_type=${filters.eventtype}`;
-          if (filters.category && filters.category !== 'all') url += `&category=${filters.category}`;
-          if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
-          
-          window.history.pushState({ filters }, '', url);
-      }
-  
-      /* ===========================
-         AJAX LOAD PROTOCOLS
-         =========================== */
-      async function loadProtocols(filters, scrollToTop = true) {
-          showLoader();
-          
-          try {
-              let url = `/documents/events?page=${filters.page}`;
-              if (filters.year) url += `&year=${filters.year}`;
-              if (filters.eventtype && filters.eventtype !== 'all') url += `&event_type=${filters.eventtype}`;
-              if (filters.category && filters.category !== 'all') url += `&category=${filters.category}`;
-              if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
-              
-              const response = await fetch(url, {
-                  headers: { 'X-Requested-With': 'XMLHttpRequest' }
-              });
-              
-              if (!response.ok) throw new Error('Network error');
-              
-              const html = await response.text();
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(html, 'text/html');
-              
-              const newTable = doc.querySelector('#protocols-table');
-              const newPagination = doc.querySelector('#protocols-pagination');
-              const newStats = doc.querySelector('#protocols-stats');
-              
-              const currentTable = document.querySelector('#protocols-table');
-              const currentPagination = document.querySelector('#protocols-pagination');
-              const currentStats = document.querySelector('#protocols-stats');
-              
-              if (!currentTable) {
-                  console.error('Table not found');
-                  hideLoader();
-                  return;
-              }
-              
-              // Fade out
-              currentTable.classList.add('loading');
-              
-              setTimeout(() => {
-                  // Update content
-                  if (newTable) currentTable.outerHTML = newTable.outerHTML;
-                  if (newPagination && currentPagination) currentPagination.outerHTML = newPagination.outerHTML;
-                  if (newStats && currentStats) currentStats.outerHTML = newStats.outerHTML;
-                  
-                  const updatedTable = document.querySelector('#protocols-table');
-                  if (updatedTable) updatedTable.classList.remove('loading');
-                  
-                  // Scroll to top if needed
-                  if (scrollToTop) {
-                      const mainSection = document.querySelector('main');
-                      if (mainSection) mainSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                  
-                  hideLoader();
-              }, 300);
-              
-              updateURL(filters);
-              currentFilters = { ...filters };
-              
-          } catch (error) {
-              console.error('Error loading protocols:', error);
-              hideLoader();
-              // Fallback
-              window.location.href = url;
-          }
-      }
-  
-      /* ===========================
-         FILTER FUNCTIONS
-         =========================== */
-      function applyFilters() {
-          const year = document.querySelector('.custom-dropdown[data-name="year"]')?.getAttribute('data-value') || '';
-          const eventType = document.querySelector('.custom-dropdown[data-name="event_type"]')?.getAttribute('data-value') || 'all';
-          const category = document.querySelector('.custom-dropdown[data-name="category"]')?.getAttribute('data-value') || 'all';
-          const search = document.getElementById('search-input')?.value?.trim() || '';
-          
-          const filters = {
-              year: year,
-              eventtype: eventType,
-              category: category,
-              search: search,
-              page: 1
-          };
-          
-          loadProtocols(filters, true);
-      }
-  
-      function clearSearch() {
-          const searchInput = document.getElementById('search-input');
-          if (searchInput) {
-              searchInput.value = '';
-              applyFilters();
-          }
-      }
-  
-      function clearAllFilters() {
-          // Reset dropdowns
-          const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
-          const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
-          const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
-          
-          if (yearDropdown) {
-              yearDropdown.setAttribute('data-value', '');
-              const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
-              if (valueEl) valueEl.textContent = 'Всі роки';
-              yearDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
-                  item.classList.toggle('selected', item.getAttribute('data-value') === '');
-              });
-          }
-          
-          if (eventTypeDropdown) {
-              eventTypeDropdown.setAttribute('data-value', 'all');
-              const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
-              if (valueEl) valueEl.textContent = 'Всі типи';
-              eventTypeDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
-                  item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
-              });
-          }
-          
-          if (categoryDropdown) {
-              categoryDropdown.setAttribute('data-value', 'all');
-              const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
-              if (valueEl) valueEl.textContent = 'Всі категорії';
-              categoryDropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
-                  item.classList.toggle('selected', item.getAttribute('data-value') === 'all');
-              });
-          }
-          
-          const searchInput = document.getElementById('search-input');
-          if (searchInput) searchInput.value = '';
-          
-          loadProtocols({ year: '', eventtype: 'all', category: 'all', search: '', page: 1 }, true);
-      }
-  
-      /* ===========================
-         PAGINATION
-         =========================== */
-      function goToPage(page) {
-          loadProtocols({ ...currentFilters, page: page }, true);
-      }
-  
-      /* ===========================
-         CUSTOM DROPDOWN LOGIC
-         =========================== */
-      function initCustomDropdowns() {
-          const dropdowns = document.querySelectorAll('.custom-dropdown');
-          
-          dropdowns.forEach(dropdown => {
-              const trigger = dropdown.querySelector('.custom-dropdown-trigger');
-              const items = dropdown.querySelectorAll('.custom-dropdown-item');
-              const valueSpan = dropdown.querySelector('.custom-dropdown-value');
-              
-              if (!trigger || !valueSpan) return;
-              
-              // Remove old listeners (clone node trick)
-              const newTrigger = trigger.cloneNode(true);
-              trigger.parentNode.replaceChild(newTrigger, trigger);
-              
-              // Toggle dropdown
-              newTrigger.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  
-                  // Close all other dropdowns
-                  document.querySelectorAll('.custom-dropdown.active').forEach(d => {
-                      if (d !== dropdown) d.classList.remove('active');
-                  });
-                  
-                  dropdown.classList.toggle('active');
-              });
-              
-              // Mark current value as selected
-              items.forEach(item => {
-                  const value = item.getAttribute('data-value');
-                  if (value === dropdown.getAttribute('data-value')) {
-                      item.classList.add('selected');
-                  }
-                  
-                  // Remove old listener
-                  const newItem = item.cloneNode(true);
-                  item.parentNode.replaceChild(newItem, item);
-                  
-                  // Item selection
-                  newItem.addEventListener('click', function(e) {
-                      e.stopPropagation();
-                      
-                      dropdown.setAttribute('data-value', value);
-                      const valueEl = dropdown.querySelector('.custom-dropdown-value');
-                      if (valueEl) valueEl.textContent = newItem.textContent;
-                      
-                      dropdown.querySelectorAll('.custom-dropdown-item').forEach(i => i.classList.remove('selected'));
-                      newItem.classList.add('selected');
-                      dropdown.classList.remove('active');
-                      
-                      // Trigger filter update
-                      applyFilters();
-                  });
-              });
-          });
-      }
-  
-      /* ===========================
-         DROPDOWN TOGGLE (for protocols)
-         =========================== */
-      function toggleDropdown(event) {
-          event.stopPropagation();
-          const button = event.currentTarget;
-          const dropdown = button.nextElementSibling;
-          const icon = button.querySelector('.chevron-icon');
-          
-          // Close all other dropdowns
-          document.querySelectorAll('.dropdown-menu.show').forEach(d => {
-              if (d !== dropdown) closeDropdown(d);
-          });
-          
-          // Toggle current dropdown
-          if (dropdown.classList.contains('show')) {
-              closeDropdown(dropdown);
-          } else {
-              openDropdown(dropdown, icon);
-          }
-      }
-  
-      function openDropdown(dropdown, icon) {
-          dropdown.classList.add('show');
-          if (icon) icon.style.transform = 'rotate(180deg)';
-      }
-  
-      function closeDropdown(dropdown) {
-          dropdown.classList.remove('show');
-          const button = dropdown.previousElementSibling;
-          const icon = button?.querySelector('.chevron-icon');
-          if (icon) icon.style.transform = 'rotate(0deg)';
-      }
-  
-      /* ===========================
-         CLEANUP FUNCTION
-         =========================== */
-      function cleanup() {
-          // Remove event listeners
-          document.removeEventListener('click', outsideClickHandler);
-          document.removeEventListener('keydown', escapeKeyHandler);
-          document.removeEventListener('click', paginationClickHandler);
-          
-          const searchInput = document.getElementById('search-input');
-          if (searchInput) {
-              searchInput.removeEventListener('keypress', searchEnterHandler);
-          }
-          
-          window.removeEventListener('popstate', popstateHandler);
-      }
-  
-      /* ===========================
-         EVENT HANDLERS
-         =========================== */
-      function outsideClickHandler() {
-          document.querySelectorAll('.custom-dropdown.active').forEach(d => {
-              d.classList.remove('active');
-          });
-          
-          document.querySelectorAll('.dropdown-menu.show').forEach(dropdown => {
-              closeDropdown(dropdown);
-          });
-      }
-  
-      function escapeKeyHandler(e) {
-          if (e.key === 'Escape') {
-              document.querySelectorAll('.dropdown-menu.show').forEach(dropdown => {
-                  closeDropdown(dropdown);
-              });
-          }
-      }
-  
-      function paginationClickHandler(e) {
-          const pageLink = e.target.closest('a[data-page]');
-          if (pageLink) {
-              e.preventDefault();
-              const page = parseInt(pageLink.getAttribute('data-page'));
-              goToPage(page);
-          }
-      }
-  
-      function searchEnterHandler(e) {
-          if (e.key === 'Enter') {
-              e.preventDefault();
-              applyFilters();
-          }
-      }
-  
-      function popstateHandler(event) {
-          if (event.state && event.state.filters) {
-              loadProtocols(event.state.filters, false);
-              
-              // Update UI
-              const filters = event.state.filters;
-              
-              const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
-              if (yearDropdown) {
-                  yearDropdown.setAttribute('data-value', filters.year || '');
-                  const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
-                  if (valueEl) valueEl.textContent = filters.year || 'Всі роки';
-              }
-              
-              const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
-              if (eventTypeDropdown) {
-                  eventTypeDropdown.setAttribute('data-value', filters.eventtype || 'all');
-                  const labels = { 'national': 'Національні', 'international': 'Міжнародні', 'all': 'Всі типи' };
-                  const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
-                  if (valueEl) valueEl.textContent = labels[filters.eventtype] || 'Всі типи';
-              }
-              
-              const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
-              if (categoryDropdown) {
-                  categoryDropdown.setAttribute('data-value', filters.category || 'all');
-                  const labels = {
-                      'championship': 'Чемпіонати',
-                      'cup': 'Кубки',
-                      'tournament': 'Турніри',
-                      'seminar': 'Семінари',
-                      'training': 'Тренування',
-                      'all': 'Всі категорії'
-                  };
-                  const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
-                  if (valueEl) valueEl.textContent = labels[filters.category] || 'Всі категорії';
-              }
-              
-              const searchInput = document.getElementById('search-input');
-              if (searchInput) searchInput.value = filters.search || '';
-          } else {
-              location.reload();
-          }
-      }
-  
-      /* ===========================
-         INITIALIZATION
-         =========================== */
-      function init() {
-          // Initialize custom dropdowns
-          initCustomDropdowns();
-          
-          // Search on Enter
-          const searchInput = document.getElementById('search-input');
-          if (searchInput) {
-              searchInput.addEventListener('keypress', searchEnterHandler);
-          }
-          
-          // Event listeners
-          document.addEventListener('click', outsideClickHandler);
-          document.addEventListener('keydown', escapeKeyHandler);
-          document.addEventListener('click', paginationClickHandler);
-          window.addEventListener('popstate', popstateHandler);
-          
-          console.log('Protocols page initialized');
-      }
-  
-      /* ===========================
-         EXPOSE TO GLOBAL SCOPE
-         =========================== */
-      // Make functions available globally for inline onclick handlers
-      window.toggleDropdown = toggleDropdown;
-      window.clearSearch = clearSearch;
-      window.clearAllFilters = clearAllFilters;
-      window.applyFilters = applyFilters;
-  
-      /* ===========================
-         AUTO-INIT & CLEANUP
-         =========================== */
-      // Initialize on DOM ready or immediately if already loaded
-      if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', init);
-      } else {
-          init();
-      }
-  
-      // Listen for page transition complete event
-      document.addEventListener('pageTransitionComplete', function() {
-          console.log('Page transition complete - reinitializing protocols page');
-          cleanup();
-          init();
-      });
-  
-      // Cleanup on page unload
-      window.addEventListener('beforeunload', cleanup);
-  })();
-  </script>
+    // ============================================
+    // PROTOCOLS PAGE SCRIPT - Використовує Navigation Manager
+    // ============================================
+    
+    (function() {
+        'use strict';
+        
+        let currentFilters = {
+            year: '',
+            eventtype: 'all',
+            category: 'all',
+            search: '',
+            page: 1
+        };
+        
+        let isInitialized = false;
+        let paginationHandlerAttached = false;
+        let globalEventListenersAttached = false;
+    
+        // ==================== INITIALIZATION ====================
+        
+        function initFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            currentFilters = {
+                year: urlParams.get('year') || '',
+                eventtype: urlParams.get('event_type') || 'all',
+                category: urlParams.get('category') || 'all',
+                search: urlParams.get('search') || '',
+                page: parseInt(urlParams.get('page')) || 1
+            };
+            
+            // Update UI
+            updateDropdownsFromFilters();
+            
+            const searchInput = document.getElementById('search-input');
+            if (searchInput && currentFilters.search) {
+                searchInput.value = currentFilters.search;
+            }
+        }
+    
+        function updateDropdownsFromFilters() {
+            // Year dropdown
+            const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
+            if (yearDropdown) {
+                yearDropdown.setAttribute('data-value', currentFilters.year);
+                const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
+                if (valueEl) {
+                    valueEl.textContent = currentFilters.year || 'Всі роки';
+                }
+            }
+            
+            // Event type dropdown
+            const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
+            if (eventTypeDropdown) {
+                eventTypeDropdown.setAttribute('data-value', currentFilters.eventtype);
+                const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
+                const labels = { 
+                    'national': 'Національні', 
+                    'international': 'Міжнародні', 
+                    'all': 'Всі типи' 
+                };
+                if (valueEl) {
+                    valueEl.textContent = labels[currentFilters.eventtype] || 'Всі типи';
+                }
+            }
+            
+            // Category dropdown
+            const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
+            if (categoryDropdown) {
+                categoryDropdown.setAttribute('data-value', currentFilters.category);
+                const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
+                const labels = {
+                    'championship': 'Чемпіонати',
+                    'cup': 'Кубки',
+                    'tournament': 'Турніри',
+                    'seminar': 'Семінари',
+                    'training': 'Тренування',
+                    'all': 'Всі категорії'
+                };
+                if (valueEl) {
+                    valueEl.textContent = labels[currentFilters.category] || 'Всі категорії';
+                }
+            }
+            
+            // Update selected items
+            updateSelectedItems();
+        }
+    
+        function updateSelectedItems() {
+            document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                const currentValue = dropdown.getAttribute('data-value');
+                dropdown.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                    const itemValue = item.getAttribute('data-value');
+                    item.classList.toggle('selected', itemValue === currentValue);
+                });
+            });
+        }
+    
+        // ==================== URL BUILDER ====================
+        
+        function buildProtocolsURL(filters) {
+            const url = new URL('/documents/events', window.location.origin);
+            
+            url.searchParams.set('page', filters.page);
+            
+            if (filters.year) {
+                url.searchParams.set('year', filters.year);
+            }
+            
+            if (filters.eventtype && filters.eventtype !== 'all') {
+                url.searchParams.set('event_type', filters.eventtype);
+            }
+            
+            if (filters.category && filters.category !== 'all') {
+                url.searchParams.set('category', filters.category);
+            }
+            
+            if (filters.search) {
+                url.searchParams.set('search', filters.search);
+            }
+            
+            return url.pathname + url.search;
+        }
+    
+        // ==================== NAVIGATION ====================
+        
+        function loadProtocols(filters, scrollToTop = true) {
+            const url = buildProtocolsURL(filters);
+            
+            console.log('[Protocols] Loading with filters:', filters);
+            
+            currentFilters = { ...filters };
+            
+            if (window.navigationManager) {
+                window.navigationManager.navigateTo(url);
+            } else {
+                window.location.href = url;
+            }
+        }
+    
+        // ==================== FILTERS ====================
+        
+        function applyFilters() {
+            const year = document.querySelector('.custom-dropdown[data-name="year"]')?.getAttribute('data-value') || '';
+            const eventType = document.querySelector('.custom-dropdown[data-name="event_type"]')?.getAttribute('data-value') || 'all';
+            const category = document.querySelector('.custom-dropdown[data-name="category"]')?.getAttribute('data-value') || 'all';
+            const search = document.getElementById('search-input')?.value?.trim() || '';
+            
+            const filters = {
+                year: year,
+                eventtype: eventType,
+                category: category,
+                search: search,
+                page: 1
+            };
+            
+            console.log('[Protocols] Apply filters:', filters);
+            loadProtocols(filters, true);
+        }
+    
+        function clearSearch() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.value = '';
+                applyFilters();
+            }
+        }
+    
+        function clearAllFilters() {
+            // Reset dropdowns UI
+            const yearDropdown = document.querySelector('.custom-dropdown[data-name="year"]');
+            if (yearDropdown) {
+                yearDropdown.setAttribute('data-value', '');
+                const valueEl = yearDropdown.querySelector('.custom-dropdown-value');
+                if (valueEl) valueEl.textContent = 'Всі роки';
+            }
+            
+            const eventTypeDropdown = document.querySelector('.custom-dropdown[data-name="event_type"]');
+            if (eventTypeDropdown) {
+                eventTypeDropdown.setAttribute('data-value', 'all');
+                const valueEl = eventTypeDropdown.querySelector('.custom-dropdown-value');
+                if (valueEl) valueEl.textContent = 'Всі типи';
+            }
+            
+            const categoryDropdown = document.querySelector('.custom-dropdown[data-name="category"]');
+            if (categoryDropdown) {
+                categoryDropdown.setAttribute('data-value', 'all');
+                const valueEl = categoryDropdown.querySelector('.custom-dropdown-value');
+                if (valueEl) valueEl.textContent = 'Всі категорії';
+            }
+            
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            
+            loadProtocols({
+                year: '',
+                eventtype: 'all',
+                category: 'all',
+                search: '',
+                page: 1
+            }, true);
+        }
+    
+        // ==================== PAGINATION ====================
+        
+        function goToPage(page) {
+            loadProtocols({ 
+                ...currentFilters, 
+                page: page 
+            }, true);
+        }
+    
+        // ==================== CUSTOM DROPDOWNS ====================
+        
+        function initCustomDropdowns() {
+            const dropdowns = document.querySelectorAll('.custom-dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                const trigger = dropdown.querySelector('.custom-dropdown-trigger');
+                const items = dropdown.querySelectorAll('.custom-dropdown-item');
+                
+                if (!trigger) return;
+                
+                // Toggle dropdown
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Close all other dropdowns
+                    document.querySelectorAll('.custom-dropdown.active').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('active');
+                    });
+                    
+                    dropdown.classList.toggle('active');
+                });
+                
+                // Item selection
+                items.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        
+                        const value = this.getAttribute('data-value');
+                        
+                        dropdown.setAttribute('data-value', value);
+                        const valueEl = dropdown.querySelector('.custom-dropdown-value');
+                        if (valueEl) {
+                            valueEl.textContent = this.textContent;
+                        }
+                        
+                        dropdown.querySelectorAll('.custom-dropdown-item').forEach(i => {
+                            i.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        
+                        dropdown.classList.remove('active');
+                        
+                        // Trigger filter update
+                        applyFilters();
+                    });
+                });
+            });
+            
+            // Update selected items based on current values
+            updateSelectedItems();
+        }
+    
+        // ==================== PROTOCOL DROPDOWNS ====================
+        
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const button = event.currentTarget;
+            const dropdown = button.nextElementSibling;
+            const icon = button.querySelector('.chevron-icon');
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu.show').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                    const otherButton = d.previousElementSibling;
+                    const otherIcon = otherButton?.querySelector('.chevron-icon');
+                    if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            } else {
+                dropdown.classList.add('show');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    
+        // ==================== EVENT LISTENERS ====================
+    
+        function attachPaginationHandlers() {
+            if (paginationHandlerAttached) {
+                console.log('[Protocols] Pagination handler already attached');
+                return;
+            }
+            
+            // Event delegation для pagination
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.pagination-btn');
+                if (btn && !btn.disabled) {
+                    e.preventDefault();
+                    const page = parseInt(btn.getAttribute('data-page'));
+                    if (page) {
+                        goToPage(page);
+                    }
+                }
+            });
+            
+            paginationHandlerAttached = true;
+        }
+    
+        function attachEventListeners() {
+            if (globalEventListenersAttached) {
+                console.log('[Protocols] Global event listeners already attached');
+                return;
+            }
+            
+            // Close dropdowns on outside click
+            document.addEventListener('click', (e) => {
+                // Перевіряємо чи клік НЕ всередині dropdown
+                const clickedDropdown = e.target.closest('.custom-dropdown');
+                const clickedProtocolDropdown = e.target.closest('.group-dropdown');
+                
+                if (!clickedDropdown) {
+                    document.querySelectorAll('.custom-dropdown.active').forEach(d => {
+                        d.classList.remove('active');
+                    });
+                }
+                
+                if (!clickedProtocolDropdown) {
+                    document.querySelectorAll('.dropdown-menu.show').forEach(d => {
+                        d.classList.remove('show');
+                        const button = d.previousElementSibling;
+                        const icon = button?.querySelector('.chevron-icon');
+                        if (icon) icon.style.transform = 'rotate(0deg)';
+                    });
+                }
+            });
+            
+            // ESC key to close dropdowns
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.custom-dropdown.active').forEach(d => {
+                        d.classList.remove('active');
+                    });
+                    
+                    document.querySelectorAll('.dropdown-menu.show').forEach(d => {
+                        d.classList.remove('show');
+                        const button = d.previousElementSibling;
+                        const icon = button?.querySelector('.chevron-icon');
+                        if (icon) icon.style.transform = 'rotate(0deg)';
+                    });
+                }
+            });
+            
+            globalEventListenersAttached = true;
+        }
+    
+        function attachSearchHandler() {
+            // Search on Enter
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        applyFilters();
+                    }
+                });
+            }
+        }
+    
+        // ==================== INITIALIZATION ====================
+    
+        function init() {
+            if (isInitialized) {
+                console.log('[Protocols] Already initialized, skipping...');
+                return;
+            }
+            
+            console.log('[Protocols] Initializing...');
+            
+            initFiltersFromURL();
+            initCustomDropdowns();
+            attachEventListeners();
+            attachPaginationHandlers();
+            attachSearchHandler();
+            
+            isInitialized = true;
+            console.log('[Protocols] Ready');
+        }
+    
+        // ==================== CLEANUP ====================
+        
+        function cleanup() {
+            console.log('[Protocols] Cleaning up...');
+            // НЕ скидаємо globalEventListenersAttached і paginationHandlerAttached
+            // бо вони глобальні
+            isInitialized = false;
+        }
+    
+        // ==================== GLOBAL EXPORTS ====================
+        
+        // Export with namespace to avoid conflicts
+        window.ProtocolsPage = {
+            toggleDropdown,
+            clearSearch,
+            clearAllFilters,
+            applyFilters,
+            goToPage
+        };
+        
+        // Legacy support (only for this page)
+        if (window.location.pathname.startsWith('/documents/events')) {
+            window.toggleDropdown = toggleDropdown;
+            window.clearSearch = clearSearch;
+            window.clearAllFilters = clearAllFilters;
+            window.applyFilters = applyFilters;
+            window.goToPage = goToPage;
+        }
+    
+        // ==================== AUTO-INIT ====================
+    
+        // Cleanup on page navigation
+        window.addEventListener('pageCleanup', cleanup);
+    
+        // Ініціалізація через pageInit
+        window.addEventListener('pageInit', () => {
+            if (window.location.pathname.startsWith('/documents/events')) {
+                init();
+            }
+        });
+    
+        // Fallback для першого завантаження
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!isInitialized) {
+                    init();
+                }
+            });
+        } else {
+            if (!isInitialized) {
+                init();
+            }
+        }
+    
+    })();
+    </script>
+    
   
 {% endblock %}

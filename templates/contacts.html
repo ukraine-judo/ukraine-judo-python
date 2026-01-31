@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+
+{% block title %}Контакти - Федерація Дзюдо України{% endblock %}
+
+{% block content %}
+
+<main class="flex-grow w-full">
+    
+<!-- Hero Section -->
+<div class="relative overflow-hidden min-h-[500px] md:min-h-[600px] flex items-center">
+    <!-- Background Image -->
+    <div class="absolute inset-0 z-0">
+        <img src="/static/assets/news/341A3930-min.jpg" alt="Contacts" class="w-full h-full object-cover">
+        <!-- Gradient Overlay (lighter) -->
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-slate-900/40"></div>
+    </div>
+    
+    <!-- Decorative Glow -->
+    <div class="absolute inset-0 opacity-5 z-0">
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[120px]"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10 w-full">
+        <div class="max-w-2xl">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-white text-sm font-medium mb-6 shadow-xl">
+                <span class="material-symbols-outlined text-[18px]">contact_mail</span>
+                <span>Зв'яжіться з нами</span>
+            </div>
+            
+            <!-- Title -->
+            <h1 class="text-white text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-6 drop-shadow-2xl">
+                Контакти
+            </h1>
+            
+            <!-- Description -->
+            <p class="text-white/95 text-lg md:text-xl leading-relaxed drop-shadow-lg font-medium max-w-xl">
+                Офіційні контакти Федерації дзюдо України та відділу дзюдо Міністерства молоді та спорту України
+            </p>
+        </div>
+    </div>
+</div>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        
+        <!-- Main Contacts Grid -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- ФДУ -->
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-[28px]">emoji_events</span>
+                        </div>
+                        <div>
+                            <h2 class="text-white text-2xl font-black leading-tight">Федерація дзюдо України</h2>
+                            <p class="text-blue-100 text-sm">Головний офіс</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <!-- Address -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600 text-[20px]">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Адреса</div>
+                            <p class="text-gray-900 font-medium leading-relaxed">
+                                Україна, 01601, м. Київ,<br>
+                                вул. Еспланадна, 42, офіс 808
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600 text-[20px]">call</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Телефон</div>
+                            <div class="flex items-center gap-2">
+                                <a href="tel:+380442843839" class="text-gray-900 font-medium hover:text-blue-600 transition-colors">
+                                    +38 044 284-38-39
+                                </a>
+                                <button onclick="copyToClipboard('+380442843839', this)" class="copy-btn flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-blue-100 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-gray-600 group-hover:text-blue-600 text-[18px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600 text-[20px]">mail</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Email</div>
+                            <div class="flex items-center gap-2">
+                                <a href="mailto:judoukr@ukr.net" class="text-gray-900 font-medium hover:text-blue-600 transition-colors">
+                                    judoukr@ukr.net
+                                </a>
+                                <button onclick="copyToClipboard('judoukr@ukr.net', this)" class="copy-btn flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-blue-100 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-gray-600 group-hover:text-blue-600 text-[18px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-sm font-bold text-gray-900 uppercase mb-4">Керівництво</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">person</span>
+                                <div class="flex-1">
+                                    <div class="text-sm font-semibold text-gray-900">Віталій Дуброва</div>
+                                    <div class="text-xs text-gray-600 mb-1">Спортивний директор</div>
+                                    <div class="flex items-center gap-2">
+                                        <a href="tel:+380672310126" class="text-xs text-blue-600 hover:text-blue-700 font-medium">067 231 01 26</a>
+                                        <button onclick="copyToClipboard('+380672310126', this)" class="copy-btn flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-blue-100 transition-colors group" title="Копіювати">
+                                            <span class="material-symbols-outlined text-gray-600 group-hover:text-blue-600 text-[14px]">content_copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">person</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Наталія Редкіна</div>
+                                    <div class="text-xs text-gray-600">Виконавчий секретар</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">person</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Вікторія Мельник</div>
+                                    <div class="text-xs text-gray-600">Менеджер</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Міністерство -->
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-[28px]">account_balance</span>
+                        </div>
+                        <div>
+                            <h2 class="text-white text-xl font-black leading-tight">Відділ дзюдо</h2>
+                            <p class="text-indigo-100 text-sm">Міністерство молоді та спорту України</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <!-- Address -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-indigo-600 text-[20px]">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Адреса</div>
+                            <p class="text-gray-900 font-medium leading-relaxed">
+                                Україна, 01601, м. Київ,<br>
+                                вул. Еспланадна, 42, офіс 808
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-indigo-600 text-[20px]">call</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Телефон</div>
+                            <div class="flex items-center gap-2">
+                                <a href="tel:+380442843839" class="text-gray-900 font-medium hover:text-indigo-600 transition-colors">
+                                    +38 044 284-38-39
+                                </a>
+                                <button onclick="copyToClipboard('+380442843839', this)" class="copy-btn flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-indigo-100 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-gray-600 group-hover:text-indigo-600 text-[18px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-indigo-600 text-[20px]">mail</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Email</div>
+                            <div class="flex items-center gap-2">
+                                <a href="mailto:judoukr@ukr.net" class="text-gray-900 font-medium hover:text-indigo-600 transition-colors">
+                                    judoukr@ukr.net
+                                </a>
+                                <button onclick="copyToClipboard('judoukr@ukr.net', this)" class="copy-btn flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-indigo-100 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-gray-600 group-hover:text-indigo-600 text-[18px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-sm font-bold text-gray-900 uppercase mb-4">Тренерський штаб</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">military_tech</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Михайло Руденко</div>
+                                    <div class="text-xs text-gray-600">Державний тренер збірної України</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">sports_martial_arts</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Олександр Косінов</div>
+                                    <div class="text-xs text-gray-600">Головний тренер збірної (чоловіки)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">sports_martial_arts</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Ганна Каштанова</div>
+                                    <div class="text-xs text-gray-600">Головний тренер збірної (жінки)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">manage_accounts</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Вікторія Мельник</div>
+                                    <div class="text-xs text-gray-600">Начальник команди</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">manage_accounts</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Надія Кочевенко</div>
+                                    <div class="text-xs text-gray-600">Начальник команди</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">manage_accounts</span>
+                                <div>
+                                    <div class="text-sm font-semibold text-gray-900">Наталія Редкіна</div>
+                                    <div class="text-xs text-gray-600">Начальник команди</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Press & Banking Info -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- For Media -->
+            <section class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 p-6 md:p-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="flex-shrink-0 w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="material-symbols-outlined text-white text-[28px]">newspaper</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-gray-900 mb-1">Для ЗМІ</h2>
+                        <p class="text-gray-600 text-sm">Контакти для преси та медіа</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <p class="text-gray-700 leading-relaxed">
+                        Підписатися на розсилку пресрелізів ФДУ можна, надіславши відповідного листа на електронну адресу:
+                    </p>
+                    <div class="flex items-center gap-2">
+                        <a href="mailto:press_judoukr@ukr.net" class="inline-flex items-center gap-2 px-4 py-3 bg-white border-2 border-emerald-600 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">mail</span>
+                            press_judoukr@ukr.net
+                        </a>
+                        <button onclick="copyToClipboard('press_judoukr@ukr.net', this)" class="copy-btn flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-white border-2 border-emerald-600 hover:bg-emerald-100 transition-colors group" title="Копіювати">
+                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">content_copy</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-t border-emerald-200 pt-6">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-emerald-600 text-[20px] mt-0.5">person</span>
+                        <div class="flex-1">
+                            <div class="text-sm font-bold text-gray-900 mb-1">Максим Чеберяка</div>
+                            <div class="text-xs text-gray-600 mb-2">Пресаташе ФДУ</div>
+                            <div class="flex items-center gap-2">
+                                <a href="tel:+380972581754" class="inline-flex items-center gap-1 text-sm text-emerald-700 hover:text-emerald-800 font-medium">
+                                    <span class="material-symbols-outlined text-[16px]">call</span>
+                                    097 258 17 54
+                                </a>
+                                <button onclick="copyToClipboard('+380972581754', this)" class="copy-btn flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg bg-white hover:bg-emerald-100 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[14px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-emerald-200">
+                    <p class="text-sm text-gray-700 italic">💙 Дякуємо за співпрацю!</p>
+                </div>
+            </section>
+
+            <!-- Banking Details -->
+            <section class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6 md:p-8">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="flex-shrink-0 w-14 h-14 bg-amber-600 rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="material-symbols-outlined text-white text-[28px]">account_balance_wallet</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-gray-900 mb-1">Банківські реквізити</h2>
+                        <p class="text-gray-600 text-sm">Для фінансової підтримки ФДУ</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white rounded-xl p-4 border border-amber-200">
+                        <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Назва організації</div>
+                        <div class="text-sm font-bold text-gray-900">Громадська організація «Федерація дзюдо України»</div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-4 border border-amber-200">
+                        <div class="text-xs font-semibold text-gray-500 uppercase mb-2">Розрахунковий рахунок</div>
+                        <div class="flex items-center gap-2">
+                            <div class="text-sm font-mono font-bold text-gray-900 break-all flex-1">UA643226690000026006300764883</div>
+                            <button onclick="copyToClipboard('UA643226690000026006300764883', this)" class="copy-btn flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-amber-100 hover:bg-amber-200 transition-colors group" title="Копіювати">
+                                <span class="material-symbols-outlined text-amber-700 text-[18px]">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white rounded-xl p-4 border border-amber-200">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Банк</div>
+                            <div class="text-sm font-bold text-gray-900">АТ "Ощадбанк"</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 border border-amber-200">
+                            <div class="text-xs font-semibold text-gray-500 uppercase mb-2">Код ЄДРПОУ</div>
+                            <div class="flex items-center gap-2">
+                                <div class="text-sm font-mono font-bold text-gray-900 flex-1">14292688</div>
+                                <button onclick="copyToClipboard('14292688', this)" class="copy-btn flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg bg-amber-100 hover:bg-amber-200 transition-colors group" title="Копіювати">
+                                    <span class="material-symbols-outlined text-amber-700 text-[14px]">content_copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-amber-100 rounded-xl border border-amber-300">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined text-amber-700 text-[20px] flex-shrink-0">info</span>
+                            <div>
+                                <div class="text-xs font-bold text-amber-900 uppercase mb-1">Призначення платежу</div>
+                                <p class="text-sm text-amber-800">
+                                    Безповоротна фінансова допомога на статутну діяльність
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Map Section -->
+        <section class="mt-12 bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-gray-600 text-[28px]">map</span>
+                    <h2 class="text-2xl font-black text-gray-900">Як нас знайти</h2>
+                </div>
+            </div>
+            <div class="aspect-video bg-gray-100 relative">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.2!2d30.5383!3d50.4501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTDCsDI3JzAwLjQiTiAzMMKwMzInMTcuOSJF!5e0!3m2!1suk!2sua!4v1234567890"
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="absolute inset-0">
+                </iframe>
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+
+{% endblock %}
+{% block scripts %}
+<script data-page-script="true">
+    // Copy to Clipboard Function
+    function copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Show success toast
+            window.ToastManager.success(text, 'Скопійовано!');
+            
+            // Change button icon temporarily
+            const icon = button.querySelector('.material-symbols-outlined');
+            const originalIcon = icon.textContent;
+            icon.textContent = 'check';
+            button.classList.add('!bg-green-100');
+            icon.classList.add('!text-green-600');
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                icon.textContent = originalIcon;
+                button.classList.remove('!bg-green-100');
+                icon.classList.remove('!text-green-600');
+            }, 2000);
+            
+        }).catch(function(err) {
+            console.error('Failed to copy:', err);
+            window.ToastManager.error('Не вдалося скопіювати. Спробуйте ще раз.', 'Помилка!');
+        });
+    }
+    
+    console.log('[Contacts] Page loaded with global toast system');
+</script>
+{% endblock %}
+

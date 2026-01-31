@@ -5,7 +5,14 @@ from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from app.config import get_settings
 from app.api.v1.router import api_router
 from app.services.supabase import supabase
-from app.utils.categories import normalize_category, get_old_categories_for_filter, CATEGORY_LABELS, get_category_label
+from app.utils.news.categories import (
+    normalize_news_category,
+    get_news_category_label
+)
+from app.utils.documents.categories import (
+    normalize_document_category,
+    get_document_category_label
+)
 from app.utils.coach_categories import COACH_CATEGORY_LABELS, get_coach_category_label
 from app.utils.file_helpers import (
     get_file_extension,
@@ -40,8 +47,6 @@ if os.path.exists("static"):
 
 # Шаблони
 templates = Jinja2Templates(directory="templates") if os.path.exists("templates") else None
-
-
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Головна сторінка з SSR новинами"""
@@ -60,10 +65,11 @@ async def index(request: Request):
         for item in response.data:
             if item.get('image_url'):
                 item['image_full_url'] = f"/static/{item['image_url']}"
-            # ✅ ВИПРАВЛЕННЯ: зберігаємо англійську для логіки, додаємо українську для UI
-            normalized = normalize_category(item.get('category', ''))
+            
+            # ✅ ВИПРАВЛЕНО: Використовуємо функції для НОВИН
+            normalized = normalize_news_category(item.get('category', ''))
             item['category_key'] = normalized  # англійська для фільтрів
-            item['display_category'] = get_category_label(normalized)  # українська для відображення
+            item['display_category'] = get_news_category_label(normalized)  # українська для відображення
             news_items.append(item)
         
         return templates.TemplateResponse("index.html", {
@@ -83,7 +89,6 @@ async def index(request: Request):
 @app.get("/news", response_class=HTMLResponse)
 async def news_page(
     request: Request,
-    category: str = None,
     search: str = None,
     page: int = 1
 ):
@@ -95,15 +100,11 @@ async def news_page(
         limit = 8
         offset = (page - 1) * limit
         
+        # Завантажуємо новини
         query = supabase.table("news").select(
             "number, id, title, excerpt, category, publishedAt, featured, image_url, author_name, tags",
             count="exact"
         )
-        
-        # ✅ Фільтрація з маппінгом категорій
-        if category and category != 'all':
-            old_categories = get_old_categories_for_filter(category)
-            query = query.in_("category", old_categories)
         
         if search:
             query = query.ilike("title", f"%{search}%")
@@ -117,16 +118,59 @@ async def news_page(
         for item in response.data:
             if item.get('image_url'):
                 item['image_full_url'] = f"/static/{item['image_url']}"
-            # ✅ ВИПРАВЛЕННЯ: зберігаємо англійську для логіки, додаємо українську для UI
-            normalized = normalize_category(item.get('category', ''))
-            item['category_key'] = normalized  # англійська для фільтрів
-            item['display_category'] = get_category_label(normalized)  # українська для відображення
+            
+            normalized = normalize_news_category(item.get('category', ''))
+            item['category_key'] = normalized
+            item['display_category'] = get_news_category_label(normalized)
             news_items.append(item)
         
         total = response.count if hasattr(response, 'count') else len(response.data)
         total_pages = (total + limit - 1) // limit
         has_prev = page > 1
         has_next = page < total_pages
+        
+        # ✅ ДОДАНО: Завантажуємо найближчі події
+        upcoming_events = []
+        try:
+            from datetime import date
+            today = date.today().isoformat()
+            
+            # Спочатку майбутні події
+            events_response = supabase.table("events") \
+                .select("slug, title, date_start, date_end, city, region") \
+                .gte("date_start", today) \
+                .order("date_start", desc=False) \
+                .limit(5) \
+                .execute()
+            
+            upcoming_events = events_response.data if events_response.data else []
+            
+            # Якщо мало, додаємо минулі
+            if len(upcoming_events) < 5:
+                past_events_response = supabase.table("events") \
+                    .select("slug, title, date_start, date_end, city, region") \
+                    .lt("date_start", today) \
+                    .order("date_start", desc=True) \
+                    .limit(5 - len(upcoming_events)) \
+                    .execute()
+                
+                if past_events_response.data:
+                    upcoming_events.extend(past_events_response.data)
+            
+            # Форматуємо дати
+            for event in upcoming_events:
+                from datetime import datetime
+                event_date = datetime.fromisoformat(event['date_start'])
+                
+                month_names = ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 
+                               'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру']
+                
+                event['day'] = event_date.day
+                event['month'] = month_names[event_date.month - 1]
+                event['location'] = event.get('city') or event.get('region') or 'Україна'
+        
+        except Exception as e:
+            print(f"Error loading upcoming events: {e}")
         
         return templates.TemplateResponse("news.html", {
             "request": request,
@@ -135,10 +179,9 @@ async def news_page(
             "total_pages": total_pages,
             "has_prev": has_prev,
             "has_next": has_next,
-            "current_category": category or 'all',
             "search_query": search or '',
-            "settings": settings,
-            "category_labels": CATEGORY_LABELS  # ✅ Передаємо лейбли
+            "upcoming_events": upcoming_events,  # ✅ Передаємо події
+            "settings": settings
         })
     except Exception as e:
         print(f"Error loading news: {e}")
@@ -149,12 +192,10 @@ async def news_page(
             "total_pages": 1,
             "has_prev": False,
             "has_next": False,
-            "current_category": 'all',
             "search_query": '',
-            "settings": settings,
-            "category_labels": CATEGORY_LABELS
+            "upcoming_events": [],  # ✅ Порожній список при помилці
+            "settings": settings
         })
-
 
 @app.get("/news/{news_slug}", response_class=HTMLResponse)
 async def news_detail(request: Request, news_slug: str):
@@ -180,8 +221,10 @@ async def news_detail(request: Request, news_slug: str):
         if news_item.get('image_url'):
             news_item['image_full_url'] = f"/static/{news_item['image_url']}"
         
-        # Конвертуємо категорію
-        news_item['display_category'] = get_category_label(normalize_category(news_item.get('category', '')))
+        # ✅ ВИПРАВЛЕНО: Використовуємо функції для НОВИН
+        normalized_cat = normalize_news_category(news_item.get('category', ''))
+        news_item['category_key'] = normalized_cat
+        news_item['display_category'] = get_news_category_label(normalized_cat)
         
         # ✅ Обробка тегів (розділених крапкою з комою)
         tags = news_item.get('tags', '')
@@ -210,7 +253,10 @@ async def news_detail(request: Request, news_slug: str):
             for item in latest_response.data:
                 if item.get('image_url'):
                     item['image_full_url'] = f"/static/{item['image_url']}"
-                item['display_category'] = get_category_label(normalize_category(item.get('category', '')))
+                # ✅ ВИПРАВЛЕНО
+                item_cat = normalize_news_category(item.get('category', ''))
+                item['category_key'] = item_cat
+                item['display_category'] = get_news_category_label(item_cat)
                 latest_news.append(item)
         except Exception as e:
             print(f"Error loading latest news: {e}")
@@ -218,11 +264,10 @@ async def news_detail(request: Request, news_slug: str):
         # Завантажуємо схожі новини
         related_news = []
         try:
-            old_categories = get_old_categories_for_filter(normalize_category(news_item.get('category', '')))
             
             related_response = supabase.table("news") \
                 .select("id, title, publishedAt, image_url, category") \
-                .in_("category", old_categories) \
+                .in_("category") \
                 .neq("id", news_slug) \
                 .order("publishedAt", desc=True) \
                 .limit(3) \
@@ -231,7 +276,10 @@ async def news_detail(request: Request, news_slug: str):
             for item in related_response.data:
                 if item.get('image_url'):
                     item['image_full_url'] = f"/static/{item['image_url']}"
-                item['display_category'] = get_category_label(normalize_category(item.get('category', '')))
+                # ✅ ВИПРАВЛЕНО
+                item_cat = normalize_news_category(item.get('category', ''))
+                item['category_key'] = item_cat
+                item['display_category'] = get_news_category_label(item_cat)
                 related_news.append(item)
         except Exception as e:
             print(f"Error loading related news: {e}")
@@ -250,7 +298,10 @@ async def news_detail(request: Request, news_slug: str):
                     if not any(n['id'] == item['id'] for n in related_news):
                         if item.get('image_url'):
                             item['image_full_url'] = f"/static/{item['image_url']}"
-                        item['display_category'] = get_category_label(normalize_category(item.get('category', '')))
+                        # ✅ ВИПРАВЛЕНО
+                        item_cat = normalize_news_category(item.get('category', ''))
+                        item['category_key'] = item_cat
+                        item['display_category'] = get_news_category_label(item_cat)
                         related_news.append(item)
             except Exception as e:
                 print(f"Error loading additional news: {e}")
@@ -965,53 +1016,52 @@ def get_age_category(age, sex):
         return "Чоловіки" if is_male else "Жінки"
 
 
-@app.get("/team", response_class=HTMLResponse)
-async def team_page(
+# ==================== ATHLETES PAGE ====================
+@app.get("/team/athletes", response_class=HTMLResponse)
+async def athletes_page(
     request: Request,
     sex: str = None,
     status: str = None,
     search: str = None,
-    page: int = 1,
-    coaches_page: int = 1,
-    coaches_tab: str = 'all',
-    coach_category: str = None,
-    coaches_search: str = None
+    page: int = 1
 ):
-    """Сторінка команди з SSR"""
+    """SSR: Athletes listing page"""
     if not templates:
         return JSONResponse({"error": "Templates directory not found"}, status_code=500)
     
     def safe_int(value, default=0):
-        """Безпечна конвертація в int"""
         try:
             return int(value)
         except (ValueError, TypeError):
             return default
     
     try:
-        # ================== СПОРТСМЕНИ ==================
-        limit = 12
+        # Query athletes
+        limit = 15  # 4x4 grid
         offset = (page - 1) * limit
         
         query = supabase.table("athletes").select("*", count="exact")
         
-        if sex and sex != "all":
-            query = query.eq("sex", sex)
+        # Filters
+        if sex and sex != 'all':
+            query = query.eq('sex', sex)
         
-        if status and status != "all":
-            query = query.eq("status", status)
+        if status and status != 'all':
+            query = query.eq('status', status)
         
         if search:
-            query = query.ilike("name", f"%{search}%")
+            query = query.ilike('name', f'%{search}%')
         
         athletes_response = query.execute()
         
+        # Process athletes
         athletes = []
-        status_priority = {"main": 1, "candidate": 2, "reserve": 3}
+        status_priority = {'main': 1, 'candidate': 2, 'reserve': 3}
         
         for athlete in athletes_response.data:
             athlete['rating'] = safe_int(athlete.get('rating'), 0)
             
+            # Photo URL
             athlete['photo_url'] = None
             if athlete.get('photos'):
                 try:
@@ -1022,9 +1072,10 @@ async def team_page(
                     
                     if photos_data and 'thumb' in photos_data:
                         athlete['photo_url'] = f"/static/{photos_data['thumb']}"
-                except Exception as e:
+                except:
                     athlete['photo_url'] = None
             
+            # Age & Category
             if athlete.get('bdate'):
                 try:
                     from datetime import datetime, date
@@ -1038,102 +1089,26 @@ async def team_page(
                     athlete['age_category'] = get_age_category(athlete['age'], athlete.get('sex'))
                 except:
                     athlete['age'] = None
-                    athlete['age_category'] = 'Не вказано'
+                    athlete['age_category'] = ''
             else:
                 athlete['age'] = None
-                athlete['age_category'] = 'Не вказано'
+                athlete['age_category'] = ''
             
             athlete['status_priority'] = status_priority.get(athlete.get('status', 'reserve'), 99)
             athletes.append(athlete)
         
+        # Sort by status, then rating
         athletes.sort(key=lambda x: (x['status_priority'], -x['rating']))
         
+        # Pagination
         total_athletes = len(athletes)
         athletes_paginated = athletes[offset:offset + limit]
         total_pages = (total_athletes + limit - 1) // limit if total_athletes > 0 else 1
         has_prev = page > 1
         has_next = page < total_pages
         
-        # ================== ТРЕНЕРИ ==================
-        coaches_limit = 8
-        coaches_offset = (coaches_page - 1) * coaches_limit
-        
-        # Завжди отримуємо ПОВНИЙ список
-        all_coaches_full_response = supabase.table("coach").select("*").order("id", desc=False).execute()
-        all_coaches_full = all_coaches_full_response.data if all_coaches_full_response.data else []
-        
-        print(f"\n[TEAM] Total coaches in DB: {len(all_coaches_full)}")
-        
-        # ✅ ВИПРАВЛЕНО: Нормалізуємо is_national_team для ВСІХ тренерів ОДРАЗУ
-        for coach in all_coaches_full:
-            is_nat = coach.get('is_national_team')
-            # Конвертуємо в boolean
-            coach['is_national_team'] = is_nat is True or str(is_nat).lower() == 'true'
-        
-        # Підрахунок національних та регіональних (тепер з boolean значеннями)
-        national_coaches_total = len([c for c in all_coaches_full if c['is_national_team']])
-        regional_coaches_total = len([c for c in all_coaches_full if not c['is_national_team']])
-        
-        print(f"[TEAM] Total: National={national_coaches_total}, Regional={regional_coaches_total}")
-        
-        # Фільтруємо для відображення
-        if coaches_tab == 'national':
-            filtered_coaches = [c for c in all_coaches_full if c['is_national_team']]
-        elif coaches_tab == 'regional':
-            filtered_coaches = [c for c in all_coaches_full if not c['is_national_team']]
-        else:
-            filtered_coaches = list(all_coaches_full)
-        
-        print(f"[TEAM] After team type filter ({coaches_tab}): {len(filtered_coaches)} coaches")
-        
-        # Фільтр по категорії
-        if coach_category and coach_category != 'all':
-            filtered_coaches = [c for c in filtered_coaches if c.get('team_category') == coach_category]
-            print(f"[TEAM] After category filter: {len(filtered_coaches)} coaches")
-        
-        # Фільтр по пошуку
-        if coaches_search and coaches_search.strip():
-            search_lower = coaches_search.lower().strip()
-            filtered_coaches = [
-                c for c in filtered_coaches 
-                if (c.get('name') and search_lower in c.get('name', '').lower()) or 
-                   (c.get('position') and search_lower in c.get('position', '').lower()) or
-                   (c.get('city') and search_lower in c.get('city', '').lower())
-            ]
-            print(f"[TEAM] After search filter '{coaches_search}': {len(filtered_coaches)} coaches")
-        
-        # Обробка тренерів (image, category_label, awards)
-        for coach in filtered_coaches:
-            if coach.get('image'):
-                coach['image_url'] = f"/static/{coach['image']}"
-            else:
-                coach['image_url'] = None
-            
-            coach['category_label'] = get_coach_category_label(coach.get('team_category', ''))
-            
-            if coach.get('awards'):
-                try:
-                    if isinstance(coach['awards'], str):
-                        coach['awards'] = json.loads(coach['awards'])
-                except:
-                    coach['awards'] = []
-        
-        # ✅ DEBUG: Виводимо перших 3 тренерів
-        if filtered_coaches:
-            print(f"[TEAM DEBUG] Sample coaches:")
-            for i, coach in enumerate(filtered_coaches[:3]):
-                print(f"  {i+1}. {coach.get('name')} - is_national_team: {coach.get('is_national_team')} (type: {type(coach.get('is_national_team'))})")
-        
-        # Пагінація
-        coaches_total = len(filtered_coaches)
-        coaches_display = filtered_coaches[coaches_offset:coaches_offset + coaches_limit]
-        coaches_total_pages = (coaches_total + coaches_limit - 1) // coaches_limit if coaches_total > 0 else 1
-        
-        print(f"[TEAM] Final: {len(coaches_display)} coaches displayed (page {coaches_page}/{coaches_total_pages})\n")
-        
-        return templates.TemplateResponse("team.html", {
+        return templates.TemplateResponse("athletes.html", {
             "request": request,
-            # Спортсмені
             "athletes": athletes_paginated,
             "current_page": page,
             "total_pages": total_pages,
@@ -1143,31 +1118,16 @@ async def team_page(
             "current_sex": sex or 'all',
             "current_status": status or 'all',
             "search_query": search or '',
-            # Тренери
-            "coaches": coaches_display,
-            "national_coaches_total": national_coaches_total,
-            "regional_coaches_total": regional_coaches_total,
-            "coaches_page": coaches_page,
-            "coaches_total_pages": coaches_total_pages,
-            "coaches_tab": coaches_tab,
-            "current_coach_category": coach_category,
-            "coaches_search_query": coaches_search or '',
-            "coaches_has_prev": coaches_page > 1,
-            "coaches_has_next": coaches_page < coaches_total_pages,
-            # Інше
-            "coach_category_labels": COACH_CATEGORY_LABELS,
             "settings": settings
         })
-    
+        
     except Exception as e:
-        print(f"[TEAM ERROR] {e}")
+        print(f"[ATHLETES] ERROR: {e}")
         import traceback
         traceback.print_exc()
-        
-        return templates.TemplateResponse("team.html", {
+        return templates.TemplateResponse("athletes.html", {
             "request": request,
             "athletes": [],
-            "coaches": [],
             "current_page": 1,
             "total_pages": 1,
             "total_athletes": 0,
@@ -1176,18 +1136,176 @@ async def team_page(
             "current_sex": 'all',
             "current_status": 'all',
             "search_query": '',
-            "national_coaches_total": 0,
-            "regional_coaches_total": 0,
-            "coaches_page": 1,
-            "coaches_total_pages": 1,
-            "coaches_tab": 'all',
-            "current_coach_category": None,
-            "coaches_search_query": '',
-            "coaches_has_prev": False,
-            "coaches_has_next": False,
+            "settings": settings
+        })
+
+
+# ==================== CONTACTS PAGE ====================
+@app.get("/contacts", response_class=HTMLResponse)
+async def contacts_page(request: Request):
+    """SSR: Contacts page"""
+    if not templates:
+        return JSONResponse({"error": "Templates directory not found"}, status_code=500)
+    
+    try:
+        return templates.TemplateResponse("contacts.html", {
+            "request": request,
+            "settings": settings
+        })
+    except Exception as e:
+        print(f"[CONTACTS] ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse({"error": "Internal server error"}, status_code=500)
+
+
+# ==================== COACHES PAGE ====================
+@app.get("/team/coaches", response_class=HTMLResponse)
+async def coaches_page(
+    request: Request,
+    tab: str = 'all',
+    category: str = None,
+    search: str = None,
+    page: int = 1
+):
+    """SSR: Coaches listing page"""
+    if not templates:
+        return JSONResponse({"error": "Templates directory not found"}, status_code=500)
+    
+    try:
+        limit = 10
+        offset = (page - 1) * limit
+        
+        # Fetch ALL coaches
+        all_coaches_response = supabase.table("coach").select("*").order('id', desc=False).execute()
+        all_coaches_full = all_coaches_response.data if all_coaches_response.data else []
+        
+        print(f"[COACHES] Total coaches in DB: {len(all_coaches_full)}")
+        
+        # Process is_national_team boolean (ВАЖЛИВО!)
+        for coach in all_coaches_full:
+            is_nat = coach.get('is_national_team')
+            # Обробка всіх варіантів: True, "true", "True", 1, etc.
+            if is_nat is None:
+                coach['is_national_team'] = False
+            elif isinstance(is_nat, bool):
+                coach['is_national_team'] = is_nat
+            elif isinstance(is_nat, str):
+                coach['is_national_team'] = is_nat.lower() == 'true'
+            elif isinstance(is_nat, int):
+                coach['is_national_team'] = is_nat == 1
+            else:
+                coach['is_national_team'] = bool(is_nat)
+        
+        # Count totals BEFORE filtering
+        national_total = len([c for c in all_coaches_full if c['is_national_team']])
+        regional_total = len([c for c in all_coaches_full if not c['is_national_team']])
+        
+        print(f"[COACHES] National: {national_total}, Regional: {regional_total}")
+        
+        # Filter by tab (national/regional/all)
+        if tab == 'national':
+            filtered_coaches = [c for c in all_coaches_full if c['is_national_team']]
+            print(f"[COACHES] After 'national' filter: {len(filtered_coaches)} coaches")
+        elif tab == 'regional':
+            filtered_coaches = [c for c in all_coaches_full if not c['is_national_team']]
+            print(f"[COACHES] After 'regional' filter: {len(filtered_coaches)} coaches")
+        else:
+            filtered_coaches = list(all_coaches_full)
+            print(f"[COACHES] After 'all' filter: {len(filtered_coaches)} coaches")
+        
+        # Filter by category
+        if category and category != 'all':
+            filtered_coaches = [c for c in filtered_coaches if c.get('team_category') == category]
+            print(f"[COACHES] After category '{category}' filter: {len(filtered_coaches)} coaches")
+        
+        # Filter by search
+        if search and search.strip():
+            search_lower = search.lower().strip()
+            filtered_coaches = [c for c in filtered_coaches if
+                (c.get('name') and search_lower in c.get('name', '').lower()) or
+                (c.get('position') and search_lower in c.get('position', '').lower()) or
+                (c.get('city') and search_lower in c.get('city', '').lower())
+            ]
+            print(f"[COACHES] After search '{search}' filter: {len(filtered_coaches)} coaches")
+        
+        # Process coaches (image URL, category label)
+        for coach in filtered_coaches:
+            # Image URL
+            if coach.get('image'):
+                coach['image_url'] = f"/static/{coach['image']}"
+            else:
+                coach['image_url'] = None
+            
+            # Category label
+            coach['category_label'] = get_coach_category_label(coach.get('team_category'))
+            
+            # Awards
+            if coach.get('awards'):
+                try:
+                    if isinstance(coach['awards'], str):
+                        coach['awards'] = json.loads(coach['awards'])
+                except:
+                    coach['awards'] = []
+        
+        # Pagination
+        coaches_total = len(filtered_coaches)
+        coaches_display = filtered_coaches[offset:offset + limit]
+        total_pages = (coaches_total + limit - 1) // limit if coaches_total > 0 else 1
+        
+        print(f"[COACHES] Final: {len(coaches_display)} coaches displayed (page {page}/{total_pages})")
+        
+        # Debug first 3 coaches
+        if coaches_display:
+            print("[COACHES] DEBUG Sample coaches:")
+            for i, coach in enumerate(coaches_display[:3]):
+                print(f"  {i+1}. {coach.get('name')} - is_national_team={coach.get('is_national_team')} (type: {type(coach.get('is_national_team'))})")
+        
+        return templates.TemplateResponse("coaches.html", {
+            "request": request,
+            "coaches": coaches_display,
+            "coaches_total": coaches_total,
+            "current_page": page,
+            "total_pages": total_pages,
+            "has_prev": page > 1,
+            "has_next": page < total_pages,
+            "current_tab": tab,
+            "current_category": category,
+            "search_query": search or '',
+            "national_coaches_total": national_total,
+            "regional_coaches_total": regional_total,
             "coach_category_labels": COACH_CATEGORY_LABELS,
             "settings": settings
         })
+        
+    except Exception as e:
+        print(f"[COACHES] ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        return templates.TemplateResponse("coaches.html", {
+            "request": request,
+            "coaches": [],
+            "coaches_total": 0,
+            "current_page": 1,
+            "total_pages": 1,
+            "has_prev": False,
+            "has_next": False,
+            "current_tab": 'all',
+            "current_category": None,
+            "search_query": '',
+            "national_coaches_total": 0,
+            "regional_coaches_total": 0,
+            "coach_category_labels": COACH_CATEGORY_LABELS,
+            "settings": settings
+        })
+
+# ==================== REDIRECT OLD /team ====================
+@app.get("/team", response_class=HTMLResponse)
+async def team_redirect(request: Request):
+    """Redirect /team to /team/athletes"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/team/athletes", status_code=301)
+
 
 
 @app.get("/team/athletes/{athlete_slug}", response_class=HTMLResponse)

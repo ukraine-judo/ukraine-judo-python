@@ -19,13 +19,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex items-center gap-1 overflow-x-auto scrollbar-hide py-2" aria-label="Навігація по документах">
             <!-- Документи (Active) -->
-            <a href="/documents" class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+            <a href="/documents" 
+               data-page="documents"
+               class="subheader-link active flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
                 <span class="material-symbols-outlined text-[18px]">folder</span>
                 <span>Нормативні документи</span>
             </a>
             
             <!-- Протоколи та регламенти -->
-            <a href="/documents/events" class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
+            <a href="/documents/events" 
+               data-page="documents-events"
+               class="subheader-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all whitespace-nowrap">
                 <span class="material-symbols-outlined text-[18px]">description</span>
                 <span>Протоколи та регламенти</span>
             </a>
@@ -55,12 +59,6 @@
             </h1>
             <p class="text-[var(--muted)] leading-relaxed mb-1">
                 Системний архів регламентів, протоколів та звітності ФДУ
-            </p>
-            <p class="text-gray-400 text-sm font-normal">
-                <span class="inline-flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">link</span>
-                    Джерело: офіційний сайт Федерації Дзюдо України
-                </span>
             </p>
         </div>
     </div>
@@ -174,141 +172,79 @@
             </div>
 
 <!-- Document Rows -->
-<div id="documents-container" class="flex flex-col divide-y divide-gray-200">
+<div id="documents-container" class="divide-y divide-gray-100">
     {% if documents and documents|length > 0 %}
     {% for doc in documents %}
-    <div class="document-card group relative flex flex-col md:flex-row gap-5 p-6 hover:bg-blue-50/30 transition-all duration-200">
+    <div class="document-card group p-6 hover:bg-blue-50/30 transition-all duration-300 cursor-pointer border-l-4 border-transparent hover:border-blue-600">
         
-        <!-- NEW Badge -->
-        {% if doc.is_new %}
-        <div class="absolute top-4 right-4 md:top-6 md:right-6">
-            <span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wide shadow-sm">
-                Новий
-            </span>
-        </div>
-        {% endif %}
-        
-        <!-- Left: Icon -->
-        <div class="flex-shrink-0">
-            <div class="size-14 rounded-lg {{ doc.file.icon_color.bg }} {{ doc.file.icon_color.text }} flex items-center justify-center border {{ doc.file.icon_color.border }} shadow-sm group-hover:scale-105 transition-transform">
-                <span class="material-symbols-outlined text-[36px]">{{ doc.file.icon }}</span>
-            </div>
-        </div>
-        
-        <!-- Center: Content -->
-        <div class="flex-1 min-w-0 flex flex-col justify-between">
-            <!-- Header -->
-            <div class="mb-2">
-                <div class="flex flex-wrap items-start gap-x-3 gap-y-1 mb-2">
-                    <h3 class="text-lg font-semibold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors flex-1">
+        <div class="flex items-start justify-between gap-6">
+            <!-- Left: Content -->
+            <div class="flex-1 min-w-0">
+                <!-- Title + Badges -->
+                <div class="flex items-center gap-2 mb-2 flex-wrap">
+                    <h3 class="text-base font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
                         {{ doc.title }}
                     </h3>
+                    {% if doc.is_new %}
+                    <span class="px-1.5 py-0.5 text-[10px] font-bold bg-blue-600 text-white rounded uppercase group-hover:shadow-md transition-shadow duration-300">
+                        New
+                    </span>
+                    {% endif %}
                 </div>
+                
+                <!-- Description -->
+                {% if doc.description %}
+                <p class="text-sm text-gray-600 mb-3 line-clamp-1 group-hover:text-gray-900 transition-colors duration-300">
+                    {{ doc.description }}
+                </p>
+                {% endif %}
                 
                 <!-- Meta -->
-                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">calendar_today</span>
-                        {{ doc.date_formatted }}
-                    </span>
-                    
-                    <span class="text-gray-400">•</span>
-                    
-                    <span class="uppercase font-medium">{{ doc.file.extension }}</span>
-                    
-                    {% if doc.file.size_formatted %}
-                    <span class="text-gray-400">•</span>
-                    <span>{{ doc.file.size_formatted }}</span>
-                    {% endif %}
-                    
-                    {% if doc.author and doc.author != 'ФДУ' %}
-                    <span class="text-gray-400">•</span>
-                    <span>{{ doc.author }}</span>
-                    {% endif %}
-                </div>
-            </div>
-            
-            <!-- Description -->
-            {% if doc.description %}
-            <p class="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-                {{ doc.description }}
-            </p>
-            {% endif %}
-            
-            <!-- Footer: Category + Stats -->
-            <div class="flex flex-wrap items-center justify-between gap-3 mt-auto">
-                <div class="flex items-center gap-2">
-                    <!-- Category Badge -->
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border {{ doc.category_colors.bg }} {{ doc.category_colors.text }} {{ doc.category_colors.border }}">
-                        <span class="material-symbols-outlined text-[14px]">{{ doc.category_icon }}</span>
+                <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
+                    <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded font-medium group-hover:bg-blue-100 group-hover:text-blue-700 transition-all duration-300">
                         {{ doc.category_display }}
                     </span>
-                </div>
-                
-                <!-- Stats -->
-                {% if doc.views or doc.downloads %}
-                <div class="flex items-center gap-3 text-xs text-gray-500">
+                    <span class="group-hover:text-gray-700 transition-colors duration-300">{{ doc.date_formatted }}</span>
+                    <span>•</span>
+                    <span class="font-medium group-hover:text-gray-700 transition-colors duration-300">{{ doc.file.extension }}</span>
+                    {% if doc.file.size_formatted %}
+                    <span>•</span>
+                    <span class="group-hover:text-gray-700 transition-colors duration-300">{{ doc.file.size_formatted }}</span>
+                    {% endif %}
+                    {% if doc.views or doc.downloads %}
+                    <span>•</span>
+                    {% endif %}
                     {% if doc.views %}
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">visibility</span>
-                        {{ doc.views }}
-                    </span>
+                    <span class="group-hover:text-gray-700 transition-colors duration-300">👁 {{ doc.views }}</span>
                     {% endif %}
-                    
                     {% if doc.downloads %}
-                    <span class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">download</span>
-                        {{ doc.downloads }}
-                    </span>
+                    <span class="group-hover:text-gray-700 transition-colors duration-300">⬇ {{ doc.downloads }}</span>
                     {% endif %}
                 </div>
-                {% endif %}
             </div>
-        </div>
-        
-        <!-- Right: Actions -->
-        <div class="flex-shrink-0 flex flex-col gap-2 md:self-center md:items-end pt-2 md:pt-0">
-            <!-- Main Download Button -->
+            
+            <!-- Right: Download -->
             <a 
                 href="{{ doc.file.url }}" 
                 target="_blank"
                 onclick="trackDownload('{{ doc.id }}')"
-                class="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-md font-bold shadow-sm transition-all active:scale-95 ring-offset-2 focus:ring-2 ring-blue-500/50"
+                class="flex-shrink-0 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95"
             >
-                <span class="material-symbols-outlined text-[20px]">download</span>
-                <span>Завантажити</span>
+                Завантажити
             </a>
-            
-            <!-- Quick Actions -->
-            <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button 
-                    onclick="copyLink('{{ doc.file.url }}')" 
-                    class="flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 transition-colors"
-                    title="Копіювати посилання"
-                >
-                    <span class="material-symbols-outlined text-[18px]">link</span>
-                </button>
-                
-                <button 
-                    onclick="shareDocument('{{ doc.title }}', '{{ doc.file.url }}')" 
-                    class="flex items-center justify-center w-9 h-9 rounded-md border border-gray-300 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900 transition-colors"
-                    title="Поділитися"
-                >
-                    <span class="material-symbols-outlined text-[18px]">share</span>
-                </button>
-            </div>
         </div>
+        
     </div>
     {% endfor %}
     
     {% else %}
     <!-- Empty State -->
-    <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
-        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+    <div class="text-center py-16 px-6">
+        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-110">
             <span class="material-symbols-outlined text-gray-400 text-[36px]">folder_open</span>
         </div>
         <h3 class="text-lg font-semibold text-gray-900 mb-2">Документи не знайдено</h3>
-        <p class="text-gray-600 mb-6 max-w-sm">
+        <p class="text-gray-600 mb-6">
             {% if search_query %}
                 За вашим запитом "<strong>{{ search_query }}</strong>" документів не знайдено.
             {% elif category and category != 'all' %}
@@ -319,115 +255,85 @@
         </p>
         {% if category or search_query %}
         <button onclick="clearAllFilters()" 
-           class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors">
-            <span class="material-symbols-outlined text-[20px]">refresh</span>
+           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
             Скинути фільтри
         </button>
         {% endif %}
     </div>
     {% endif %}
-            <!-- Pagination -->
-            {% if total_pages and total_pages > 1 %}
-            <div id="documents-pagination" class="mt-12 space-y-4 p-12">
-                <!-- Results Info -->
-                <div class="text-center">
-                  <p class="text-sm text-[#617589]">
-                    Сторінка <span class="font-bold text-[#111418]">{{ current_page }}</span> з 
-                    <span class="font-bold text-[#111418]">{{ total_pages }}</span>
-                    <span class="mx-2">•</span>
-                    Всього документів: <span class="font-bold text-[#111418]">{{ total_count }}</span>
-                  </p>
-                </div>
-    
-                <!-- Pagination Controls -->
-                <div class="flex items-center justify-center gap-2">
-                  <!-- Previous Button -->
-                  {% if has_prev %}
-                    <button
-                      onclick="goToPage({{ current_page - 1 }}); return false;"
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
-                      title="Попередня сторінка"
-                    >
-                      <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                    </button>
-                  {% else %}
-                    <button 
-                      disabled 
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-                    >
-                      <span class="material-symbols-outlined text-[20px]">chevron_left</span>
-                    </button>
-                  {% endif %}
-    
-                  <!-- Page Numbers -->
-                  <div class="flex items-center gap-2">
-                    {% set start_page = [1, current_page - 2]|max %}
-                    {% set end_page = [total_pages, current_page + 2]|min %}
-    
-                    {# Перша сторінка #}
-                    {% if start_page > 1 %}
-                      <button
-                        onclick="goToPage(1); return false;"
-                        class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-                      >
-                        1
-                      </button>
-                      {% if start_page > 2 %}
-                        <span class="text-gray-400 px-1">...</span>
-                      {% endif %}
-                    {% endif %}
-    
-                    {# Номери сторінок #}
-                    {% for page_num in range(start_page, end_page + 1) %}
-                      {% if page_num == current_page %}
-                        <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#111418] text-white font-bold shadow-lg">
-                          {{ page_num }}
-                        </span>
-                      {% else %}
-                        <button
-                          onclick="goToPage({{ page_num }}); return false;"
-                          class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 hover:scale-105"
-                        >
-                          {{ page_num }}
-                        </button>
-                      {% endif %}
-                    {% endfor %}
-    
-                    {# Остання сторінка #}
-                    {% if end_page < total_pages %}
-                      {% if end_page < total_pages - 1 %}
-                        <span class="text-gray-400 px-1">...</span>
-                      {% endif %}
-                      <button
-                        onclick="goToPage({{ total_pages }}); return false;"
-                        class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] font-semibold hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-                      >
-                        {{ total_pages }}
-                      </button>
-                    {% endif %}
-                  </div>
-    
-                  <!-- Next Button -->
-                  {% if has_next %}
-                    <button
-                      onclick="goToPage({{ current_page + 1 }}); return false;"
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-[#111418] hover:border-blue-600 hover:text-blue-600 transition-all duration-200 hover:scale-105"
-                      title="Наступна сторінка"
-                    >
-                      <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                    </button>
-                  {% else %}
-                    <button 
-                      disabled 
-                      class="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-400 cursor-not-allowed"
-                    >
-                      <span class="material-symbols-outlined text-[20px]">chevron_right</span>
-                    </button>
-                  {% endif %}
-                </div>
-              </div>
-            {% endif %}
 </div>
+
+<!-- Pagination -->
+{% if total_pages and total_pages > 1 %}
+<div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
+    <div class="space-y-4">
+        <!-- Results Info -->
+        <p class="text-center text-sm text-gray-600">
+            Сторінка <strong class="text-gray-900">{{ current_page }}</strong> з <strong class="text-gray-900">{{ total_pages }}</strong> • Всього: <strong class="text-gray-900">{{ total_count }}</strong>
+        </p>
+
+<!-- Pagination Controls -->
+<div class="flex items-center justify-center gap-1" id="pagination-controls">
+    <!-- Previous -->
+    {% if has_prev %}
+      <button
+        data-page="{{ current_page - 1 }}"
+        class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 transition-all duration-300 hover:scale-110"
+        title="Попередня сторінка"
+      >
+        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+      </button>
+    {% else %}
+      <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+      </button>
+    {% endif %}
+  
+    <!-- Pages -->
+    <div class="flex items-center gap-1 mx-2">
+      {% set start_page = [1, current_page - 2]|max %}
+      {% set end_page = [total_pages, current_page + 2]|min %}
+  
+      {% if start_page > 1 %}
+        <button data-page="1" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">1</button>
+        {% if start_page > 2 %}<span class="text-gray-400 px-1">...</span>{% endif %}
+      {% endif %}
+  
+      {% for page_num in range(start_page, end_page + 1) %}
+        {% if page_num == current_page %}
+          <span class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-600 text-white text-sm font-bold shadow-md scale-110">{{ page_num }}</span>
+        {% else %}
+          <button data-page="{{ page_num }}" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">{{ page_num }}</button>
+        {% endif %}
+      {% endfor %}
+  
+      {% if end_page < total_pages %}
+        {% if end_page < total_pages - 1 %}<span class="text-gray-400 px-1">...</span>{% endif %}
+        <button data-page="{{ total_pages }}" class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 text-sm font-medium transition-all duration-300 hover:scale-110">{{ total_pages }}</button>
+      {% endif %}
+    </div>
+  
+    <!-- Next -->
+    {% if has_next %}
+      <button
+        data-page="{{ current_page + 1 }}"
+        class="pagination-btn w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:border-blue-600 hover:bg-blue-50 transition-all duration-300 hover:scale-110"
+        title="Наступна сторінка"
+      >
+        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+      </button>
+    {% else %}
+      <button disabled class="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed">
+        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+      </button>
+    {% endif %}
+  </div>
+  
+    </div>
+</div>
+{% endif %}
+
 
     </div>
 </main>
@@ -503,11 +409,13 @@
             page: parseInt(urlParams.get('page')) || 1
         };
         
+        // Update search input
         const searchInput = document.getElementById('search-input');
         if (searchInput && currentFilters.search) {
             searchInput.value = currentFilters.search;
         }
         
+        // Update sidebar
         updateSidebarActive(currentFilters.category);
     }
 
@@ -536,8 +444,10 @@
         
         console.log('[Documents] Loading with filters:', filters);
         
+        // Оновлюємо currentFilters
         currentFilters = { ...filters };
         
+        // Використовуємо Navigation Manager
         if (window.navigationManager) {
             window.navigationManager.navigateTo(url);
         } else {
@@ -587,37 +497,49 @@
     function filterByCategory(category) {
         const search = document.getElementById('search-input')?.value?.trim() || '';
         
-        loadDocuments({
+        const filters = {
             category: category,
             search: search,
             page: 1
-        }, true);
+        };
+        
+        console.log('[Documents] Filter by category:', filters);
+        loadDocuments(filters, true);
     }
 
     function applySearch() {
         const search = document.getElementById('search-input')?.value?.trim() || '';
         
-        loadDocuments({
+        const filters = {
             category: currentFilters.category || 'all',
             search: search,
             page: 1
-        }, true);
+        };
+        
+        console.log('[Documents] Apply search:', filters);
+        loadDocuments(filters, true);
     }
 
     function clearSearch() {
         const searchInput = document.getElementById('search-input');
-        if (searchInput) searchInput.value = '';
+        if (searchInput) {
+            searchInput.value = '';
+        }
         
-        loadDocuments({
+        const filters = {
             category: currentFilters.category || 'all',
             search: '',
             page: 1
-        }, true);
+        };
+        
+        loadDocuments(filters, true);
     }
 
     function clearAllFilters() {
         const searchInput = document.getElementById('search-input');
-        if (searchInput) searchInput.value = '';
+        if (searchInput) {
+            searchInput.value = '';
+        }
         
         loadDocuments({
             category: 'all',
@@ -638,6 +560,7 @@
     // ==================== UTILITY FUNCTIONS ====================
     
     function trackDownload(docId) {
+        // Track download analytics
         if (window.gtag) {
             gtag('event', 'download', {
                 'event_category': 'document',
@@ -652,9 +575,11 @@
             navigator.clipboard.writeText(url).then(() => {
                 showNotification('Посилання скопійовано!', 'success');
             }).catch(err => {
+                console.error('Failed to copy:', err);
                 showNotification('Помилка копіювання', 'error');
             });
         } else {
+            // Fallback
             const input = document.createElement('input');
             input.value = url;
             document.body.appendChild(input);
@@ -667,8 +592,14 @@
 
     function shareDocument(title, url) {
         if (navigator.share) {
-            navigator.share({ title, url }).catch(() => {});
+            navigator.share({
+                title: title,
+                url: url
+            }).catch(err => {
+                console.log('Share cancelled or failed:', err);
+            });
         } else {
+            // Fallback to copy link
             copyLink(url);
         }
     }
@@ -681,24 +612,30 @@
             'bg-blue-500 text-white'
         }`;
         notification.textContent = message;
-        notification.style.transition = 'all 0.3s ease';
         
         document.body.appendChild(notification);
         
         setTimeout(() => {
             notification.style.opacity = '0';
             notification.style.transform = 'translateY(20px)';
-            setTimeout(() => notification.remove(), 300);
+            notification.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
         }, 2000);
     }
 
     // ==================== EVENT LISTENERS ====================
     
     function attachCategoryLinks() {
-        document.querySelectorAll('.category-link').forEach(link => {
+        const categoryLinks = document.querySelectorAll('.category-link');
+        
+        categoryLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-                filterByCategory(this.getAttribute('data-category'));
+                const category = this.getAttribute('data-category');
+                filterByCategory(category);
             });
         });
     }
@@ -707,17 +644,23 @@
         const searchInput = document.getElementById('search-input');
         
         if (searchInput) {
+            // Input with debounce
             searchInput.addEventListener('input', function(e) {
                 clearTimeout(searchTimeout);
                 const value = e.target.value.trim();
                 
                 if (value === '') {
+                    // Якщо порожнє - одразу застосувати
                     applySearch();
                 } else {
-                    searchTimeout = setTimeout(() => applySearch(), 500);
+                    // Інакше чекати 500ms
+                    searchTimeout = setTimeout(() => {
+                        applySearch();
+                    }, 500);
                 }
             });
             
+            // Enter key
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -728,60 +671,108 @@
         }
     }
 
-    // ==================== INITIALIZATION ====================
-    
-    function init() {
-        if (isInitialized) {
-            console.log('[Documents] Already initialized, skipping...');
-            return;
+    function attachPaginationHandlers() {
+    // Видаляємо старий listener перед додаванням нового
+    document.removeEventListener('click', paginationClickHandler);
+    document.addEventListener('click', paginationClickHandler);
+}
+
+// Виносимо handler в окрему функцію для можливості removeEventListener
+function paginationClickHandler(e) {
+    const btn = e.target.closest('.pagination-btn');
+    if (btn && !btn.disabled) {
+        e.preventDefault();
+        const page = parseInt(btn.getAttribute('data-page'));
+        if (page) {
+            goToPage(page);
         }
-        
-        console.log('[Documents] Initializing...');
-        
-        initFiltersFromURL();
-        attachCategoryLinks();
-        attachSearchHandlers();
-        
-        isInitialized = true;
-        console.log('[Documents] Ready');
     }
+}
+
+
+function init() {
+    if (isInitialized) {
+        console.log('[Documents] Already initialized, skipping...');
+        return;
+    }
+    
+    console.log('[Documents] Initializing...');
+    
+    initFiltersFromURL();
+    attachCategoryLinks();
+    attachSearchHandlers();
+    attachPaginationHandlers(); // <-- Додати цей рядок
+    
+    isInitialized = true;
+    console.log('[Documents] Ready');
+}
+
 
     // ==================== CLEANUP ====================
     
     function cleanup() {
+        console.log('[Documents] Cleaning up...');
+        
         if (searchTimeout) {
             clearTimeout(searchTimeout);
             searchTimeout = null;
         }
+        
         isInitialized = false;
     }
 
     // ==================== GLOBAL EXPORTS ====================
     
-    window.filterByCategory = filterByCategory;
-    window.applySearch = applySearch;
-    window.clearSearch = clearSearch;
-    window.clearAllFilters = clearAllFilters;
-    window.goToPage = goToPage;
-    window.trackDownload = trackDownload;
-    window.copyLink = copyLink;
-    window.shareDocument = shareDocument;
-
-    // ==================== AUTO-INIT ====================
+    // Export with namespace to avoid conflicts
+    window.DocumentsPage = {
+        filterByCategory,
+        applySearch,
+        clearSearch,
+        clearAllFilters,
+        goToPage,
+        trackDownload,
+        copyLink,
+        shareDocument
+    };
     
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
+    // Legacy support (only for this page)
+    if (window.location.pathname === '/documents') {
+        window.filterByCategory = filterByCategory;
+        window.applySearch = applySearch;
+        window.clearSearch = clearSearch;
+        window.clearAllFilters = clearAllFilters;
+        window.goToPage = goToPage;
+        window.trackDownload = trackDownload;
+        window.copyLink = copyLink;
+        window.shareDocument = shareDocument;
     }
 
-    window.addEventListener('pageCleanup', cleanup);
-    
-    window.addEventListener('pageInit', () => {
-        if (window.location.pathname.startsWith('/documents')) {
+// ==================== AUTO-INIT ====================
+
+// Cleanup on page navigation
+window.addEventListener('pageCleanup', cleanup);
+
+// Ініціалізація через pageInit (працює і при першому завантаженні, і при AJAX)
+window.addEventListener('pageInit', () => {
+    if (window.location.pathname === '/documents') {
+        init();
+    }
+});
+
+// Fallback для першого завантаження (якщо pageInit ще не налаштований)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!isInitialized) {
             init();
         }
     });
+} else {
+    if (!isInitialized) {
+        init();
+    }
+}
+
+
 
 })();
 </script>

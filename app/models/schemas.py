@@ -5,6 +5,13 @@ from pydantic import BaseModel, Field, computed_field
 from datetime import date
 from typing import Optional, List, Any, Dict
 
+# ✅ Імпортуємо функції для обробки категорій новин
+from app.utils.news.categories import (
+    normalize_news_category,
+    get_news_category_label
+)
+
+
 # ========== NEWS MODELS ==========
 class NewsBase(BaseModel):
     """Базова модель новини"""
@@ -17,6 +24,7 @@ class NewsBase(BaseModel):
     image_url: Optional[str] = None
     author_name: str = Field(default="Пресс-служба ФДУ", description="Автор")
     tags: Optional[str] = None
+
 
 class NewsListItem(NewsBase):
     """Новина для списку (БЕЗ content для оптимізації)"""
@@ -49,8 +57,30 @@ class NewsListItem(NewsBase):
         }
         return f"{self.publishedAt.day} {months_uk[self.publishedAt.month]} {self.publishedAt.year}"
     
+    # ✅ ДОДАНО: Нормалізована категорія
+    @computed_field
+    @property
+    def category_normalized(self) -> str:
+        """Нормалізована категорія (competitions, team, federation...)"""
+        return normalize_news_category(self.category)
+    
+    # ✅ ДОДАНО: Читабельна назва категорії
+    @computed_field
+    @property
+    def category_label(self) -> str:
+        """Читабельна назва категорії (Змагання, Збірна, Федерація...)"""
+        return get_news_category_label(self.category_normalized)
+    
+    # ✅ ДОДАНО: Для backward compatibility з шаблонами
+    @computed_field
+    @property
+    def display_category(self) -> str:
+        """Alias для category_label (для сумісності з шаблонами)"""
+        return self.category_label
+    
     class Config:
         from_attributes = True
+
 
 class NewsDetail(NewsBase):
     """Повна новина (З content)"""
@@ -81,8 +111,30 @@ class NewsDetail(NewsBase):
         }
         return f"{self.publishedAt.day} {months_uk[self.publishedAt.month]} {self.publishedAt.year}"
     
+    # ✅ ДОДАНО: Нормалізована категорія
+    @computed_field
+    @property
+    def category_normalized(self) -> str:
+        """Нормалізована категорія"""
+        return normalize_news_category(self.category)
+    
+    # ✅ ДОДАНО: Читабельна назва категорії
+    @computed_field
+    @property
+    def category_label(self) -> str:
+        """Читабельна назва категорії"""
+        return get_news_category_label(self.category_normalized)
+    
+    # ✅ ДОДАНО: Для backward compatibility
+    @computed_field
+    @property
+    def display_category(self) -> str:
+        """Alias для category_label"""
+        return self.category_label
+    
     class Config:
         from_attributes = True
+
 
 
 # ========== NEW EVENT MODELS ==========
